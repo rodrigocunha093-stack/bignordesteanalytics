@@ -1,6 +1,8 @@
 # BIGNORDESTE ANALYTICS
 
-MVP funcional para transformar arquivos `.txt` exportados do VR em analises mensais de ofertas, campanhas, encartes, departamentos, produtos, lojas e regioes.
+MVP funcional para transformar arquivos `.txt` exportados do VR em inteligencia comercial de ofertas, campanhas, encartes, departamentos, produtos, lojas e regioes.
+
+O sistema agora trabalha com **analise por periodo**, mas importa os dados **mes a mes** dentro do mesmo arquivo. Exemplo: selecionar `2026-01-01` ate `2026-07-01` gera consultas que retornam janeiro, fevereiro, marco, abril, maio e junho em linhas separadas pela coluna `mes`.
 
 ## Como abrir
 
@@ -11,17 +13,29 @@ A persistencia inicial usa `localStorage`, entao as importacoes ficam salvas no 
 ## Fluxo recomendado
 
 1. Cadastre/valide as empresas e o ID da loja no VR.
-2. Escolha 1 loja piloto e 1 mes fechado.
-3. Rode os 5 modelos SQL no VR.
-4. Exporte os arquivos `.txt` separados por `;`.
-5. Importe os arquivos no sistema.
-6. Abra **Auditoria da Importacao**.
-7. Se os numeros baterem com o VR, use **Plano de Coleta 27 Lojas** para aprovar o lote.
-8. A **Consolidacao Final** considera somente lojas com status `Aprovado`.
+2. Escolha 1 loja piloto e um periodo fechado, por exemplo `2026-01-01` ate `2026-07-01`.
+3. Rode os 5 modelos SQL no VR usando loja, data inicial e data final.
+4. Confira se todas as consultas retornam a coluna `mes` no formato `YYYY-MM`.
+5. Exporte os arquivos `.txt` separados por `;`.
+6. Importe os 5 arquivos no sistema.
+7. Abra **Auditoria da Importacao**.
+8. Se os numeros baterem com o VR, use **Plano de Coleta 27 Lojas** para aprovar o lote.
+9. A **Consolidacao Final** considera somente lojas com status `Aprovado`.
+
+## Analise por periodo
+
+Regras implementadas:
+
+- A tela usa **Loja**, **Data inicial** e **Data final**.
+- O campo `mes` vem do arquivo importado, gerado pela SQL.
+- Um unico arquivo pode conter varios meses da mesma loja.
+- A importacao aceita varias linhas para a mesma loja, uma por mes.
+- A consolidacao permite visao **mensal** e **acumulada do periodo**.
+- Os calculos derivados usam o `mes` do arquivo, nao um mes selecionado manualmente.
 
 ## Plano de Coleta 27 Lojas
 
-A tela **Plano de Coleta 27 Lojas** controla quais lojas ja tiveram os 5 arquivos importados, auditados e aprovados por loja/mes.
+A tela **Plano de Coleta 27 Lojas** controla quais lojas ja tiveram os 5 arquivos importados, auditados e aprovados por loja/periodo.
 
 Mostra:
 
@@ -39,14 +53,6 @@ Mostra:
 - Botao `Aprovar lote`
 - Botao `Reprocessar`
 
-Indicadores no topo:
-
-- Total de lojas
-- Lojas pendentes
-- Lojas completas
-- Lojas com erro
-- Percentual de avanco da coleta
-
 Regra de negocio:
 
 - Uma loja so entra na **Consolidacao Final** se estiver com status `Aprovado`.
@@ -55,7 +61,7 @@ Regra de negocio:
 
 A tela **Auditoria da Importacao** valida se os arquivos importados estao confiaveis antes de usar o dashboard.
 
-Ela mostra por loja/mes:
+Ela mostra por loja/periodo:
 
 - total de arquivos importados
 - tipos importados
@@ -73,7 +79,7 @@ Ela mostra por loja/mes:
 
 Status possiveis:
 
-- Completo/Auditado
+- Auditado
 - Parcial
 - Com erro
 - Pendente
@@ -89,13 +95,19 @@ A pasta `/sql` contem os 5 modelos oficiais de consulta que devem ser rodados no
 - `sql/departamentos_campanha.sql`
 - `sql/cupons_totais.sql`
 
+Todos os modelos retornam `mes` com:
+
+```sql
+TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes
+```
+
 Tambem existe o arquivo `modelo_exportacao.txt`, com padrao de exportacao, nomes dos arquivos, cabecalhos esperados e checklist de importacao.
 
 ## Importacao TXT
 
 O sistema aceita somente arquivos `.txt` separados por ponto e virgula (`;`), com primeira linha como cabecalho.
 
-Antes de importar, o usuario informa obrigatoriamente loja, mes/ano, tipo de arquivo e observacao.
+Antes de importar, o usuario informa obrigatoriamente loja, data inicial, data final, tipo de arquivo e observacao.
 
 Tipos suportados:
 
