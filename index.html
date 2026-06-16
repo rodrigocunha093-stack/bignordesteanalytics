@@ -12,7 +12,58 @@ function importacoes(){return`<div class="panel"><div class="toolbar"><h2>Import
 function audit(loja=fLoja.value){if(loja=='Todas')loja='Loja 01';let months=monthsBetween(fInicio.value,fFim.value),imps=db.importacoes.filter(i=>i.loja==loja&&i.periodo==fInicio.value+' a '+fFim.value),present={};ORDER.forEach(t=>present[t]=db[TYPES[t].bucket].some(r=>r.loja==loja&&months.includes(r.mes)&&r.__tipo==t));let missing=ORDER.filter(t=>!present[t]),t=total(loja),ignored=imps.reduce((s,i)=>s+(+i.ignoradas||0),0),cols=imps.flatMap(i=>i.colunas_faltantes||[]),alerts=[];if(missing.length)alerts.push('Arquivos faltantes: '+missing.map(t=>TYPES[t].label).join(', '));if(!t.vt)alerts.push('Resumo geral ausente no periodo.');if(!t.v)alerts.push('Campanhas/ofertas ausentes no periodo.');if(ignored)alerts.push('Existem linhas ignoradas.');if(cols.length)alerts.push('Existem colunas faltantes.');let st='Pendente';if(ORDER.length-missing.length>0)st=missing.length?'Parcial':'Auditado';if(alerts.length&&st!='Pendente')st='Com erro';if(db.aprovacoes[periodKey(loja)]?.status=='Aprovado')st='Aprovado';return{loja,months,imps,present,missing,total:t,ignored,cols,alerts,status:st,last:imps[0]?.data||'',obs:db.aprovacoes[periodKey(loja)]?.obs||imps[0]?.observacao||''}}function statusPill(st){return st=='Aprovado'?'<span class="pill ok">Aprovado</span>':st=='Auditado'?'<span class="pill info">Auditado</span>':st=='Com erro'?'<span class="pill bad">Com erro</span>':st=='Parcial'?'<span class="pill warn">Parcial</span>':'<span class="pill mutedpill">Pendente</span>'}function auditoria(){let a=audit();return`<div class="grid cards">${card('Status',statusPill(a.status),'Periodo')}${card('Arquivos',a.imps.length,'Historico')}${card('Meses',a.months.length,'No periodo')}${card('Linhas ignoradas',num(a.ignored),'Importacao')}${card('Part. prom.',pct(a.total.part),'Campanhas / total')}</div><div class="grid two mt"><div class="panel"><h2>Arquivos importados</h2>${history()}</div><div class="panel"><h2>Totais e alertas</h2><p>Venda total resumo: <b>${brl(a.total.vt)}</b></p><p>Soma campanhas: <b>${brl(a.total.v)}</b></p><p>Diferenca: <b>${brl(a.total.vt-a.total.v)}</b></p><p>Cupons totais: <b>${num(a.total.ct)}</b></p><p>Cupons campanhas: <b>${num(a.total.cup)}</b></p><h2>Arquivos faltantes</h2><p>${a.missing.map(t=>`<span class="pill warn">${TYPES[t].label}</span>`).join(' ')||'<span class="pill ok">Nenhum</span>'}</p>${a.alerts.map(x=>`<div class="alert ${a.status=='Com erro'?'bad':'warn'}">${x}</div>`).join('')||'<div class="alert ok">Sem alertas criticos.</div>'}</div></div>`}
 function plano(){let rs=db.empresas.filter(e=>fRegiao.value=='Todas'||e.regiao==fRegiao.value).map(e=>({...audit(e.nome),regiao:e.regiao})),tot=rs.length,ap=rs.filter(r=>r.status=='Aprovado').length,err=rs.filter(r=>r.status=='Com erro').length,pend=rs.filter(r=>r.status!='Aprovado').length;return`<div class="grid cards">${card('Total lojas',tot,'Periodo')}${card('Pendentes',pend,'Nao aprovadas')}${card('Completas',ap,'Aprovadas')}${card('Com erro',err,'Auditoria')}${card('% avanco',pct(tot?ap/tot*100:0),'Aprovadas')}</div><div class="panel mt"><h2>Plano de Coleta 27 Lojas</h2><div class="table"><table><tr><th>Loja</th><th>Regiao</th><th>Status</th><th>Resumo?</th><th>Campanhas?</th><th>Produtos?</th><th>Departamentos?</th><th>Cupons?</th><th>Ultima importacao</th><th>Observacao</th><th>Acoes</th></tr>${rs.map(r=>`<tr><td><b>${r.loja}</b></td><td>${r.regiao}</td><td>${statusPill(r.status)}</td>${ORDER.map(t=>`<td>${r.present[t]?'<span class="pill ok">Sim</span>':'<span class="pill mutedpill">Nao</span>'}</td>`).join('')}<td>${r.last||'-'}</td><td>${r.obs||'-'}</td><td><button class="btn" onclick="openAudit('${r.loja}')">Ver auditoria</button> <button class="btn primary" onclick="approve('${r.loja}')">Aprovar lote</button> <button class="btn" onclick="reprocess('${r.loja}')">Reprocessar</button></td></tr>`).join('')}</table></div></div>`}function openAudit(l){fLoja.value=l;go('auditoria')}function approve(l){let a=audit(l);if(a.status=='Com erro'||a.status=='Pendente'||a.missing.length){if(!confirm('Lote incompleto ou com erro. Aprovar mesmo assim?'))return}db.aprovacoes[periodKey(l)]={status:'Aprovado',data:new Date().toLocaleString('pt-BR'),obs:prompt('Observacao:',a.obs||'Validado com VR')||''};save();render()}function reprocess(l){delete db.aprovacoes[periodKey(l)];fLoja.value=l;go('importacoes')}
 function consolidacao(){let lojas=db.empresas.filter(e=>audit(e.nome).status=='Aprovado'),data=[];if(fVisao.value=='mensal'){lojas.forEach(e=>monthsBetween(fInicio.value,fFim.value).forEach(m=>{let cs=db.campanhas.filter(r=>r.loja==e.nome&&r.mes==m).map(calc),rr=db.resumos.find(r=>r.loja==e.nome&&r.mes==m)||{},v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0);data.push({loja:e.nome,mes:m,regiao:e.regiao,vt:+rr.venda_total||0,v,l,margem:v?l/v*100:0,part:rr.venda_total?v/rr.venda_total*100:0})}))}else{lojas.forEach(e=>{let t=total(e.nome);data.push({loja:e.nome,mes:'Periodo',regiao:e.regiao,vt:t.vt,v:t.v,l:t.l,margem:t.margem,part:t.part})})}return`<div class="alert info">Regra ativa: apenas lojas aprovadas entram na Consolidacao Final.</div><div class="panel mt"><h2>${fVisao.value=='mensal'?'Visao mensal':'Visao acumulada do periodo'}</h2><div class="table"><table><tr><th>Loja</th><th>Mes</th><th>Regiao</th><th>Venda total</th><th>Venda prom.</th><th>Part.</th><th>Lucro</th><th>Margem</th></tr>${data.map(r=>`<tr><td>${r.loja}</td><td>${r.mes}</td><td>${r.regiao}</td><td>${brl(r.vt)}</td><td>${brl(r.v)}</td><td>${pct(r.part)}</td><td>${brl(r.l)}</td><td>${pct(r.margem)}</td></tr>`).join('')||'<tr><td colspan="8">Nenhuma loja aprovada.</td></tr>'}</table></div></div>`}
-function modelos(){let loja=fLoja.value=='Todas'?'Loja 01':fLoja.value,tipo=(window.sqlTipo&&sqlTipo.value)||'resumo_geral_loja';return`<div class="panel"><h2>Modelos SQL por periodo mensalizado</h2><div class="row"><select id="sqlTipo" onchange="render()">${ORDER.map(k=>`<option value="${k}" ${k==tipo?'selected':''}>${TYPES[k].label} - ${TYPES[k].file}</option>`).join('')}</select><button class="btn primary" onclick="copySql()">Copiar SQL</button></div><p class="muted">Use loja, data inicial e data final. A coluna mes e gerada por TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM').</p><pre id="sqlBox" class="sql">${makeSql(tipo,empresa(loja),fInicio.value,fFim.value)}</pre></div>`}function makeSql(tipo,e,ini,fim){let id=e.id_vr||1;if(tipo=='departamentos_campanha')return `SELECT
+function modelos(){let loja=fLoja.value=='Todas'?'Loja 01':fLoja.value,tipo=(window.sqlTipo&&sqlTipo.value)||'resumo_geral_loja';return`<div class="panel"><h2>Modelos SQL por periodo mensalizado</h2><div class="row"><select id="sqlTipo" onchange="render()">${ORDER.map(k=>`<option value="${k}" ${k==tipo?'selected':''}>${TYPES[k].label} - ${TYPES[k].file}</option>`).join('')}</select><button class="btn primary" onclick="copySql()">Copiar SQL</button></div><p class="muted">Use loja, data inicial e data final. A coluna mes e gerada por TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM').</p><pre id="sqlBox" class="sql">${makeSql(tipo,empresa(loja),fInicio.value,fFim.value)}</pre></div>`}function makeSql(tipo,e,ini,fim){let id=e.id_vr||1;if(tipo=='cupons_totais')return `SELECT
+    v.id_loja AS loja,
+
+    TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,
+
+    ct.cupons_totais,
+
+    t.descricao AS campanha,
+
+    COUNT(DISTINCT v.id) AS cupons_campanha
+
+FROM pdv.vendaitem i
+
+INNER JOIN pdv.venda v
+    ON v.id = i.id_venda
+
+INNER JOIN public.tipooferta t
+    ON t.id = i.id_tipooferta
+
+INNER JOIN (
+    SELECT
+        id_loja,
+        DATE_TRUNC('month', data) AS mes_ref,
+        COUNT(DISTINCT id) AS cupons_totais
+    FROM pdv.venda
+    WHERE id_loja = 1
+      AND data >= '2026-01-01'
+      AND data < '2026-07-01'
+      AND cancelado = FALSE
+    GROUP BY
+        id_loja,
+        DATE_TRUNC('month', data)
+) ct
+    ON ct.id_loja = v.id_loja
+   AND ct.mes_ref = DATE_TRUNC('month', v.data)
+
+WHERE v.id_loja = 1
+  AND v.data >= '2026-01-01'
+  AND v.data < '2026-07-01'
+  AND v.cancelado = FALSE
+  AND i.oferta = TRUE
+
+GROUP BY
+    v.id_loja,
+    DATE_TRUNC('month', v.data),
+    ct.cupons_totais,
+    t.descricao
+
+ORDER BY
+    mes,
+    cupons_campanha DESC;`;
+if(tipo=='departamentos_campanha')return `SELECT
     v.id_loja AS loja,
 
     TO_CHAR(
