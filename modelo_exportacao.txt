@@ -1,0 +1,51 @@
+BIGNORDESTE ANALYTICS - MODELO DE EXPORTACAO TXT
+
+Objetivo
+Padronizar a exportacao dos resultados das consultas SQL do VR para importacao no sistema.
+
+Formato obrigatorio
+- Extensao: .txt
+- Separador: ponto e virgula (;)
+- Primeira linha: cabecalho com os nomes das colunas
+- Encoding recomendado: UTF-8
+- Encoding aceito: ISO-8859-1
+- Casas decimais: ponto ou virgula sao aceitos pelo sistema
+- Campos vazios: aceitos
+
+Ordem recomendada por loja e mes
+1. resumo_geral_loja.sql -> resumo_geral_loja.txt
+2. campanhas_ofertas.sql -> campanhas_ofertas.txt
+3. cupons_totais.sql -> cupons_campanha.txt
+4. departamentos_campanha.sql -> departamentos_campanha.txt
+5. produtos_campanha.sql -> produtos_campanha.txt
+
+Checklist de importacao
+1. Selecionar loja
+2. Selecionar mes
+3. Rodar as 5 consultas no VR
+4. Exportar .txt separado por ;
+5. Importar os 5 arquivos no sistema
+6. Validar consolidacao
+
+Parametros que devem ser trocados nas consultas
+- :id_loja -> codigo da loja no VR
+- :mes -> mes de referencia, exemplo 2026-01
+- :data_inicio -> primeiro dia do mes, exemplo 2026-01-01
+- :data_fim -> primeiro dia do mes seguinte, exemplo 2026-02-01
+
+Cabecalhos esperados
+
+resumo_geral_loja.txt
+loja;mes;venda_total;custo_total;lucro_total;margem_total;cupons_totais;unidades_totais
+
+campanhas_ofertas.txt
+loja;mes;id_tipooferta;descricao;venda;custo;lucro;margem;quantidade;itens;produtos_distintos;cupons;ticket_medio;preco_medio
+
+produtos_campanha.txt
+loja;mes;id_tipooferta;campanha;id_produto;descricao_produto;quantidade;venda;lucro;margem
+
+departamentos_campanha.txt
+loja;mes;id_tipooferta;campanha;mercadologico1;descricao_departamento;produtos;quantidade;venda;lucro;margem
+
+cupons_campanha.txt
+loja;mes;cupons_totais;campanha;cupons_campanha
