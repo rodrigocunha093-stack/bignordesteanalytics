@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Loja {
+  id          String   @id @default(cuid())
+  codigo      String   @unique
+  nome        String
+  regiao      String
+  cidade      String?
+  estado      String?
+  status      String   @default("Ativa")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  resumos       ResumoGeralLojaMes[]
+  resultados    ResultadoCampanha[]
+  produtos      ProdutoCampanha[]
+  departamentos DepartamentoCampanha[]
+  importacoes   Importacao[]
+}
+
+model Campanha {
+  id             String   @id @default(cuid())
+  idTipoOferta   String   @unique
+  descricao      String
+  categoria      String?
+  ativo          Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Importacao {
+  id                String      @id @default(cuid())
+  lojaId            String
+  mes               String
+  tipoArquivo       TipoArquivo
+  campanha          String?
+  nomeArquivo       String
+  chaveDuplicidade  String      @unique
+  status            String
+  linhasProcessadas Int
+  erros             Json?
+  dataImportacao    DateTime    @default(now())
+
+  loja Loja @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+
+  @@index([lojaId, mes, tipoArquivo, campanha])
+}
+
+model ResumoGeralLojaMes {
+  id             String  @id @default(cuid())
+  lojaId         String
+  mes            String
+  vendaTotal     Decimal @db.Decimal(14, 2)
+  custoTotal     Decimal @db.Decimal(14, 2)
+  lucroTotal     Decimal @db.Decimal(14, 2)
+  margemTotal    Decimal @db.Decimal(8, 4)
+  cuponsTotais   Int
+  unidadesTotais Decimal @db.Decimal(14, 3)
+
+  loja Loja @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+
+  @@unique([lojaId, mes])
+}
+
+model ResultadoCampanha {
+  id                String  @id @default(cuid())
+  lojaId            String
+  mes               String
+  idTipoOferta      String
+  descricao         String
+  venda             Decimal @db.Decimal(14, 2)
+  custo             Decimal @db.Decimal(14, 2)
+  lucro             Decimal @db.Decimal(14, 2)
+  margem            Decimal @db.Decimal(8, 4)
+  quantidade        Decimal @db.Decimal(14, 3)
+  itens             Int
+  produtosDistintos Int
+  cupons            Int
+  ticketMedio       Decimal @db.Decimal(14, 2)
+  precoMedio        Decimal @db.Decimal(14, 2)
+
+  loja Loja @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+
+  @@unique([lojaId, mes, idTipoOferta])
+  @@index([mes, descricao])
+}
+
+model ProdutoCampanha {
+  id               String  @id @default(cuid())
+  lojaId           String
+  mes              String
+  idTipoOferta     String
+  campanha         String
+  idProduto        String
+  descricaoProduto String
+  quantidade       Decimal @db.Decimal(14, 3)
+  venda            Decimal @db.Decimal(14, 2)
+  lucro            Decimal @db.Decimal(14, 2)
+  margem           Decimal @db.Decimal(8, 4)
+
+  loja Loja @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+
+  @@index([lojaId, mes, campanha])
+  @@index([idProduto])
+}
+
+model DepartamentoCampanha {
+  id                    String  @id @default(cuid())
+  lojaId                String
+  mes                   String
+  idTipoOferta          String
+  campanha              String
+  mercadologico1        String
+  descricaoDepartamento String
+  produtos              Int
+  quantidade            Decimal @db.Decimal(14, 3)
+  venda                 Decimal @db.Decimal(14, 2)
+  lucro                 Decimal @db.Decimal(14, 2)
+  margem                Decimal @db.Decimal(8, 4)
+
+  loja Loja @relation(fields: [lojaId], references: [id], onDelete: Cascade)
+
+  @@index([lojaId, mes, campanha])
+  @@index([mercadologico1])
+}
+
+model CuponsCampanha {
+  id             String @id @default(cuid())
+  lojaCodigo     String
+  mes            String
+  cuponsTotais   Int
+  campanha       String
+  cuponsCampanha Int
+
+  @@unique([lojaCodigo, mes, campanha])
+}
+
+enum TipoArquivo {
+  RESUMO_GERAL_LOJA_MES
+  RESULTADO_CAMPANHA
+  PRODUTOS_CAMPANHA
+  DEPARTAMENTOS_CAMPANHA
+  CUPONS_CAMPANHA
+}
