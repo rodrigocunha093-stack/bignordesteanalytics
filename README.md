@@ -10,6 +10,41 @@ Abra o arquivo `index.html` diretamente no navegador.
 
 A persistencia inicial usa `localStorage`, entao as importacoes ficam salvas no navegador usado para operar o sistema.
 
+## Banco de dados na nuvem
+
+O sistema tambem pode rodar com PostgreSQL na nuvem. O primeiro passo usa uma API Node simples que salva o estado completo da aplicacao em uma tabela `app_state` no banco. Isso permite centralizar importacoes, auditorias, aprovacoes e analises sem depender do navegador local.
+
+Passos:
+
+1. Crie um banco PostgreSQL em um provedor como Supabase, Neon, Railway ou outro Postgres gerenciado.
+2. Copie a string de conexao no formato `DATABASE_URL`.
+3. Crie um arquivo `.env` baseado no `.env.example`.
+4. Instale dependencias:
+
+```bash
+npm install
+```
+
+5. Inicie o sistema:
+
+```bash
+npm start
+```
+
+6. Acesse:
+
+```text
+http://127.0.0.1:8080/index.html
+```
+
+Endpoints:
+
+- `GET /api/health`: verifica conexao com o banco.
+- `GET /api/state`: carrega os dados salvos.
+- `PUT /api/state`: salva os dados atuais.
+
+Se `DATABASE_URL` nao estiver configurada, a tela continua funcionando com `localStorage`.
+
 ## Fluxo recomendado
 
 1. Cadastre/valide as empresas e o ID da loja no VR.
