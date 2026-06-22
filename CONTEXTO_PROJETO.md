@@ -82,7 +82,7 @@ Comando de deploy:
 & "$env:APPDATA\npm\vercel.cmd" deploy --prod --yes
 ```
 
-Ultimo deploy validado:
+Ultimo deploy validado com PostgreSQL/Supabase conectado:
 
 ```text
 https://bignordesteanalytics.vercel.app
@@ -95,10 +95,10 @@ Invoke-WebRequest -Uri 'https://bignordesteanalytics.vercel.app/index.html' -Use
 Invoke-RestMethod -Uri 'https://bignordesteanalytics.vercel.app/api/health'
 ```
 
-Resultado esperado sem banco:
+Resultado esperado em producao com banco:
 
 ```json
-{"ok":true,"database":"not_configured"}
+{"ok":true,"database":"connected"}
 ```
 
 ## Banco de dados e persistencia
@@ -127,6 +127,13 @@ Dashboard: https://supabase.com/dashboard/project/upaujonwcngtmgztpmsr
 Para Vercel/serverless, usar preferencialmente a connection string **Transaction pooler** do Supabase como `DATABASE_URL`.
 A chave publishable/anon do Supabase nao e suficiente para a persistencia atual, porque o servidor usa PostgreSQL via `pg` e `DATABASE_URL`.
 Nao versionar senhas, service role keys ou `.env`.
+
+Status em 2026-06-22:
+
+- `DATABASE_URL` configurada na Vercel em Production como variavel sensivel.
+- Deploy de producao executado e alias `https://bignordesteanalytics.vercel.app` atualizado.
+- `GET /api/health` em producao retornou `{"ok":true,"database":"connected"}`.
+- Tabela `app_state` foi criada/validada automaticamente pelo servidor.
 
 Arquivo local esperado:
 
@@ -384,8 +391,7 @@ Antes de continuar o desenvolvimento:
 
 Prioridades futuras:
 
-1. Configurar `DATABASE_URL` em PostgreSQL na nuvem e na Vercel.
-2. Testar fluxo completo com dados reais de mais de uma loja.
-3. Melhorar parser TXT para suportar campos com aspas e `;` dentro do texto.
-4. Adicionar export/import de backup JSON para migrar localStorage.
-5. Criar testes automatizados para importacao, auditoria e calculos.
+1. Testar fluxo completo com dados reais de mais de uma loja usando a persistencia compartilhada.
+2. Melhorar parser TXT para suportar campos com aspas e `;` dentro do texto.
+3. Adicionar export/import de backup JSON para migrar localStorage.
+4. Criar testes automatizados para importacao, auditoria e calculos.
