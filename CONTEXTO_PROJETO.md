@@ -116,6 +116,18 @@ Com banco configurado:
 - A API salva o estado completo da aplicacao em `app_state`.
 - Todos os usuarios passam a compartilhar importacoes, auditorias, aprovacoes e analises.
 
+Projeto Supabase criado para o BIGNORDESTE ANALYTICS:
+
+```text
+Project ref: upaujonwcngtmgztpmsr
+Project URL: https://upaujonwcngtmgztpmsr.supabase.co
+Dashboard: https://supabase.com/dashboard/project/upaujonwcngtmgztpmsr
+```
+
+Para Vercel/serverless, usar preferencialmente a connection string **Transaction pooler** do Supabase como `DATABASE_URL`.
+A chave publishable/anon do Supabase nao e suficiente para a persistencia atual, porque o servidor usa PostgreSQL via `pg` e `DATABASE_URL`.
+Nao versionar senhas, service role keys ou `.env`.
+
 Arquivo local esperado:
 
 ```text
