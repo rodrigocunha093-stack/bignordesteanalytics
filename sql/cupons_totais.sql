@@ -23,9 +23,9 @@ INNER JOIN (
         DATE_TRUNC('month', data) AS mes_ref,
         COUNT(DISTINCT id) AS cupons_totais
     FROM pdv.venda
-    WHERE id_loja = 1
-      AND data >= '2026-01-01'
-      AND data < '2026-07-01'
+    WHERE id_loja = :id_loja
+      AND data >= :data_inicio
+      AND data < :data_fim
       AND cancelado = FALSE
     GROUP BY
         id_loja,
@@ -34,9 +34,9 @@ INNER JOIN (
     ON ct.id_loja = v.id_loja
    AND ct.mes_ref = DATE_TRUNC('month', v.data)
 
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
+WHERE v.id_loja = :id_loja
+  AND v.data >= :data_inicio
+  AND v.data < :data_fim
   AND v.cancelado = FALSE
   AND i.oferta = TRUE
 

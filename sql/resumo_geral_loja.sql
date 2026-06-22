@@ -31,9 +31,9 @@ FROM pdv.venda v
 INNER JOIN pdv.vendaitem i
     ON i.id_venda = v.id
 
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
+WHERE v.id_loja = :id_loja
+  AND v.data >= :data_inicio
+  AND v.data < :data_fim
   AND v.cancelado = FALSE
 
 GROUP BY

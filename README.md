@@ -6,9 +6,20 @@ O sistema agora trabalha com **analise por periodo**, mas importa os dados **mes
 
 ## Como abrir
 
-Abra o arquivo `index.html` diretamente no navegador.
+Instale as dependencias e rode o servidor Node:
 
-A persistencia inicial usa `localStorage`, entao as importacoes ficam salvas no navegador usado para operar o sistema.
+```bash
+npm install
+npm start
+```
+
+Depois acesse:
+
+```text
+http://127.0.0.1:8080/index.html
+```
+
+Sem `DATABASE_URL`, a persistencia usa `localStorage`, entao as importacoes ficam salvas apenas no navegador usado para operar o sistema.
 
 ## Banco de dados na nuvem
 
@@ -18,7 +29,7 @@ Passos:
 
 1. Crie um banco PostgreSQL em um provedor como Supabase, Neon, Railway ou outro Postgres gerenciado.
 2. Copie a string de conexao no formato `DATABASE_URL`.
-3. Crie um arquivo `.env` baseado no `.env.example`.
+3. Crie um arquivo `.env` baseado no `.env.example`. O servidor carrega esse arquivo automaticamente ao iniciar.
 4. Instale dependencias:
 
 ```bash
@@ -52,7 +63,7 @@ Se `DATABASE_URL` nao estiver configurada, a tela continua funcionando com `loca
 3. Rode os 5 modelos SQL no VR usando loja, data inicial e data final.
 4. Confira se todas as consultas retornam a coluna `mes` no formato `YYYY-MM`.
 5. Exporte os arquivos `.txt` separados por `;`.
-6. Importe os 5 arquivos no sistema.
+6. No sistema, selecione a loja correta e importe os 5 arquivos juntos.
 7. Abra **Auditoria da Importacao**.
 8. Se os numeros baterem com o VR, use **Plano de Coleta 27 Lojas** para aprovar o lote.
 9. A **Consolidacao Final** considera somente lojas com status `Aprovado`.
@@ -142,7 +153,14 @@ Tambem existe o arquivo `modelo_exportacao.txt`, com padrao de exportacao, nomes
 
 O sistema aceita somente arquivos `.txt` separados por ponto e virgula (`;`), com primeira linha como cabecalho.
 
-Antes de importar, o usuario informa obrigatoriamente loja, data inicial, data final, tipo de arquivo e observacao.
+Antes de importar, o usuario informa obrigatoriamente loja, data inicial e data final. O tipo de arquivo e detectado pelo nome do `.txt`.
+
+Regra critica para as 27 lojas independentes:
+
+- A loja selecionada na tela e o destino oficial da importacao.
+- A coluna `loja` dentro do TXT fica apenas como referencia/auditoria.
+- Se qualquer arquivo do lote tiver colunas invalidas, o sistema cancela a importacao inteira para evitar dados parciais.
+- Se um arquivo valido nao tiver linhas no periodo selecionado, os dados antigos daquele arquivo/periodo sao limpos.
 
 Tipos suportados:
 

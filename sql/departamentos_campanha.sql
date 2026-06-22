@@ -48,9 +48,9 @@ INNER JOIN public.mercadologico m
     ON m.mercadologico1 = p.mercadologico1
    AND m.nivel = 1
 
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
+WHERE v.id_loja = :id_loja
+  AND v.data >= :data_inicio
+  AND v.data < :data_fim
   AND v.cancelado = FALSE
   AND i.oferta = TRUE
 

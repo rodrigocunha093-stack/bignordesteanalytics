@@ -50,9 +50,9 @@ INNER JOIN pdv.vendaitem i
 INNER JOIN public.tipooferta t
     ON t.id = i.id_tipooferta
 
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
+WHERE v.id_loja = :id_loja
+  AND v.data >= :data_inicio
+  AND v.data < :data_fim
   AND v.cancelado = FALSE
   AND i.oferta = TRUE
 

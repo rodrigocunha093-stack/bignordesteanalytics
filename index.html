@@ -1,289 +1,446 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BIGNORDESTE ANALYTICS</title><style>
-:root{--bg:#f5f6f8;--ink:#20242a;--muted:#68707c;--line:#dfe3e8;--panel:#fff;--brand:#16603a;--gold:#d39b21;--bad:#b42318;--warn:#b76e00;--ok:#087443;--blue:#175cd3}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif}.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}aside{background:#12201a;color:white;padding:18px 14px}.brand{padding:8px 10px 18px;border-bottom:1px solid #ffffff22}.brand b{display:block;font-size:18px}.brand span{font-size:12px;color:#b9c4be}nav{display:grid;gap:4px;margin-top:16px}nav button{border:0;background:transparent;color:#d7ded9;text-align:left;padding:10px 12px;border-radius:8px;cursor:pointer}nav button.active,nav button:hover{background:#ffffff1c;color:white}main{padding:22px;min-width:0}header{display:flex;justify-content:space-between;gap:16px;margin-bottom:18px}h1{font-size:24px;margin:0 0 5px}.sub{color:var(--muted);font-size:14px}.filters,.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filters{justify-content:flex-end}select,input,textarea{border:1px solid var(--line);background:white;border-radius:7px;padding:9px 10px;min-height:38px;font:inherit}textarea{resize:vertical}.grid{display:grid;gap:14px}.cards{grid-template-columns:repeat(5,minmax(140px,1fr))}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 26px #20242a12}.card{padding:15px;min-height:92px}.label{font-size:12px;text-transform:uppercase;font-weight:800;color:var(--muted)}.value{font-size:23px;font-weight:850;margin-top:8px}.hint{font-size:12px;color:var(--muted);margin-top:5px}.panel{padding:16px}.panel h2{font-size:16px;margin:0 0 12px}.table{overflow:auto;max-height:620px;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#fafbfc;color:var(--muted);font-size:11px;text-transform:uppercase;position:sticky;top:0}.pill{display:inline-flex;border-radius:99px;padding:4px 8px;font-size:12px;font-weight:800;white-space:nowrap}.ok{background:#dcfae6;color:var(--ok)}.warn{background:#fef0c7;color:var(--warn)}.bad{background:#fee4e2;color:var(--bad)}.info{background:#dbeafe;color:var(--blue)}.mutedpill{background:#eef1f4;color:#5f6875}.btn{border:1px solid var(--line);background:white;border-radius:7px;padding:8px 10px;font-weight:800;cursor:pointer}.primary{background:var(--brand);border-color:var(--brand);color:white}.danger{background:var(--bad);border-color:var(--bad);color:white}.drop{border:1.5px dashed #a8b0b9;border-radius:8px;background:#fbfcfd;padding:18px;display:grid;gap:10px}.row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.preview,pre.sql{white-space:pre;overflow:auto;max-height:360px;background:#111827;color:#e5e7eb;padding:12px;border-radius:8px;font-size:12px}.mt{margin-top:14px}.muted{color:var(--muted)}.alert{border-left:4px solid var(--blue);background:white;border:1px solid var(--line);border-left-width:4px;border-radius:8px;padding:12px;margin:10px 0}.alert.bad{border-left-color:var(--bad)}.alert.warn{border-left-color:var(--warn)}.alert.ok{border-left-color:var(--ok)}.barrow{display:grid;grid-template-columns:minmax(170px,1fr) 120px;gap:10px;align-items:center;margin:10px 0;font-size:13px}.track{height:9px;background:#edf0f3;border-radius:99px;overflow:hidden;margin-top:5px}.fill{height:100%;background:linear-gradient(90deg,var(--brand),var(--gold))}.hero{background:white;border:1px solid var(--line);border-radius:8px;padding:18px;margin-bottom:14px}.hero h2{margin:0 0 6px;font-size:24px}.quick{border-left:5px solid var(--brand);background:#f8faf9;padding:12px;border-radius:7px;margin-top:12px}.answer-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.answer{background:white;border:1px solid var(--line);border-radius:8px;padding:12px}.matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.quadrant{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfcfd;min-height:120px}.quad-title{font-weight:850;margin-bottom:8px}.campaign-card{border:1px solid var(--line);border-radius:8px;padding:12px;margin:10px 0;background:white}.metric-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}.metric{background:#f6f8fa;border-radius:7px;padding:8px}.rec{font-weight:850;margin-top:8px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:980px){.answer-grid,.matrix,.metric-row,.three{grid-template-columns:1fr}}@media(max-width:980px){.app{grid-template-columns:1fr}header{display:grid}.cards,.two,.row{grid-template-columns:1fr}.filters{justify-content:flex-start}}
-.decision-hero{background:linear-gradient(135deg,#12201a,#1d5f3c);color:white;border-radius:8px;padding:20px;margin-bottom:14px}.decision-hero h2{margin:0 0 8px;font-size:25px}.decision-hero .sub{color:#dbe7df}.decision-strip{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:12px;margin-top:15px}.decision-tile{background:#ffffff14;border:1px solid #ffffff2e;border-radius:8px;padding:12px}.decision-tile b{display:block;font-size:18px;margin-top:6px}.story-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.decision-card{border:1px solid var(--line);border-radius:8px;background:#fff;padding:12px;margin:10px 0}.decision-card .topline{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.barline{height:8px;background:#edf0f3;border-radius:99px;overflow:hidden;margin:8px 0}.barline span{display:block;height:100%;background:linear-gradient(90deg,var(--brand),var(--gold))}.risk-list{display:grid;gap:10px}.risk-item{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:10px;background:#fff}.compact-table .table{max-height:430px}.action-list{counter-reset:act;display:grid;gap:10px}.action-step{border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:8px;background:#fff;padding:12px}.action-step:before{counter-increment:act;content:counter(act);display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:50%;background:#e8f3ed;color:var(--brand);font-weight:900;margin-right:8px}@media(max-width:980px){.decision-strip,.story-grid{grid-template-columns:1fr}.risk-item{grid-template-columns:1fr}}</style></head><body><div class="app"><aside><div class="brand"><b>BIGNORDESTE</b><span>ANALYTICS</span></div><nav id="nav"></nav></aside><main><header><div><h1 id="title"></h1><div id="sub" class="sub"></div></div><div class="filters"><select id="fLoja"></select><select id="fRegiao"></select><input id="fInicio" type="date" value="2026-01-01"><input id="fFim" type="date" value="2026-07-01"><select id="fVisao"><option value="acumulado">Acumulado</option><option value="mensal">Mensal</option></select><select id="fCamp"></select></div></header><section id="view"></section></main></div><script>
-const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),nf=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:2});const brl=v=>money.format(+v||0),num=v=>nf.format(+v||0),pct=v=>num(v)+'%';
-const TYPES={resumo_geral_loja:{label:'Resumo geral',file:'resumo_geral_loja.txt',bucket:'resumos',cols:['loja','mes','venda_total','custo_total','lucro_total','margem_total','cupons_totais','unidades_totais','produtos_distintos']},campanhas_ofertas:{label:'Campanhas/ofertas',file:'campanhas_ofertas.txt',bucket:'campanhas',cols:['loja','mes','id_tipooferta','descricao','venda','custo','lucro','margem','quantidade','itens','produtos_distintos','cupons','ticket_medio','preco_medio']},produtos_campanha:{label:'Produtos',file:'produtos_campanha.txt',bucket:'produtos',cols:['loja','mes','id_tipooferta','campanha','id_produto','descricao_produto','quantidade','venda','lucro','margem']},departamentos_campanha:{label:'Departamentos',file:'departamentos_campanha.txt',bucket:'departamentos',cols:['loja','mes','id_tipooferta','campanha','mercadologico1','descricao_departamento','produtos','quantidade','venda','lucro','margem']},cupons_totais:{label:'Cupons',file:'cupons_campanha.txt',bucket:'cupons',cols:['loja','mes','cupons_totais','campanha','cupons_campanha']}};const ORDER=Object.keys(TYPES);
-const pages=[['decisao','Centro de Decisao'],['dashboard','Dashboard'],['importacoes','Importacoes'],['auditoria','Auditoria'],['plano','Plano de Coleta 27 Lojas'],['modelos','Modelos SQL'],['empresas','Empresas'],['consolidacao','Consolidacao Final'],['relatorio','Relatorio Executivo']];
-function monthsBetween(ini,fim){let out=[],d=new Date(ini+'T00:00:00'),end=new Date(fim+'T00:00:00');while(d<end){out.push(d.toISOString().slice(0,7));d=new Date(d.getFullYear(),d.getMonth()+1,1)}return out}function inPeriod(m){return monthsBetween(fInicio.value,fFim.value).includes(m)}function periodKey(loja){return loja+'|'+fInicio.value+'|'+fFim.value}
-function seed(){let empresas=Array.from({length:27},(_,i)=>({codigo:String(i+1).padStart(2,'0'),id_vr:String(i+1),nome:'Loja '+String(i+1).padStart(2,'0'),regiao:['Natal','Agreste','Sertao','Litoral'][i%4],cidade:['Natal','Parnamirim','Mossoro','Caico'][i%4],uf:'RN',status:'Ativa'}));let meses=['2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];let resumos=meses.map((m,i)=>({loja:'Loja 01',mes:m,venda_total:3042701.83+i*85000,custo_total:2650820.21+i*72000,lucro_total:391881.62+i*13000,margem_total:12.88,cupons_totais:62761+i*900,unidades_totais:489300+i*14000,produtos_distintos:740,__tipo:'resumo_geral_loja'}));let nomes=['ENCARTE BIG NORDESTE','FDS DE OFERTAS','DIA BIG','SEMANA DE OFERTAS'];let campanhas=meses.flatMap((m,mi)=>nomes.map((n,i)=>({loja:'Loja 01',mes:m,id_tipooferta:String(101+i),descricao:n,venda:[299097,227879,200699,115847][i]+mi*6000,custo:[261096,192757,196485,96654][i]+mi*4500,lucro:[38000,35121,4214,19192][i]+mi*900,margem:[12.71,15.41,2.10,16.57][i],quantidade:[53375,39124,42008,18142][i],itens:[690,490,430,260][i],produtos_distintos:[515,348,290,184][i],cupons:[10031,8210,11880,5138][i],ticket_medio:[29.82,27.76,16.89,22.55][i],preco_medio:[5.60,5.82,4.78,6.39][i],__tipo:'campanhas_ofertas'})));let departamentos=meses.map(m=>({loja:'Loja 01',mes:m,id_tipooferta:'101',campanha:'ENCARTE BIG NORDESTE',mercadologico1:'1',descricao_departamento:'PERECIVEIS',produtos:180,quantidade:28842,venda:157302,lucro:19000,margem:11.9,__tipo:'departamentos_campanha'}));let produtos=meses.map(m=>({loja:'Loja 01',mes:m,id_tipooferta:'101',campanha:'ENCARTE BIG NORDESTE',id_produto:'P1000',descricao_produto:'Produto promocional 01',quantidade:900,venda:24800,lucro:2480,margem:10,__tipo:'produtos_campanha'}));let cupons=campanhas.map(c=>({loja:c.loja,mes:c.mes,cupons_totais:resumos.find(r=>r.mes==c.mes).cupons_totais,campanha:c.descricao,cupons_campanha:c.cupons,__tipo:'cupons_totais'}));let importacoes=ORDER.map(t=>({data:new Date().toLocaleString('pt-BR'),arquivo:TYPES[t].file,loja:'Loja 01',periodo:'2026-01-01 a 2026-07-01',tipo:t,linhas:t=='resumo_geral_loja'?6:t=='campanhas_ofertas'||t=='cupons_totais'?24:6,ignoradas:0,colunas_faltantes:[],observacao:'Mock periodo jan-jun'}));return{empresas,resumos,campanhas,departamentos,produtos,cupons,importacoes,aprovacoes:{}}}
-let db=JSON.parse(localStorage.getItem('bignordeste.analytics.periodo.v1')||'null')||seed();let page='decisao',cloudOnline=false;async function loadCloud(){if(location.protocol=='file:')return;try{let r=await fetch('/api/state');if(r.ok){let data=await r.json();if(data&&data.empresas){db=data;cloudOnline=true;localStorage.setItem('bignordeste.analytics.periodo.v1',JSON.stringify(db));setupFilters();render()}}}catch(e){console.warn('Banco em nuvem indisponivel',e.message)}}function save(){localStorage.setItem('bignordeste.analytics.periodo.v1',JSON.stringify(db));if(location.protocol!='file:')fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(db)}).then(r=>{cloudOnline=r.ok}).catch(e=>console.warn('Nao foi possivel salvar na nuvem',e.message))}function empresa(nome){return db.empresas.find(e=>e.nome==nome)||{}}function statusPill(st){return st=='Aprovado'?`<span class="pill ok">Aprovado</span>`:st=='Auditado'?`<span class="pill info">Auditado</span>`:st=='Com erro'?`<span class="pill bad">Com erro</span>`:st=='Parcial'||st=='Importado'?`<span class="pill warn">${st}</span>`:`<span class="pill mutedpill">Pendente</span>`}function scopeRows(bucket,loja=fLoja.value){return db[bucket].filter(r=>(loja=='Todas'||r.loja==loja)&&inPeriod(r.mes)&&(fRegiao.value=='Todas'||empresa(r.loja).regiao==fRegiao.value))}function resumos(loja=fLoja.value){return scopeRows('resumos',loja)}function campanhas(loja=fLoja.value){return scopeRows('campanhas',loja).filter(r=>fCamp.value=='Todas'||r.descricao==fCamp.value).map(calc)}function calc(r){let rr=db.resumos.find(x=>x.loja==r.loja&&x.mes==r.mes)||{},v=+r.venda||0,l=+r.lucro||0,c=+r.cupons||0,part=rr.venda_total?v/rr.venda_total*100:0,pen=rr.cupons_totais?c/rr.cupons_totais*100:0,prod=+r.produtos_distintos||0,q=+r.quantidade||0;return{...r,venda:v,lucro:l,participacao:part,penetracao:pen,ticket_medio:+r.ticket_medio||(c?v/c:0),preco_medio:+r.preco_medio||(q?v/q:0),lucro_cupom:c?l/c:0,venda_produto:prod?v/prod:0,lucro_produto:prod?l/prod:0,indice_forca:part*pen,indice_eficiencia:part*(+r.margem||0)}}function total(loja=fLoja.value){let cs=campanhas(loja),rs=resumos(loja),v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0),vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0),ct=rs.reduce((s,r)=>s+(+r.cupons_totais||0),0),cup=cs.reduce((s,r)=>s+(+r.cupons||0),0);return{v,l,vt,ct,cup,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0}}function card(a,b,c){return`<div class="card"><div class="label">${a}</div><div class="value">${b}</div><div class="hint">${c}</div></div>`}function cards(t){return`<div class="grid cards">${card('Venda total',brl(t.vt),'Periodo')}${card('Venda prom.',brl(t.v),'Campanhas')}${card('Part.',pct(t.part),'Prom./total')}${card('Margem',pct(t.margem),'Promocional')}${card('Penetracao',pct(t.pen),'Cupons')}</div>`}function bars(title,rows,val,fmt=brl,label){let m=Math.max(1,...rows.map(val));let name=label||((r)=>r.mes||r.loja||r.descricao);return`<div class="panel"><h2>${title}</h2>${rows.slice(0,12).map(r=>`<div class="barrow"><div><b>${name(r)}</b><div class="track"><div class="fill" style="width:${Math.max(3,val(r)/m*100)}%"></div></div></div><div>${fmt(val(r))}</div></div>`).join('')}</div>`}function dashCampaignRows(){let cs=campanhas(),t=total(),rows=sumBy(cs,r=>r.descricao,(r,k)=>({descricao:k,venda:0,lucro:0,cupons:0,quantidade:0,produtos:0}),(a,r)=>{a.venda+=r.venda;a.lucro+=r.lucro;a.cupons+=+r.cupons||0;a.quantidade+=+r.quantidade||0;a.produtos+=+r.produtos_distintos||0});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.participacao=t.vt?r.venda/t.vt*100:0;r.penetracao=t.ct?r.cupons/t.ct*100:0});let max={venda:Math.max(1,...rows.map(r=>r.venda)),lucro:Math.max(1,...rows.map(r=>r.lucro)),pen:Math.max(1,...rows.map(r=>r.penetracao)),margem:Math.max(1,...rows.map(r=>Math.max(0,r.margem)))};rows.forEach(r=>{r.score=Math.round((r.venda/max.venda*30)+(Math.max(0,r.lucro)/max.lucro*25)+(r.penetracao/max.pen*25)+(Math.max(0,r.margem)/max.margem*20));r.recomendacao=r.margem<5?'Revisar composicao':r.score>=80?'Repetir/Reforcar':r.score>=65?'Manter com ajuste':'Revisar mecanica'});return rows.sort((a,b)=>b.venda-a.venda)}
-function dashDepartments(camp){let rows=scopeRows('departamentos').filter(r=>!camp||r.campanha==camp),tv=rows.reduce((s,r)=>s+(+r.venda||0),0),out=sumBy(rows,r=>r.descricao_departamento,(r,k)=>({departamento:k,venda:0,lucro:0,produtos:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.produtos+=+r.produtos||0});out.forEach(r=>{r.part=tv?r.venda/tv*100:0;r.margem=r.venda?r.lucro/r.venda*100:0});return out.sort((a,b)=>b.venda-a.venda)}
-function dashProducts(camp){let rows=scopeRows('produtos').filter(r=>!camp||r.campanha==camp),out=sumBy(rows,r=>r.id_produto+'|'+r.descricao_produto+'|'+r.campanha,(r,k)=>({produto:r.descricao_produto,campanha:r.campanha,venda:0,lucro:0,quantidade:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.quantidade+=+r.quantidade||0});out.forEach(r=>r.margem=r.venda?r.lucro/r.venda*100:0);return out.sort((a,b)=>b.venda-a.venda)}
-function badge(text,type='info'){return '<span class="pill '+(type=='bad'?'bad':type=='warn'?'warn':type=='ok'?'ok':'info')+'">'+text+'</span>'}
-function dashMonthRows(){return monthsBetween(fInicio.value,fFim.value).map(m=>{let cs=campanhas().filter(r=>r.mes==m),rs=resumos().filter(r=>r.mes==m),v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0),vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0);return{mes:m,venda:v,lucro:l,part:vt?v/vt*100:0,margem:v?l/v*100:0,incompleto:!rs.length||!cs.length}})}
-function dashboard(){let t=total(),camps=decisionCampaigns(),top=camps[0]||{},profit=[...camps].sort((a,b)=>b.lucro-a.lucro)[0]||{},client=[...camps].sort((a,b)=>b.penetracao-a.penetracao)[0]||{},risk=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},depts=decisionDepartments(top.descricao),deptTop=depts[0]||{},months=dashMonthRows(),bestM=[...months].sort((a,b)=>b.venda-a.venda)[0]||{},badMonths=months.filter(m=>m.incompleto),diagnosis=managerDiagnosis(t,camps,depts,decisionProducts(top.descricao),storeRank(),regionRank());return `<div class="decision-hero"><h2>Analise de Forca Promocional - Big Nordeste</h2><div class="sub">Leitura executiva para decidir verba, mecanica, negociacao e escala das campanhas.</div><div class="decision-strip"><div class="decision-tile"><div class="label">Decisao do periodo</div><b>${diagnosis}</b></div><div class="decision-tile"><div class="label">Oferta pesa</div><b>${pct(t.part)}</b><span>da venda total</span></div><div class="decision-tile"><div class="label">Campanha para defender</div><b>${top.descricao||'-'}</b><span>score ${top.score||0}</span></div><div class="decision-tile"><div class="label">Campanha para corrigir</div><b>${risk.descricao||'-'}</b><span>margem ${pct(risk.margem||0)}</span></div></div></div><div class="grid cards">${card('Venda Total',brl(t.vt),'Base do periodo')}${card('Venda Promocional',brl(t.v),'Venda em ofertas')}${card('Lucro Promocional',brl(t.l),'Resultado absoluto')}${card('Margem Promocional',pct(t.margem),'Saude comercial')}${card('Penetracao',pct(t.pen),'Alcance em cupons')}</div>${blocoAnalise()}<div class="story-grid mt"><div class="panel"><h2>Mapa de decisao das campanhas</h2>${campaignDecisionCards(camps)}</div><div class="panel"><h2>Resposta rapida</h2><div class="risk-list"><div class="risk-item"><span>Mais forte</span><b>${top.descricao||'-'}</b></div><div class="risk-item"><span>Mais lucro</span><b>${profit.descricao||'-'} - ${brl(profit.lucro||0)}</b></div><div class="risk-item"><span>Mais clientes</span><b>${client.descricao||'-'} - ${pct(client.penetracao||0)}</b></div><div class="risk-item"><span>Risco</span><b>${risk.descricao||'-'} - ${pct(risk.margem||0)}</b></div><div class="risk-item"><span>Sustentacao</span><b>${deptTop.departamento||'-'} - ${pct(deptTop.part||0)}</b></div></div></div></div><div class="grid two mt"><div class="panel compact-table"><h2>Evolucao mensal com alerta</h2>${decTable(['Mes','Venda prom.','Part.','Margem','Leitura'],months.map(r=>`<tr><td><b>${r.mes}</b></td><td>${brl(r.venda)}</td><td>${pct(r.part)}</td><td>${pct(r.margem)}</td><td>${r.incompleto?badge('Incompleto','warn'):r.margem<5?badge('Margem critica','bad'):badge('Ok','ok')}</td></tr>`))}${conclusion(`${bestM.mes||'-'} foi o melhor mes em venda promocional. ${badMonths.length?badMonths.length+' mes(es) precisam completar importacao.':'Base mensal completa no filtro atual.'}`)}</div><div class="panel compact-table"><h2>Quem sustenta a venda</h2>${decTable(['Departamento','Part.','Venda','Margem'],depts.slice(0,8).map(r=>`<tr><td><b>${r.departamento}</b></td><td>${pct(r.part)}</td><td>${brl(r.venda)}</td><td>${pct(r.margem)}</td></tr>`))}${deptTop.departamento?conclusion(`O resultado esta concentrado em ${deptTop.departamento}. Se esse departamento perder margem ou abastecimento, a campanha perde forca.`):conclusion('Importe departamentos para explicar a venda.','warn')}</div></div><div class="panel mt"><h2>Proximas acoes sugeridas</h2>${actionPlan(camps,depts)}</div>`}function campTable(cs){return`<div class="table"><table><tr><th>Mes</th><th>Loja</th><th>Campanha</th><th>Venda</th><th>Part.</th><th>Lucro</th><th>Margem</th><th>Pen.</th><th>Forca</th></tr>${cs.map(r=>`<tr><td>${r.mes}</td><td>${r.loja}</td><td><b>${r.descricao}</b></td><td>${brl(r.venda)}</td><td>${pct(r.participacao)}</td><td>${brl(r.lucro)}</td><td>${pct(r.margem)}</td><td>${pct(r.penetracao)}</td><td>${num(r.indice_forca)}</td></tr>`).join('')}</table></div>`}
-function importacoes(){return`<div class="panel"><div class="toolbar"><h2>Importar periodo mensalizado</h2><button class="btn" onclick="template()">Baixar cabecalho</button><button class="btn" onclick="go('auditoria')">Auditar</button></div><div class="drop"><div class="row"><select id="il">${db.empresas.map(e=>`<option ${e.nome==fLoja.value?'selected':''}>${e.nome}</option>`).join('')}</select><input id="ii" type="date" value="${fInicio.value}"><input id="ifim" type="date" value="${fFim.value}"><select id="it" onchange="showReq()">${ORDER.map(k=>`<option value="${k}">${TYPES[k].label}</option>`).join('')}</select></div><div class="muted"><b>Tipo padrao:</b> usado apenas se o nome do arquivo nao identificar o modelo. Voce pode selecionar os 5 arquivos juntos. A loja selecionada na tela define o destino; a coluna loja do TXT fica registrada para auditoria.</div><textarea id="io" placeholder="Observacao opcional"></textarea><input id="files" type="file" accept=".txt" multiple><div id="req" class="muted"></div><pre id="prev" class="preview" style="display:none"></pre><div id="ir"></div><button class="btn primary" onclick="processImport()">Importar arquivo(s)</button></div></div><div class="panel mt"><h2>Historico</h2>${history()}</div>`}function history(){return db.importacoes.length?`<div class="table"><table><tr><th>Data</th><th>Arquivo</th><th>Loja</th><th>Periodo</th><th>Tipo</th><th>Linhas</th><th>Ignoradas</th><th>Colunas faltantes</th><th>Obs.</th></tr>${db.importacoes.map(i=>`<tr><td>${i.data}</td><td>${i.arquivo}</td><td>${i.loja}</td><td>${i.periodo||''}</td><td>${TYPES[i.tipo]?.label||i.tipo}</td><td>${i.linhas||0}</td><td>${i.ignoradas||0}</td><td>${(i.colunas_faltantes||[]).join(', ')||'-'}</td><td>${i.observacao||''}</td></tr>`).join('')}</table></div>`:'<p class="muted">Nenhuma importacao.</p>'}function showReq(){if(window.req)req.innerHTML='<b>Colunas obrigatorias:</b> '+TYPES[it.value].cols.join('; ')}function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'_')}function parseNum(v){if(v==null||String(v).trim()==='')return'';let s=String(v).trim();if(/^[-+]?\d{1,3}(\.\d{3})+,\d+$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');let n=Number(s);return Number.isFinite(n)?n:v}async function readText(file){let buf=await file.arrayBuffer(),text=new TextDecoder('utf-8').decode(buf);if(text.includes('\uFFFD'))text=new TextDecoder('iso-8859-1').decode(buf);return text.replace(/^\uFEFF/,'')}function parseTxt(text){let lines=text.split(/\r?\n/).filter(x=>x.trim()),head=lines[0].split(';').map(norm);let rows=lines.slice(1).map(line=>{let cells=line.split(';');return Object.fromEntries(head.map((h,i)=>[h,parseNum(cells[i]??'')]))});return{head,rows,preview:lines.slice(0,8).join('\n')}}function detectType(name,fallback){let n=name.toLowerCase();if(n.includes('resumo_geral_loja')||n.includes('resumo_geral'))return 'resumo_geral_loja';if(n.includes('campanhas_ofertas'))return 'campanhas_ofertas';if(n.includes('produtos_campanha'))return 'produtos_campanha';if(n.includes('departamentos_campanha')||n.includes('departamento_campanha'))return 'departamentos_campanha';if(n.includes('cupons_campanha')||n.includes('cupons_totais'))return 'cupons_totais';return fallback}function lojaFromVr(raw,fallback){let v=String(raw??'').trim();if(!v)return fallback;let n=Number(v),pad=Number.isFinite(n)?String(n).padStart(2,'0'):v.padStart(2,'0');let e=db.empresas.find(x=>String(x.id_vr)==v||String(x.id_vr)==String(n)||String(x.codigo)==v||String(x.codigo)==pad||x.nome==v);return e?e.nome:fallback}async function processImport(){let fs=[...files.files],loja=il.value,ini=ii.value,fim=ifim.value,tipo=it.value,obs=io.value.trim();let box=document.getElementById('ir');if(!loja||!ini||!fim||!tipo)return box.innerHTML='<span class="pill bad">Informe loja, data inicial, data final e tipo.</span>';if(!obs)obs='Sem observacao';if(!fs.length)return box.innerHTML='<span class="pill bad">Selecione pelo menos um arquivo .txt.</span>';if(fs.some(f=>!f.name.toLowerCase().endsWith('.txt')))return box.innerHTML='<span class="pill bad">Importe somente .txt.</span>';let allowed=monthsBetween(ini,fim),grouped={},hist=[],errors=[],warnings=[],totalRows=0,lastPreview='',affected=new Set([loja]);for(let f of fs){let realTipo=detectType(f.name,tipo),cfg=TYPES[realTipo];if(!cfg){errors.push(`${f.name}: tipo nao identificado.`);continue}let p=parseTxt(await readText(f));lastPreview=p.preview;let missing=cfg.cols.filter(c=>!p.head.includes(c));if(missing.length){errors.push(`${f.name} (${cfg.label}): colunas faltantes ${missing.join(', ')}`);hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:realTipo,linhas:0,ignoradas:p.rows.length,colunas_faltantes:missing,observacao:obs});continue}let selectedVr=empresa(loja).id_vr||'',fileStores=[...new Set(p.rows.map(r=>String(r.loja??'').trim()).filter(Boolean))];if(fileStores.length&&selectedVr&&fileStores.some(v=>String(Number(v))!=String(Number(selectedVr))))warnings.push(`${f.name}: coluna loja do TXT (${fileStores.join(', ')}) diferente da loja selecionada (${loja} / VR ${selectedVr}). O arquivo foi destinado para a loja selecionada.`);let rows=p.rows.filter(r=>allowed.includes(String(r.mes))).map(r=>({...r,loja,__loja_vr:r.loja||'',__tipo:realTipo}));if(!rows.length)warnings.push(`${f.name}: nenhuma linha dentro do periodo ${ini} a ${fim}.`);let key=realTipo+'|'+loja;(grouped[key]=grouped[key]||{tipo:realTipo,loja,rows:[]}).rows.push(...rows);totalRows+=rows.length;hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:realTipo,linhas:rows.length,ignoradas:p.rows.length-rows.length,colunas_faltantes:[],observacao:obs})}affected.forEach(l=>delete db.aprovacoes[periodKey(l)]);Object.values(grouped).forEach(g=>{if(g.rows.length)saveRows(g.tipo,g.rows,g.loja,allowed)});if(hist.length)db.importacoes.unshift(...hist);save();fLoja.value=loja;setupFilters();fLoja.value=loja;render();let newBox=document.getElementById('ir'),pv=document.getElementById('prev');if(pv&&lastPreview){pv.style.display='block';pv.textContent=lastPreview}let importedTypes=[...new Set(Object.values(grouped).filter(g=>g.rows.length).map(g=>TYPES[g.tipo].label))].join(', ')||'-';let importedStores=loja;let msg=errors.length?`<div class="alert bad">${errors.join('<br>')}</div>`:`<div class="alert ok"><b>Importacao concluida.</b><br>${fs.length} arquivo(s), ${totalRows} linhas importadas.<br>Tipos: ${importedTypes}<br>Lojas: ${importedStores}</div>`;if(warnings.length)msg+=`<div class="alert warn">${warnings.join('<br>')}</div>`;if(newBox)newBox.innerHTML=msg}function saveRows(tipo,rows,loja,months){let b=TYPES[tipo].bucket;db[b]=db[b].filter(r=>!(r.loja==loja&&months.includes(r.mes)&&r.__tipo==tipo)).concat(rows)}function template(){let tipo=(window.it&&it.value)||'resumo_geral_loja',blob=new Blob([TYPES[tipo].cols.join(';')+'\n']),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=TYPES[tipo].file;a.click();URL.revokeObjectURL(a.href)}
-function audit(loja=fLoja.value){if(loja=='Todas')loja='Loja 01';let months=monthsBetween(fInicio.value,fFim.value),imps=db.importacoes.filter(i=>i.loja==loja&&i.periodo==fInicio.value+' a '+fFim.value),present={};ORDER.forEach(t=>present[t]=db[TYPES[t].bucket].some(r=>r.loja==loja&&months.includes(r.mes)&&r.__tipo==t));let missing=ORDER.filter(t=>!present[t]),t=total(loja),ignored=imps.reduce((s,i)=>s+(+i.ignoradas||0),0),cols=imps.flatMap(i=>i.colunas_faltantes||[]),alerts=[];if(missing.length)alerts.push('Arquivos faltantes: '+missing.map(t=>TYPES[t].label).join(', '));if(!t.vt)alerts.push('Resumo geral ausente no periodo.');if(!t.v)alerts.push('Campanhas/ofertas ausentes no periodo.');if(ignored)alerts.push('Existem linhas ignoradas.');if(cols.length)alerts.push('Existem colunas faltantes.');let st='Pendente';if(ORDER.length-missing.length>0)st=missing.length?'Parcial':'Auditado';if(alerts.length&&st!='Pendente')st='Com erro';if(db.aprovacoes[periodKey(loja)]?.status=='Aprovado')st='Aprovado';return{loja,months,imps,present,missing,total:t,ignored,cols,alerts,status:st,last:imps[0]?.data||'',obs:db.aprovacoes[periodKey(loja)]?.obs||imps[0]?.observacao||''}}function statusPill(st){return st=='Aprovado'?'<span class="pill ok">Aprovado</span>':st=='Auditado'?'<span class="pill info">Auditado</span>':st=='Com erro'?'<span class="pill bad">Com erro</span>':st=='Parcial'?'<span class="pill warn">Parcial</span>':'<span class="pill mutedpill">Pendente</span>'}function auditoria(){let a=audit();return`<div class="grid cards">${card('Status',statusPill(a.status),'Periodo')}${card('Arquivos',a.imps.length,'Historico')}${card('Meses',a.months.length,'No periodo')}${card('Linhas ignoradas',num(a.ignored),'Importacao')}${card('Part. prom.',pct(a.total.part),'Campanhas / total')}</div><div class="grid two mt"><div class="panel"><h2>Arquivos importados</h2>${history()}</div><div class="panel"><h2>Totais e alertas</h2><p>Venda total resumo: <b>${brl(a.total.vt)}</b></p><p>Soma campanhas: <b>${brl(a.total.v)}</b></p><p>Diferenca: <b>${brl(a.total.vt-a.total.v)}</b></p><p>Cupons totais: <b>${num(a.total.ct)}</b></p><p>Cupons campanhas: <b>${num(a.total.cup)}</b></p><h2>Arquivos faltantes</h2><p>${a.missing.map(t=>`<span class="pill warn">${TYPES[t].label}</span>`).join(' ')||'<span class="pill ok">Nenhum</span>'}</p>${a.alerts.map(x=>`<div class="alert ${a.status=='Com erro'?'bad':'warn'}">${x}</div>`).join('')||'<div class="alert ok">Sem alertas criticos.</div>'}</div></div>`}
-function plano(){let rs=db.empresas.filter(e=>fRegiao.value=='Todas'||e.regiao==fRegiao.value).map(e=>({...audit(e.nome),regiao:e.regiao})),tot=rs.length,ap=rs.filter(r=>r.status=='Aprovado').length,err=rs.filter(r=>r.status=='Com erro').length,pend=rs.filter(r=>r.status!='Aprovado').length;return`<div class="grid cards">${card('Total lojas',tot,'Periodo')}${card('Pendentes',pend,'Nao aprovadas')}${card('Completas',ap,'Aprovadas')}${card('Com erro',err,'Auditoria')}${card('% avanco',pct(tot?ap/tot*100:0),'Aprovadas')}</div><div class="panel mt"><h2>Plano de Coleta 27 Lojas</h2><div class="table"><table><tr><th>Loja</th><th>Regiao</th><th>Status</th><th>Resumo?</th><th>Campanhas?</th><th>Produtos?</th><th>Departamentos?</th><th>Cupons?</th><th>Ultima importacao</th><th>Observacao</th><th>Acoes</th></tr>${rs.map(r=>`<tr><td><b>${r.loja}</b></td><td>${r.regiao}</td><td>${statusPill(r.status)}</td>${ORDER.map(t=>`<td>${r.present[t]?'<span class="pill ok">Sim</span>':'<span class="pill mutedpill">Nao</span>'}</td>`).join('')}<td>${r.last||'-'}</td><td>${r.obs||'-'}</td><td><button class="btn" onclick="openAudit('${r.loja}')">Ver auditoria</button> <button class="btn primary" onclick="approve('${r.loja}')">Aprovar lote</button> <button class="btn" onclick="reprocess('${r.loja}')">Reprocessar</button></td></tr>`).join('')}</table></div></div>`}function openAudit(l){fLoja.value=l;go('auditoria')}function approve(l){let a=audit(l);if(a.status=='Com erro'||a.status=='Pendente'||a.missing.length){if(!confirm('Lote incompleto ou com erro. Aprovar mesmo assim?'))return}db.aprovacoes[periodKey(l)]={status:'Aprovado',data:new Date().toLocaleString('pt-BR'),obs:prompt('Observacao:',a.obs||'Validado com VR')||''};save();render()}function reprocess(l){delete db.aprovacoes[periodKey(l)];fLoja.value=l;go('importacoes')}
-function consolidacao(){let lojas=db.empresas.filter(e=>audit(e.nome).status=='Aprovado'),data=[];if(fVisao.value=='mensal'){lojas.forEach(e=>monthsBetween(fInicio.value,fFim.value).forEach(m=>{let cs=db.campanhas.filter(r=>r.loja==e.nome&&r.mes==m).map(calc),rr=db.resumos.find(r=>r.loja==e.nome&&r.mes==m)||{},v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0);data.push({loja:e.nome,mes:m,regiao:e.regiao,vt:+rr.venda_total||0,v,l,margem:v?l/v*100:0,part:rr.venda_total?v/rr.venda_total*100:0})}))}else{lojas.forEach(e=>{let t=total(e.nome);data.push({loja:e.nome,mes:'Periodo',regiao:e.regiao,vt:t.vt,v:t.v,l:t.l,margem:t.margem,part:t.part})})}return`<div class="alert info">Regra ativa: apenas lojas aprovadas entram na Consolidacao Final.</div><div class="panel mt"><h2>${fVisao.value=='mensal'?'Visao mensal':'Visao acumulada do periodo'}</h2><div class="table"><table><tr><th>Loja</th><th>Mes</th><th>Regiao</th><th>Venda total</th><th>Venda prom.</th><th>Part.</th><th>Lucro</th><th>Margem</th></tr>${data.map(r=>`<tr><td>${r.loja}</td><td>${r.mes}</td><td>${r.regiao}</td><td>${brl(r.vt)}</td><td>${brl(r.v)}</td><td>${pct(r.part)}</td><td>${brl(r.l)}</td><td>${pct(r.margem)}</td></tr>`).join('')||'<tr><td colspan="8">Nenhuma loja aprovada.</td></tr>'}</table></div></div>`}
-function modelos(){let loja=fLoja.value=='Todas'?'Loja 01':fLoja.value,tipo=(window.sqlTipo&&sqlTipo.value)||'resumo_geral_loja';return`<div class="panel"><h2>Modelos SQL por periodo mensalizado</h2><div class="row"><select id="sqlTipo" onchange="render()">${ORDER.map(k=>`<option value="${k}" ${k==tipo?'selected':''}>${TYPES[k].label} - ${TYPES[k].file}</option>`).join('')}</select><button class="btn primary" onclick="copySql()">Copiar SQL</button></div><p class="muted">Use loja, data inicial e data final. A coluna mes e gerada por TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM').</p><pre id="sqlBox" class="sql">${makeSql(tipo,empresa(loja),fInicio.value,fFim.value)}</pre></div>`}function makeSql(tipo,e,ini,fim){let id=e.id_vr||1;if(tipo=='cupons_totais')return `SELECT
-    v.id_loja AS loja,
-
-    TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,
-
-    ct.cupons_totais,
-
-    t.descricao AS campanha,
-
-    COUNT(DISTINCT v.id) AS cupons_campanha
-
-FROM pdv.vendaitem i
-
-INNER JOIN pdv.venda v
-    ON v.id = i.id_venda
-
-INNER JOIN public.tipooferta t
-    ON t.id = i.id_tipooferta
-
-INNER JOIN (
-    SELECT
-        id_loja,
-        DATE_TRUNC('month', data) AS mes_ref,
-        COUNT(DISTINCT id) AS cupons_totais
-    FROM pdv.venda
-    WHERE id_loja = 1
-      AND data >= '2026-01-01'
-      AND data < '2026-07-01'
-      AND cancelado = FALSE
-    GROUP BY
-        id_loja,
-        DATE_TRUNC('month', data)
-) ct
-    ON ct.id_loja = v.id_loja
-   AND ct.mes_ref = DATE_TRUNC('month', v.data)
-
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
-  AND v.cancelado = FALSE
-  AND i.oferta = TRUE
-
-GROUP BY
-    v.id_loja,
-    DATE_TRUNC('month', v.data),
-    ct.cupons_totais,
-    t.descricao
-
-ORDER BY
-    mes,
-    cupons_campanha DESC;`;
-if(tipo=='departamentos_campanha')return `SELECT
-    v.id_loja AS loja,
-
-    TO_CHAR(
-        DATE_TRUNC('month', v.data),
-        'YYYY-MM'
-    ) AS mes,
-
-    i.id_tipooferta,
-
-    t.descricao AS campanha,
-
-    p.mercadologico1,
-
-    m.descricao AS descricao_departamento,
-
-    COUNT(DISTINCT i.id_produto) AS produtos,
-
-    SUM(i.quantidade) AS quantidade,
-
-    SUM(i.valortotal) AS venda,
-
-    SUM(i.valortotal)
-      - SUM(i.customediocomimposto * i.quantidade) AS lucro,
-
-    ROUND(
-        (
-            SUM(i.valortotal)
-            - SUM(i.customediocomimposto * i.quantidade)
-        )
-        /
-        NULLIF(SUM(i.valortotal),0)
-        * 100
-    ,2) AS margem
-
-FROM pdv.vendaitem i
-
-INNER JOIN pdv.venda v
-    ON v.id = i.id_venda
-
-INNER JOIN public.tipooferta t
-    ON t.id = i.id_tipooferta
-
-INNER JOIN public.produto p
-    ON p.id = i.id_produto
-
-INNER JOIN public.mercadologico m
-    ON m.mercadologico1 = p.mercadologico1
-   AND m.nivel = 1
-
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
-  AND v.cancelado = FALSE
-  AND i.oferta = TRUE
-
-GROUP BY
-    v.id_loja,
-    DATE_TRUNC('month', v.data),
-    i.id_tipooferta,
-    t.descricao,
-    p.mercadologico1,
-    m.descricao
-
-ORDER BY
-    mes,
-    campanha,
-    venda DESC;`;
-if(tipo=='produtos_campanha')return `SELECT
-    v.id_loja AS loja,
-
-    TO_CHAR(
-        DATE_TRUNC('month', v.data),
-        'YYYY-MM'
-    ) AS mes,
-
-    i.id_tipooferta,
-
-    t.descricao AS campanha,
-
-    i.id_produto,
-
-    p.descricaocompleta AS descricao_produto,
-
-    SUM(i.quantidade) AS quantidade,
-
-    SUM(i.valortotal) AS venda,
-
-    SUM(i.valortotal)
-      - SUM(i.customediocomimposto * i.quantidade) AS lucro,
-
-    ROUND(
-        (
-            SUM(i.valortotal)
-            - SUM(i.customediocomimposto * i.quantidade)
-        )
-        /
-        NULLIF(SUM(i.valortotal),0)
-        * 100
-    ,2) AS margem
-
-FROM pdv.vendaitem i
-
-INNER JOIN pdv.venda v
-    ON v.id = i.id_venda
-
-INNER JOIN public.tipooferta t
-    ON t.id = i.id_tipooferta
-
-INNER JOIN public.produto p
-    ON p.id = i.id_produto
-
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
-  AND v.cancelado = FALSE
-  AND i.oferta = TRUE
-
-GROUP BY
-    v.id_loja,
-    DATE_TRUNC('month', v.data),
-    i.id_tipooferta,
-    t.descricao,
-    i.id_produto,
-    p.descricaocompleta
-
-ORDER BY
-    mes,
-    campanha,
-    venda DESC;`;
-if(tipo=='campanhas_ofertas')return `SELECT
-    v.id_loja AS loja,
-
-    TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,
-
-    i.id_tipooferta,
-
-    t.descricao,
-
-    SUM(i.valortotal) AS venda,
-
-    SUM(i.customediocomimposto * i.quantidade) AS custo,
-
-    SUM(i.valortotal)
-      - SUM(i.customediocomimposto * i.quantidade) AS lucro,
-
-    ROUND(
-        (
-            SUM(i.valortotal)
-            - SUM(i.customediocomimposto * i.quantidade)
-        )
-        /
-        NULLIF(SUM(i.valortotal),0)
-        * 100
-    ,2) AS margem,
-
-    SUM(i.quantidade) AS quantidade,
-
-    COUNT(*) AS itens,
-
-    COUNT(DISTINCT i.id_produto) AS produtos_distintos,
-
-    COUNT(DISTINCT v.id) AS cupons,
-
-    ROUND(
-        SUM(i.valortotal)
-        / NULLIF(COUNT(DISTINCT v.id),0)
-    ,2) AS ticket_medio,
-
-    ROUND(
-        SUM(i.valortotal)
-        / NULLIF(SUM(i.quantidade),0)
-    ,2) AS preco_medio
-
-FROM pdv.venda v
-
-INNER JOIN pdv.vendaitem i
-    ON i.id_venda = v.id
-
-INNER JOIN public.tipooferta t
-    ON t.id = i.id_tipooferta
-
-WHERE v.id_loja = 1
-  AND v.data >= '2026-01-01'
-  AND v.data < '2026-07-01'
-  AND v.cancelado = FALSE
-  AND i.oferta = TRUE
-
-GROUP BY
-    v.id_loja,
-    DATE_TRUNC('month', v.data),
-    i.id_tipooferta,
-    t.descricao
-
-ORDER BY
-    mes,
-    venda DESC;`;
-if(tipo=='resumo_geral_loja')return`SELECT\n    v.id_loja AS loja,\n    TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n    SUM(i.valortotal) AS venda_total,\n    SUM(i.customediocomimposto * i.quantidade) AS custo_total,\n    SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade) AS lucro_total,\n    ROUND((SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade)) / NULLIF(SUM(i.valortotal),0) * 100,2) AS margem_total,\n    COUNT(DISTINCT v.id) AS cupons_totais,\n    SUM(i.quantidade) AS unidades_totais,\n    COUNT(DISTINCT i.id_produto) AS produtos_distintos\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda = v.id\nWHERE v.id_loja = ${id}\n  AND v.data >= '${ini}'\n  AND v.data < '${fim}'\n  AND v.cancelado = FALSE\nGROUP BY v.id_loja, DATE_TRUNC('month', v.data)\nORDER BY mes;`;return`-- Modelo: ${TYPES[tipo].file}\n-- Troque loja e periodo. A consulta oficial completa esta na pasta /sql.\nSELECT v.id_loja AS loja, TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes, ...\nWHERE v.id_loja = ${id}\n  AND v.data >= '${ini}'\n  AND v.data < '${fim}'\nGROUP BY v.id_loja, DATE_TRUNC('month', v.data), ...\nORDER BY mes;`}function copySql(){navigator.clipboard.writeText(sqlBox.textContent).then(()=>alert('SQL copiado.'))}
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIGNORDESTE ANALYTICS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<style>
+:root{--bg:#f0f2f5;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--panel:#fff;--brand:#0d9f5e;--brand-dark:#064e30;--brand-light:#ecfdf5;--gold:#f59e0b;--bad:#ef4444;--warn:#f97316;--ok:#10b981;--blue:#3b82f6;--purple:#8b5cf6;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+
+/* Sidebar */
+aside{background:#111827;color:white;padding:0;display:flex;flex-direction:column}
+.brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.brand-logo{display:flex;align-items:center;gap:10px}
+.brand-icon{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.brand-icon svg{width:18px;height:18px;fill:white}
+.brand b{display:block;font-size:15px;font-weight:700;letter-spacing:.2px}
+.brand span{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px}
+nav{display:flex;flex-direction:column;gap:1px;padding:10px 8px;flex:1}
+nav button{border:0;background:transparent;color:rgba(255,255,255,.55);text-align:left;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px;transition:all .15s}
+nav button:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
+nav button.active{background:rgba(255,255,255,.1);color:white;font-weight:600}
+nav button svg{width:16px;height:16px;opacity:.5;flex-shrink:0}
+nav button.active svg{opacity:.9}
+.nav-badge{margin-left:auto;background:var(--brand);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;min-width:18px;text-align:center}
+.sidebar-footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.3)}
+.sidebar-footer .cloud-status{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.cloud-dot{width:6px;height:6px;border-radius:50%;background:#4b5563}
+.cloud-dot.online{background:#34d399}
+
+/* Main */
+main{padding:20px 24px;min-width:0;overflow-y:auto;max-height:100vh}
+header{display:flex;justify-content:space-between;gap:12px;margin-bottom:20px;align-items:center}
+h1{font-size:20px;font-weight:700;margin:0;color:var(--ink)}
+.sub{color:var(--muted);font-size:12px;margin-top:2px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.toolbar{display:flex;gap:8px;align-items:center}
+select,input[type="date"]{border:1px solid var(--line);background:white;border-radius:6px;padding:6px 8px;height:32px;font:inherit;font-size:12px;color:var(--ink)}
+select:focus,input:focus{outline:none;border-color:var(--brand)}
+textarea{border:1px solid var(--line);background:white;border-radius:6px;padding:8px;font:inherit;font-size:12px;resize:vertical}
+
+/* Grid */
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+/* KPI Cards */
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;position:relative}
+.kpi .lb{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.3px}
+.kpi .vl{font-size:22px;font-weight:800;color:var(--ink);line-height:1.2}
+.kpi .delta{font-size:11px;font-weight:600;margin-top:4px}
+.kpi .delta.up{color:var(--ok)}
+.kpi .delta.down{color:var(--bad)}
+.kpi-accent{border-left:3px solid var(--brand)}
+
+/* Panels */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.panel-title{font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)}
+.panel-sub{font-size:11px;color:var(--muted);margin-bottom:16px}
+.panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.panel-header .panel-title{margin:0}
+
+/* Charts - BI SIZED */
+.chart-xl{position:relative;width:100%;height:380px}
+.chart-lg{position:relative;width:100%;height:300px}
+.chart-md{position:relative;width:100%;height:240px}
+.chart-sm{position:relative;width:100%;height:180px}
+
+/* Tables */
+.table-wrap{overflow:auto;max-height:500px;border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{background:#f9fafb;color:var(--muted);font-size:10px;text-transform:uppercase;font-weight:700;letter-spacing:.4px;position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--ink)}
+th .sa{font-size:9px;margin-left:2px;opacity:.3}
+th.sorted .sa{opacity:1;color:var(--brand)}
+tbody tr:nth-child(even){background:#f9fafb}
+tbody tr:hover{background:#f0fdf4}
+td b{font-weight:600}
+
+/* Pills */
+.pill{display:inline-flex;align-items:center;gap:3px;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:700;white-space:nowrap}
+.p-ok{background:#dcfce7;color:#166534}
+.p-warn{background:#fef3c7;color:#92400e}
+.p-bad{background:#fee2e2;color:#991b1b}
+.p-info{background:#dbeafe;color:#1e40af}
+.p-muted{background:#f3f4f6;color:#6b7280}
+
+/* Buttons */
+.btn{border:1px solid var(--line);background:white;border-radius:6px;padding:5px 10px;font-weight:600;cursor:pointer;font-size:11px;transition:all .12s;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{border-color:#9ca3af;background:#f9fafb}
+.btn svg{width:12px;height:12px}
+.primary{background:var(--brand);border-color:var(--brand);color:white}
+.primary:hover{background:#0b8a50}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#111827 0%,#1e3a2f 50%,#0d3d28 100%);color:white;border-radius:var(--radius);padding:24px;margin-bottom:16px}
+.hero h2{margin:0 0 4px;font-size:18px;font-weight:700}
+.hero .sub{color:rgba(255,255,255,.6);font-size:12px}
+.hero-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.hero-kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px}
+.hero-kpi .lb{color:rgba(255,255,255,.5);font-size:10px;font-weight:600;letter-spacing:.3px}
+.hero-kpi .vl{font-size:18px;font-weight:800;margin-top:4px}
+.hero-kpi .sub{color:rgba(255,255,255,.4);font-size:11px;margin-top:2px}
+
+/* Import */
+.drop{border:2px dashed #d1d5db;border-radius:var(--radius);background:#fafbfc;padding:20px;display:grid;gap:12px}
+.row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.preview,pre.sql{white-space:pre;overflow:auto;max-height:360px;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:8px;font-size:11px;font-family:'JetBrains Mono','Fira Code',monospace;line-height:1.6}
+
+/* Utilities */
+.mt{margin-top:16px}
+.mt2{margin-top:24px}
+.muted{color:var(--muted)}
+.alert{border-left:3px solid var(--blue);background:white;border:1px solid var(--line);border-left-width:3px;border-radius:8px;padding:12px;margin:8px 0;font-size:12px;border-radius:0}
+.alert.a-bad{border-left-color:var(--bad)}
+.alert.a-warn{border-left-color:var(--warn)}
+.alert.a-ok{border-left-color:var(--ok)}
+.alert b{font-weight:700}
+
+/* Decision cards */
+.dcard{border:1px solid var(--line);border-radius:var(--radius);background:#fff;padding:14px;margin-bottom:10px}
+.dcard .topline{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.dcard h4{font-size:13px;font-weight:700;margin:0}
+.dcard .desc{font-size:11px;color:var(--muted);margin-top:2px}
+.bar6{height:5px;background:#f3f4f6;border-radius:99px;overflow:hidden;margin:8px 0}
+.bar6 span{display:block;height:100%;border-radius:99px}
+.metrics5{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.mbox{background:#f9fafb;border-radius:6px;padding:6px 8px;font-size:11px}
+.mbox .lb{font-size:9px;color:var(--muted);font-weight:600}
+.mbox b{display:block;font-size:13px;margin-top:1px}
+.verdict{font-size:12px;font-weight:700;margin-top:8px;color:var(--brand-dark)}
+
+/* Risk */
+.risk-grid{display:grid;gap:6px}
+.risk{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px}
+.risk .rl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;min-width:80px}
+
+/* Actions */
+.action-list{counter-reset:act;display:grid;gap:6px}
+.action-step{border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:0 8px 8px 0;background:#fff;padding:10px 12px;font-size:12px}
+.action-step:before{counter-increment:act;content:counter(act);display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;border-radius:50%;background:var(--brand-light);color:var(--brand);font-weight:800;font-size:11px;margin-right:8px}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:#111827;color:white;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:600;z-index:999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* Fade */
+#view{transition:opacity .15s ease}
+#view.fade{opacity:0}
+
+/* Print */
+@media print{
+  aside,.filters,.btn,nav,header .filters{display:none!important}
+  .app{display:block!important}
+  main{padding:10px!important;max-height:none!important;overflow:visible!important}
+  .hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .kpi,.panel{box-shadow:none!important;break-inside:avoid}
+  .print-header{display:block!important}
+  body{font-size:10px}
+}
+.print-header{display:none}
+
+/* Responsive */
+@media(max-width:980px){
+  .app{grid-template-columns:1fr}
+  aside{display:block;position:sticky;top:0;z-index:20}
+  aside .brand,.sidebar-footer{display:none}
+  nav{flex-direction:row;overflow:auto;padding:8px;background:#111827}
+  nav button{white-space:nowrap;flex:0 0 auto}
+  header{flex-direction:column;align-items:stretch}
+  .kpis,.g2,.g3,.g4,.row,.hero-kpis,.metrics5{grid-template-columns:1fr}
+  .filters{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="print-header"><h1>BIGNORDESTE ANALYTICS</h1><p id="printDate"></p></div>
+<div class="toast" id="toast"></div>
+<div class="app">
+<aside>
+  <div class="brand"><div class="brand-logo"><div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div><div><b>BIGNORDESTE</b><span>analytics</span></div></div></div>
+  <nav id="nav"></nav>
+  <div class="sidebar-footer"><div class="cloud-status"><span class="cloud-dot" id="cloudDot"></span> <span id="cloudLabel">Offline</span></div><div>v2.0</div></div>
+</aside>
+<main>
+  <header>
+    <div><h1 id="title"></h1><div id="sub" class="sub"></div></div>
+    <div class="filters">
+      <select id="fLoja"></select>
+      <select id="fRegiao"></select>
+      <input id="fInicio" type="date" value="2026-01-01">
+      <input id="fFim" type="date" value="2026-07-01">
+      <select id="fVisao"><option value="acumulado">Acumulado</option><option value="mensal">Mensal</option></select>
+      <select id="fCamp"></select>
+    </div>
+  </header>
+  <section id="view"></section>
+</main>
+</div>
+<script>
+/* ===== CHART PALETTE ===== */
+const PAL={green:'#0d9f5e',greenLight:'rgba(13,159,94,.12)',gold:'#f59e0b',goldLight:'rgba(245,158,11,.12)',blue:'#3b82f6',blueLight:'rgba(59,130,246,.12)',red:'#ef4444',redLight:'rgba(239,68,68,.12)',purple:'#8b5cf6',purpleLight:'rgba(139,92,246,.12)',teal:'#14b8a6',gray:'#6b7280',dark:'#111827'};
+const COLORS=[PAL.green,PAL.gold,PAL.blue,PAL.red,PAL.purple,PAL.teal];
+const BG_COLORS=[PAL.greenLight,PAL.goldLight,PAL.blueLight,PAL.redLight,PAL.purpleLight,'rgba(20,184,166,.12)'];
+const SOLID_COLORS=['#059669','#d97706','#2563eb','#dc2626','#7c3aed','#0d9488'];
+
+/* ===== FORMATTERS ===== */
+const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),nf=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:1});
+const brl=v=>money.format(+v||0),num=v=>nf.format(+v||0),pct=v=>num(v)+'%';
+function brlShort(v){v=+v||0;if(Math.abs(v)>=1e6)return'R$ '+num(v/1e6)+'M';if(Math.abs(v)>=1e3)return'R$ '+num(v/1e3)+'K';return brl(v)}
+
+/* ===== ICONS ===== */
+const ICONS={decisao:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',dashboard:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>',importacoes:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>',auditoria:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>',plano:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>',modelos:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',empresas:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>',consolidacao:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>',relatorio:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',exp:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>'};
+
+/* ===== CHART ENGINE ===== */
+let activeCharts={};
+function destroyCharts(){Object.values(activeCharts).forEach(c=>{try{c.destroy()}catch(e){}});activeCharts={}}
+Chart.register(ChartDataLabels);
+Chart.defaults.font.family='Inter,system-ui,sans-serif';
+Chart.defaults.font.size=11;
+Chart.defaults.color='#6b7280';
+Chart.defaults.plugins.datalabels={display:false};
+
+function mkChart(id,type,labels,datasets,opts={}){
+  setTimeout(()=>{
+    let el=document.getElementById(id);if(!el)return;
+    if(activeCharts[id])try{activeCharts[id].destroy()}catch(e){}
+    let base={responsive:true,maintainAspectRatio:false,animation:{duration:600,easing:'easeOutQuart'},interaction:{mode:'index',intersect:false},plugins:{legend:{display:labels.length<=8,position:'bottom',labels:{boxWidth:10,padding:14,font:{size:11,weight:'500'},usePointStyle:true}},tooltip:{backgroundColor:'#111827',titleFont:{size:12,weight:'600'},bodyFont:{size:11},padding:12,cornerRadius:8,displayColors:true,boxWidth:8,callbacks:{}},datalabels:{display:false}},scales:{}};
+    if(type==='doughnut'||type==='pie'||type==='radar'||type==='polarArea'){delete base.scales;if(type==='doughnut'||type==='pie'){base.cutout=type==='doughnut'?'65%':0;base.plugins.datalabels={display:true,color:'#fff',font:{weight:'700',size:12},formatter:(v,ctx)=>{let sum=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return sum?Math.round(v/sum*100)+'%':''}}}if(type==='radar'){base.scales={r:{beginAtZero:true,max:100,ticks:{display:false,stepSize:25},grid:{color:'#e5e7eb'},pointLabels:{font:{size:11,weight:'600'}}}}}}
+    else{base.scales={x:{grid:{display:false},ticks:{font:{size:10},maxRotation:45}},y:{grid:{color:'#f3f4f6'},ticks:{font:{size:10}},beginAtZero:true}}}
+    let cfg={type,data:{labels,datasets},options:{...base,...opts}};
+    if(opts.scales)cfg.options.scales={...base.scales,...opts.scales};
+    if(opts.plugins)cfg.options.plugins={...base.plugins,...opts.plugins};
+    activeCharts[id]=new Chart(el.getContext('2d'),cfg);
+  },80);
+}
+
+/* ===== TOAST ===== */
+function showToast(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+/* ===== EXPORT ===== */
+function exportCSV(fn,h,rows){let csv=h.join(';')+'\n'+rows.map(r=>r.map(c=>typeof c==='string'&&c.includes(';')?'"'+c+'"':c).join(';')).join('\n');let b=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href);showToast('Exportado: '+fn)}
+function exportJSON(fn,data){let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href);showToast('Exportado: '+fn)}
+function csvBtn(t,fn){return`<button class="btn" onclick="${fn}">${ICONS.exp} ${t}</button>`}
+
+/* ===== SORTABLE ===== */
+let sortState={};
+function sortableTable(tid,headers,rows,types){let s=sortState[tid]||{col:-1,asc:true};if(s.col>=0){let t=types?types[s.col]:'text';rows=[...rows].sort((a,b)=>{let va=a[s.col],vb=b[s.col];if(t==='num'){va=parseFloat(String(va).replace(/[^\d.,-]/g,'').replace(',','.'))||0;vb=parseFloat(String(vb).replace(/[^\d.,-]/g,'').replace(',','.'))||0}if(va<vb)return s.asc?-1:1;if(va>vb)return s.asc?1:-1;return 0})}let ths=headers.map((h,i)=>{let ar=s.col===i?(s.asc?'&#9650;':'&#9660;'):'&#8597;';return`<th class="${s.col===i?'sorted':''}" onclick="doSort('${tid}',${i})">${h} <span class="sa">${ar}</span></th>`}).join('');return`<div class="table-wrap"><table><thead><tr>${ths}</tr></thead><tbody>${rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')}</tbody></table></div>`}
+function doSort(tid,col){let s=sortState[tid]||{col:-1,asc:true};if(s.col===col)s.asc=!s.asc;else{s.col=col;s.asc=true}sortState[tid]=s;render()}
+
+/* ===== DATA TYPES ===== */
+const TYPES={resumo_geral_loja:{label:'Resumo geral',file:'resumo_geral_loja.txt',bucket:'resumos',cols:['loja','mes','venda_total','custo_total','lucro_total','margem_total','cupons_totais','unidades_totais','produtos_distintos']},campanhas_ofertas:{label:'Campanhas/ofertas',file:'campanhas_ofertas.txt',bucket:'campanhas',cols:['loja','mes','id_tipooferta','descricao','venda','custo','lucro','margem','quantidade','itens','produtos_distintos','cupons','ticket_medio','preco_medio']},produtos_campanha:{label:'Produtos',file:'produtos_campanha.txt',bucket:'produtos',cols:['loja','mes','id_tipooferta','campanha','id_produto','descricao_produto','quantidade','venda','lucro','margem']},departamentos_campanha:{label:'Departamentos',file:'departamentos_campanha.txt',bucket:'departamentos',cols:['loja','mes','id_tipooferta','campanha','mercadologico1','descricao_departamento','produtos','quantidade','venda','lucro','margem']},cupons_totais:{label:'Cupons',file:'cupons_campanha.txt',bucket:'cupons',cols:['loja','mes','cupons_totais','campanha','cupons_campanha']}};
+const ORDER=Object.keys(TYPES);
+
+/* ===== PAGES ===== */
+const pages=[['decisao','Centro de Decisao'],['dashboard','Dashboard'],['importacoes','Importacoes'],['auditoria','Auditoria'],['plano','Plano de Coleta'],['modelos','Modelos SQL'],['empresas','Empresas'],['consolidacao','Consolidacao'],['relatorio','Relatorio']];
+
+/* ===== PERIOD ===== */
+function monthsBetween(ini,fim){let out=[],d=new Date(ini+'T00:00:00'),end=new Date(fim+'T00:00:00');while(d<end){out.push(d.toISOString().slice(0,7));d=new Date(d.getFullYear(),d.getMonth()+1,1)}return out}
+function inPeriod(m){return monthsBetween(fInicio.value,fFim.value).includes(monthKey(m))}
+function periodKey(loja){return loja+'|'+fInicio.value+'|'+fFim.value}
+
+/* ===== SEED ===== */
+function seed(){let empresas=Array.from({length:27},(_,i)=>({codigo:String(i+1).padStart(2,'0'),id_vr:String(i+1),nome:'Loja '+String(i+1).padStart(2,'0'),regiao:['Natal','Agreste','Sertao','Litoral'][i%4],cidade:['Natal','Parnamirim','Mossoro','Caico'][i%4],uf:'RN',status:'Ativa'}));let meses=['2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];let resumos=meses.map((m,i)=>({loja:'Loja 01',mes:m,venda_total:3042701.83+i*85000,custo_total:2650820.21+i*72000,lucro_total:391881.62+i*13000,margem_total:12.88,cupons_totais:62761+i*900,unidades_totais:489300+i*14000,produtos_distintos:740,__tipo:'resumo_geral_loja'}));let nomes=['ENCARTE BIG NORDESTE','FDS DE OFERTAS','DIA BIG','SEMANA DE OFERTAS'];let campanhas=meses.flatMap((m,mi)=>nomes.map((n,i)=>({loja:'Loja 01',mes:m,id_tipooferta:String(101+i),descricao:n,venda:[299097,227879,200699,115847][i]+mi*6000,custo:[261096,192757,196485,96654][i]+mi*4500,lucro:[38000,35121,4214,19192][i]+mi*900,margem:[12.71,15.41,2.10,16.57][i],quantidade:[53375,39124,42008,18142][i],itens:[690,490,430,260][i],produtos_distintos:[515,348,290,184][i],cupons:[10031,8210,11880,5138][i],ticket_medio:[29.82,27.76,16.89,22.55][i],preco_medio:[5.60,5.82,4.78,6.39][i],__tipo:'campanhas_ofertas'})));let departamentos=meses.map(m=>({loja:'Loja 01',mes:m,id_tipooferta:'101',campanha:'ENCARTE BIG NORDESTE',mercadologico1:'1',descricao_departamento:'PERECIVEIS',produtos:180,quantidade:28842,venda:157302,lucro:19000,margem:11.9,__tipo:'departamentos_campanha'}));let produtos=meses.map(m=>({loja:'Loja 01',mes:m,id_tipooferta:'101',campanha:'ENCARTE BIG NORDESTE',id_produto:'P1000',descricao_produto:'Produto promocional 01',quantidade:900,venda:24800,lucro:2480,margem:10,__tipo:'produtos_campanha'}));let cupons=campanhas.map(c=>({loja:c.loja,mes:c.mes,cupons_totais:resumos.find(r=>r.mes==c.mes)?.cupons_totais||0,campanha:c.descricao,cupons_campanha:c.cupons,__tipo:'cupons_totais'}));let importacoes=ORDER.map(t=>({data:new Date().toLocaleString('pt-BR'),arquivo:TYPES[t].file,loja:'Loja 01',periodo:'2026-01-01 a 2026-07-01',tipo:t,linhas:t=='resumo_geral_loja'?6:t=='campanhas_ofertas'||t=='cupons_totais'?24:6,ignoradas:0,colunas_faltantes:[],observacao:'Mock periodo jan-jun'}));return{empresas,resumos,campanhas,departamentos,produtos,cupons,importacoes,aprovacoes:{}}}
+
+/* ===== STATE ===== */
+let db=JSON.parse(localStorage.getItem('bignordeste.analytics.periodo.v1')||'null')||seed();
+let page='dashboard',cloudOnline=false;
+function lojaFromVr(raw,fb){let v=String(raw??'').trim();if(!v)return fb;let n=Number(v),pad=Number.isFinite(n)?String(n).padStart(2,'0'):v.padStart(2,'0');let e=db.empresas.find(x=>String(x.id_vr)==v||String(x.id_vr)==String(n)||String(x.codigo)==v||String(x.codigo)==pad||x.nome==v);return e?e.nome:fb}
+async function loadCloud(){if(location.protocol=='file:')return;try{let r=await fetch('/api/state');if(r.ok){let d=await r.json();if(d&&d.empresas){db=d;cloudOnline=true;localStorage.setItem('bignordeste.analytics.periodo.v1',JSON.stringify(db));setupFilters();render()}}updateCloud()}catch(e){updateCloud()}}
+function updateCloud(){let d=document.getElementById('cloudDot'),l=document.getElementById('cloudLabel');if(d)d.className='cloud-dot'+(cloudOnline?' online':'');if(l)l.textContent=cloudOnline?'Nuvem':'Local'}
+function save(){localStorage.setItem('bignordeste.analytics.periodo.v1',JSON.stringify(db));if(location.protocol!='file:')fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(db)}).then(r=>{cloudOnline=r.ok;updateCloud()}).catch(()=>updateCloud())}
+function empresa(n){return db.empresas.find(e=>e.nome==n)||{}}
+
+/* ===== STATUS ===== */
+function statusPill(st){if(st=='Aprovado')return'<span class="pill p-ok">Aprovado</span>';if(st=='Auditado')return'<span class="pill p-info">Auditado</span>';if(st=='Com erro')return'<span class="pill p-bad">Erro</span>';if(st=='Parcial'||st=='Importado')return`<span class="pill p-warn">${st}</span>`;return'<span class="pill p-muted">Pendente</span>'}
+
+/* ===== QUERIES ===== */
+function scopeRows(bucket,loja=fLoja.value){return db[bucket].filter(r=>(loja=='Todas'||r.loja==loja)&&inPeriod(r.mes)&&(fRegiao.value=='Todas'||empresa(r.loja).regiao==fRegiao.value))}
+function resumos(loja=fLoja.value){return scopeRows('resumos',loja)}
+function campanhaCupons(r){let m=monthKey(r.mes),nome=String(r.descricao||r.campanha||'').trim().toUpperCase();return (db.cupons||[]).find(c=>c.loja==r.loja&&monthKey(c.mes)==m&&String(c.campanha||'').trim().toUpperCase()==nome)||{}}
+function campanhas(loja=fLoja.value,usarFiltro=true){return scopeRows('campanhas',loja).filter(r=>!usarFiltro||fCamp.value=='Todas'||r.descricao==fCamp.value).map(calc)}
+function calc(r){let rr=db.resumos.find(x=>x.loja==r.loja&&monthKey(x.mes)==monthKey(r.mes))||{},cq=campanhaCupons(r),v=+r.venda||0,l=+r.lucro||0,c=+cq.cupons_campanha||+r.cupons||0,ct=+cq.cupons_totais||+rr.cupons_totais||0,part=rr.venda_total?v/rr.venda_total*100:0,pen=ct?c/ct*100:0;return{...r,mes:monthKey(r.mes),venda:v,lucro:l,cupons:c,cupons_totais:ct,participacao:part,penetracao:pen,ticket_medio:+r.ticket_medio||(c?v/c:0),preco_medio:+r.preco_medio||(+r.quantidade?v/+r.quantidade:0)}}
+function total(loja=fLoja.value,usarFiltro=true){let cs=campanhas(loja,usarFiltro),rs=resumos(loja),v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0),vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0),ct=rs.reduce((s,r)=>s+(+r.cupons_totais||0),0),cup=cs.reduce((s,r)=>s+(+r.cupons||0),0);return{v,l,vt,ct,cup,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0}}
 function sumBy(rows,keyFn,seedFn,addFn){let out={};rows.forEach(r=>{let k=keyFn(r);if(!out[k])out[k]=seedFn(r,k);addFn(out[k],r)});return Object.values(out)}
-function selectedCampaignName(){return fCamp.value!='Todas'?fCamp.value:(decisionCampaigns()[0]?.descricao||'')}
-function blocoCampanha(nome){let n=String(nome||'').toUpperCase();if(n.includes('DIA BIG'))return'Dia Big';if(n.includes('ENCARTE BIG NORDESTE'))return'Encarte Big Nordeste';return'Demais encartes'}
-function blocoCaracteristica(bloco){return bloco=='Dia Big'?'3a sexta do mes; foco em fluxo e baixa margem':bloco=='Encarte Big Nordeste'?'duas janelas: 25 a 30/29 e 01 a 05':'encartes e campanhas restantes do periodo'}
-function blocoRows(){let camps=decisionCampaigns(),t=total(),order=['Dia Big','Encarte Big Nordeste','Demais encartes'],rows=order.map(b=>({bloco:b,caracteristica:blocoCaracteristica(b),venda:0,lucro:0,cupons:0,produtos:0,campanhas:[],quantidade:0}));camps.forEach(c=>{let r=rows.find(x=>x.bloco==blocoCampanha(c.descricao));r.venda+=c.venda;r.lucro+=c.lucro;r.cupons+=c.cupons;r.produtos+=c.produtos;r.quantidade+=c.quantidade;r.campanhas.push(c.descricao)});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.participacao=t.vt?r.venda/t.vt*100:0;r.sharePromo=t.v?r.venda/t.v*100:0;r.penetracao=t.ct?r.cupons/t.ct*100:0;r.status=r.margem<5?'CRITICA':r.margem<10?'ATENCAO':'SAUDAVEL';r.leitura=r.bloco=='Dia Big'?'Bloco de trafego: aceitar margem menor apenas se gerar fluxo e cesta complementar.':r.bloco=='Encarte Big Nordeste'?'Bloco principal: medir forca nas duas viradas de periodo e proteger abastecimento.':'Bloco de comparacao: separar campanhas oportunistas das que merecem escala.'});return rows}
-function blocoAnalise(){let rows=blocoRows(),top=[...rows].sort((a,b)=>b.venda-a.venda)[0]||{},risk=[...rows].sort((a,b)=>a.margem-b.margem)[0]||{},profit=[...rows].sort((a,b)=>b.lucro-a.lucro)[0]||{};return `<div class="panel mt"><h2>Analise por blocos comerciais</h2><div class="grid three">${rows.map(r=>`<div class="decision-card"><div class="topline"><div><b>${r.bloco}</b><div class="hint">${r.caracteristica}</div></div>${marginPill(r.status)}</div><div class="metric-row"><div class="metric"><span class="label">Venda</span><br>${brl(r.venda)}</div><div class="metric"><span class="label">Lucro</span><br>${brl(r.lucro)}</div><div class="metric"><span class="label">Margem</span><br>${pct(r.margem)}</div><div class="metric"><span class="label">Pen.</span><br>${pct(r.penetracao)}</div><div class="metric"><span class="label">Prom.</span><br>${pct(r.sharePromo)}</div></div><div class="rec">${r.leitura}</div><div class="hint">Campanhas: ${r.campanhas.join(', ')||'sem dados no filtro'}</div></div>`).join('')}</div>${conclusion(`${top.bloco||'-'} lidera em venda, ${profit.bloco||'-'} lidera em lucro e ${risk.bloco||'-'} e o bloco de maior risco de margem.`)}${action(`Analisar Dia Big separado de Encarte Big Nordeste; comparar os demais encartes como bloco residual para decidir o que merece virar campanha recorrente.`)}</div>`}function decisionCampaigns(){let cs=campanhas(),t=total(),rows=sumBy(cs,r=>r.descricao,(r,k)=>({descricao:k,venda:0,lucro:0,cupons:0,quantidade:0,produtos:0,itens:0,meses:new Set()}),(a,r)=>{a.venda+=r.venda;a.lucro+=r.lucro;a.cupons+=+r.cupons||0;a.quantidade+=+r.quantidade||0;a.produtos+=+r.produtos_distintos||0;a.itens+=+r.itens||0;a.meses.add(r.mes)});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.participacao=t.vt?r.venda/t.vt*100:0;r.sharePromo=t.v?r.venda/t.v*100:0;r.penetracao=t.ct?r.cupons/t.ct*100:0;r.lucroCupom=r.cupons?r.lucro/r.cupons:0;r.vendaProduto=r.produtos?r.venda/r.produtos:0});let max={part:Math.max(1,...rows.map(r=>r.participacao)),lucro:Math.max(1,...rows.map(r=>r.lucro)),pen:Math.max(1,...rows.map(r=>r.penetracao)),margem:Math.max(1,...rows.map(r=>Math.max(0,r.margem)))};rows.forEach(r=>{r.score=Math.round((Math.max(0,r.participacao)/max.part*30)+(Math.max(0,r.lucro)/max.lucro*25)+(Math.max(0,r.penetracao)/max.pen*25)+(Math.max(0,r.margem)/max.margem*20));r.classe=r.score>=90?'Excelente':r.score>=80?'Recomendada':r.score>=70?'Manter':r.score>=60?'Atencao':'Revisar';r.statusMargem=r.margem<5?'CRITICA':r.margem<10?'ATENCAO':'SAUDAVEL';r.papel=r.margem<5&&r.penetracao>=max.pen*.7?'Trafego caro':r.score>=80?'Defender verba':r.lucro>=max.lucro*.75?'Geradora de lucro':r.penetracao>=max.pen*.75?'Geradora de fluxo':r.margem>=max.margem*.8?'Rentavel pequena':'Revisar mecanica';r.decisao=r.statusMargem=='CRITICA'?'Rever sortimento, custo e descontos':r.score>=80?'Repetir e ampliar com controle':r.score>=60?'Manter, mas ajustar produtos':'Nao escalar antes de revisar'});return rows.sort((a,b)=>b.score-a.score)}
-function decTable(headers,rows){return rows.length?`<div class="table"><table><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.join('')}</table></div>`:'<p class="muted">Sem dados no filtro atual.</p>'}
-function conclusion(text,tone='info'){return`<div class="alert ${tone}"><b>Conclusao:</b> ${text}</div>`}
-function action(text){return`<div class="alert ok"><b>Proxima acao:</b> ${text}</div>`}
-function marginPill(v){return v=='CRITICA'?'<span class="pill bad">CRITICA</span>':v=='ATENCAO'?'<span class="pill warn">ATENCAO</span>':'<span class="pill ok">SAUDAVEL</span>'}
-function decisionDepartments(camp){let rows=scopeRows('departamentos').filter(r=>!camp||r.campanha==camp),totalVenda=rows.reduce((s,r)=>s+(+r.venda||0),0);let out=sumBy(rows,r=>r.descricao_departamento,(r,k)=>({departamento:k,venda:0,lucro:0,quantidade:0,produtos:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.quantidade+=+r.quantidade||0;a.produtos+=+r.produtos||0});out.forEach(r=>{r.part=totalVenda?r.venda/totalVenda*100:0;r.margem=r.venda?r.lucro/r.venda*100:0});return out.sort((a,b)=>b.venda-a.venda)}
-function decisionProducts(camp){let rows=scopeRows('produtos').filter(r=>!camp||r.campanha==camp);let out=sumBy(rows,r=>r.id_produto+'|'+r.descricao_produto+'|'+r.campanha,(r,k)=>({id_produto:r.id_produto,produto:r.descricao_produto,campanha:r.campanha,venda:0,lucro:0,quantidade:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.quantidade+=+r.quantidade||0});out.forEach(r=>r.margem=r.venda?r.lucro/r.venda*100:0);return out.sort((a,b)=>b.venda-a.venda)}
-function storeRank(){let lojas=(fRegiao.value=='Todas'?db.empresas:db.empresas.filter(e=>e.regiao==fRegiao.value));return lojas.map(e=>{let t=total(e.nome);return{loja:e.nome,regiao:e.regiao,...t}}).filter(r=>r.v||r.vt).sort((a,b)=>b.v-a.v)}
-function regionRank(){let lojas=storeRank();let out=sumBy(lojas,r=>r.regiao,(r,k)=>({regiao:k,v:0,l:0,vt:0,ct:0,cup:0}),(a,r)=>{a.v+=r.v;a.l+=r.l;a.vt+=r.vt;a.ct+=r.ct;a.cup+=r.cup});out.forEach(r=>{r.part=r.vt?r.v/r.vt*100:0;r.margem=r.v?r.l/r.v*100:0;r.pen=r.ct?r.cup/r.ct*100:0});return out.sort((a,b)=>b.v-a.v)}
-function produtoInsight(rows){let text=(rows.slice(0,20).map(r=>r.produto).join(' ')||'').toUpperCase();if(/FRANGO|CARNE|SUINO|LINGUICA|PEITO|FILE/.test(text))return'Proteinas aparecem entre os principais motores da campanha. Garanta negociacao e abastecimento.';if(/ARROZ|FEIJAO|OLEO|LEITE|ACUCAR|CAFE/.test(text))return'Itens de abastecimento basico sustentam parte relevante do resultado. Use como trafego, protegendo margem.';return'Os produtos lideres explicam a campanha; se poucos itens concentram venda, acompanhe ruptura e custo.'}
-function managerDiagnosis(t,camps,depts,prods,stores,regions){let top=camps[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{};if(!camps.length)return'Importe os 5 arquivos para gerar uma recomendacao confiavel.';if(bad.margem<5&&top.descricao==bad.descricao)return top.descricao+' vende, mas a margem critica impede ampliar sem renegociar custos.';if(top.score>=80)return 'Defender verba em '+top.descricao+' e revisar '+(bad.descricao||'campanhas fracas')+' antes de escalar.';return 'Base promocional ainda nao sustenta ampliacao; priorize revisao de mecanica e produtos.'}
-function campaignDecisionCards(camps){let max=Math.max(1,...camps.map(r=>r.venda));return camps.map(r=>`<div class="decision-card"><div class="topline"><div><b>${r.descricao}</b><div class="hint">${r.papel}</div></div>${marginPill(r.statusMargem)}</div><div class="barline"><span style="width:${Math.max(3,r.venda/max*100)}%"></span></div><div class="metric-row"><div class="metric"><span class="label">Venda</span><br>${brl(r.venda)}</div><div class="metric"><span class="label">Lucro</span><br>${brl(r.lucro)}</div><div class="metric"><span class="label">Margem</span><br>${pct(r.margem)}</div><div class="metric"><span class="label">Pen.</span><br>${pct(r.penetracao)}</div><div class="metric"><span class="label">Score</span><br>${r.score}</div></div><div class="rec"><b>Decisao:</b> ${r.decisao}</div></div>`).join('')||'<p class="muted">Sem campanhas importadas.</p>'}
-function actionPlan(camps,depts){let top=camps[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},traffic=[...camps].sort((a,b)=>b.penetracao-a.penetracao)[0]||{},dept=depts[0]||{};let steps=[];if(top.descricao)steps.push('Proteger verba de '+top.descricao+' porque combina venda, lucro e alcance melhor que as demais.');if(bad.descricao&&bad.margem<5)steps.push('Revisar '+bad.descricao+' antes de repetir: margem '+pct(bad.margem)+' indica desconto/custo agressivo demais.');if(traffic.descricao&&traffic.descricao!=top.descricao)steps.push('Usar '+traffic.descricao+' como geradora de fluxo, mas acoplar produtos de margem para compensar.');if(dept.departamento)steps.push('Negociar e acompanhar ruptura em '+dept.departamento+', que sustenta '+pct(dept.part)+' da campanha analisada.');steps.push('Depois da auditoria, comparar lojas aprovadas para replicar a mecanica onde margem e penetracao forem maiores.');return '<div class="action-list">'+steps.map(x=>`<div class="action-step">${x}</div>`).join('')+'</div>'}
-function decisionInsights(camps,depts,stores,regions){let top=camps[0]||{},profit=[...camps].sort((a,b)=>b.lucro-a.lucro)[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},dept=depts[0]||{},month=monthsBetween(fInicio.value,fFim.value).map(m=>({mes:m,venda:campanhas().filter(r=>r.mes==m).reduce((s,r)=>s+r.venda,0)})).sort((a,b)=>b.venda-a.venda)[0]||{};let out=[];if(top.descricao)out.push(top.descricao+' concentra '+pct(total().v?top.venda/total().v*100:0)+' da venda promocional e deve ser a primeira candidata a verba.');if(profit.descricao&&profit.descricao!=top.descricao)out.push(profit.descricao+' nao lidera venda, mas lidera lucro; pode ser melhor campanha para rentabilidade.');if(bad.descricao&&bad.margem<5)out.push(bad.descricao+' gera risco comercial: alta exposicao com margem de '+pct(bad.margem)+'.');if(dept.departamento)out.push(dept.departamento+' responde por '+pct(dept.part)+' da campanha analisada; isso mostra dependencia operacional.');if(month.mes)out.push(month.mes+' foi o mes mais forte em venda promocional.');if(stores[0])out.push(stores[0].loja+' e a loja referencia no filtro atual.');if(regions[0])out.push(regions[0].regiao+' lidera regionalmente em venda promocional.');return out}
-function decisao(){let t=total(),camps=decisionCampaigns(),top=camps[0]||{},client=[...camps].sort((a,b)=>b.penetracao-a.penetracao)[0]||{},profit=[...camps].sort((a,b)=>b.lucro-a.lucro)[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},camp=selectedCampaignName(),depts=decisionDepartments(camp),prods=decisionProducts(camp),stores=storeRank(),regions=regionRank(),insights=decisionInsights(camps,depts,stores,regions),deptTop=depts[0]||{},neg=prods.filter(r=>r.margem<0),low=prods.filter(r=>r.venda>0&&r.margem<5),bestStore=stores[0]||{},worstStore=stores[stores.length-1]||{};return `<div class="decision-hero"><h2>Centro de Decisao Comercial</h2><div class="sub">O sistema abaixo separa o que deve ser reforcado, corrigido, negociado e replicado.</div><div class="decision-strip"><div class="decision-tile"><div class="label">Diagnostico</div><b>${managerDiagnosis(t,camps,depts,prods,stores,regions)}</b></div><div class="decision-tile"><div class="label">Campanha para repetir</div><b>${top.descricao||'-'}</b><span>${top.classe||'Sem dados'}</span></div><div class="decision-tile"><div class="label">Campanha para revisar</div><b>${bad.descricao||'-'}</b><span>${pct(bad.margem||0)}</span></div><div class="decision-tile"><div class="label">Base de sustentacao</div><b>${deptTop.departamento||'-'}</b><span>${pct(deptTop.part||0)}</span></div></div></div>${blocoAnalise()}<div class="story-grid"><div class="panel"><h2>Campanhas: decisao, nao apenas ranking</h2>${campaignDecisionCards(camps)}</div><div class="panel"><h2>Trade-offs comerciais</h2><div class="risk-list"><div class="risk-item"><span>Resultado</span><b>${top.descricao||'-'} lidera por score, com ${brl(top.venda||0)} em venda e ${brl(top.lucro||0)} de lucro.</b></div><div class="risk-item"><span>Clientes</span><b>${client.descricao||'-'} tem maior alcance: ${pct(client.penetracao||0)}.</b></div><div class="risk-item"><span>Lucro</span><b>${profit.descricao||'-'} entrega ${brl(profit.lucro||0)} de lucro absoluto.</b></div><div class="risk-item"><span>Margem</span><b>${bad.descricao||'-'} exige revisao por margem de ${pct(bad.margem||0)}.</b></div></div>${action(top.descricao?'Priorizar '+top.descricao+' e corrigir '+(bad.descricao||'a campanha de menor margem')+' antes da proxima rodada.':'Importar campanhas para gerar decisao.')}</div></div><div class="grid two mt"><div class="panel compact-table"><h2>O que sustenta a campanha selecionada</h2>${decTable(['Departamento','Venda','Part.','Lucro','Margem'],depts.map(r=>`<tr><td><b>${r.departamento}</b></td><td>${brl(r.venda)}</td><td>${pct(r.part)}</td><td>${brl(r.lucro)}</td><td>${pct(r.margem)}</td></tr>`))}${deptTop.departamento?conclusion(`${camp} depende principalmente de ${deptTop.departamento}. Essa dependencia deve orientar compra, abastecimento e negociacao.`):conclusion('Importe departamentos para explicar a campanha.','warn')}</div><div class="panel compact-table"><h2>Produtos que explicam o resultado</h2>${decTable(['Produto','Campanha','Venda','Lucro','Margem'],prods.slice(0,12).map(r=>`<tr><td><b>${r.produto}</b></td><td>${r.campanha||camp}</td><td>${brl(r.venda)}</td><td>${brl(r.lucro)}</td><td>${pct(r.margem)}</td></tr>`))}${prods.length?conclusion(produtoInsight(prods)):conclusion('Importe produtos para achar os itens que carregam a campanha.','warn')}${neg.length||low.length?conclusion(`${neg.length} produto(s) com margem negativa e ${low.length} com margem abaixo de 5%. Priorize renegociacao nesses itens.`,'bad'):''}</div></div><div class="grid two mt"><div class="panel compact-table"><h2>Lojas: onde replicar ou corrigir</h2>${decTable(['Loja','Venda prom.','Part.','Lucro','Pen.'],stores.map(r=>`<tr><td><b>${r.loja}</b></td><td>${brl(r.v)}</td><td>${pct(r.part)}</td><td>${brl(r.l)}</td><td>${pct(r.pen)}</td></tr>`))}${bestStore.loja?conclusion(`${bestStore.loja} e referencia no filtro atual. ${worstStore.loja&&worstStore.loja!=bestStore.loja?worstStore.loja+' deve ser comparada para entender execucao, sortimento ou alcance.':''}`):''}</div><div class="panel compact-table"><h2>Regioes: onde investir</h2>${decTable(['Regiao','Venda prom.','Lucro','Part.','Pen.'],regions.map(r=>`<tr><td><b>${r.regiao}</b></td><td>${brl(r.v)}</td><td>${brl(r.l)}</td><td>${pct(r.part)}</td><td>${pct(r.pen)}</td></tr>`))}${regions[0]?conclusion(`${regions[0].regiao} lidera no filtro atual; use como referencia para comparar execucao das demais regioes.`):''}</div></div><div class="panel mt"><h2>Insights e plano de acao</h2>${insights.map(x=>`<div class="alert info">${x}</div>`).join('')||'<div class="alert warn">Importe os arquivos do periodo para gerar insights automaticos.</div>'}${actionPlan(camps,depts)}</div>`}function empresas(){return`<div class="panel"><h2>Empresas</h2><div class="table"><table><tr><th>Codigo</th><th>ID VR</th><th>Nome</th><th>Regiao</th></tr>${db.empresas.map(e=>`<tr><td>${e.codigo}</td><td>${e.id_vr}</td><td>${e.nome}</td><td>${e.regiao}</td></tr>`).join('')}</table></div></div>`}function relatorio(){return auditoria()}function setupFilters(){let old=[fLoja.value,fRegiao.value,fCamp.value];fLoja.innerHTML='<option>Todas</option>'+db.empresas.map(e=>`<option>${e.nome}</option>`).join('');fRegiao.innerHTML='<option>Todas</option>'+[...new Set(db.empresas.map(e=>e.regiao))].map(r=>`<option>${r}</option>`).join('');fCamp.innerHTML='<option>Todas</option>'+[...new Set(db.campanhas.map(c=>c.descricao))].map(c=>`<option>${c}</option>`).join('');[fLoja.value,fRegiao.value,fCamp.value]=old;if(!fLoja.value)fLoja.value='Loja 01';if(!fRegiao.value)fRegiao.value='Todas';if(!fCamp.value)fCamp.value='Todas'}function go(p){page=p;render()}function render(){nav.innerHTML=pages.map(([id,l])=>`<button class="${id==page?'active':''}" onclick="go('${id}')">${l}</button>`).join('');let meta={decisao:['Centro de Decisao','Diagnostico, conclusao, recomendacao e proxima acao.'],dashboard:['Dashboard','Analise mensal ou acumulada do periodo.'],importacoes:['Importacoes','Importe arquivos com varias linhas de mes.'],auditoria:['Auditoria','Valide periodo importado.'],plano:['Plano de Coleta 27 Lojas','Controle aprovacao por periodo.'],modelos:['Modelos SQL','Consultas por periodo agrupadas mes a mes.'],empresas:['Empresas','Cadastro de lojas.'],consolidacao:['Consolidacao Final','Somente lojas aprovadas.'],relatorio:['Relatorio Executivo','Resumo de auditoria.']}[page];title.textContent=meta[0];sub.textContent=meta[1];view.innerHTML=({decisao,dashboard,importacoes,auditoria,plano,modelos,empresas,consolidacao,relatorio})[page]();if(page=='importacoes')showReq()}['fLoja','fRegiao','fInicio','fFim','fVisao','fCamp'].forEach(id=>document.getElementById(id).addEventListener('change',render));setupFilters();render();loadCloud();
-</script></body></html>
+
+/* ===== CAMPAIGN CALCS ===== */
+function campRows(){let cs=campanhas(),t=total(fLoja.value,false),rows=sumBy(cs,r=>r.descricao,(r,k)=>({descricao:k,venda:0,lucro:0,cupons:0,quantidade:0,produtos:0}),(a,r)=>{a.venda+=r.venda;a.lucro+=r.lucro;a.cupons+=+r.cupons||0;a.quantidade+=+r.quantidade||0;a.produtos+=+r.produtos_distintos||0});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.participacao=t.vt?r.venda/t.vt*100:0;r.penetracao=t.ct?r.cupons/t.ct*100:0});let mx={v:Math.max(1,...rows.map(r=>r.venda)),l:Math.max(1,...rows.map(r=>r.lucro)),p:Math.max(1,...rows.map(r=>r.penetracao)),m:Math.max(1,...rows.map(r=>Math.max(0,r.margem)))};rows.forEach(r=>{r.score=Math.round((r.venda/mx.v*30)+(Math.max(0,r.lucro)/mx.l*25)+(r.penetracao/mx.p*25)+(Math.max(0,r.margem)/mx.m*20));r.classe=r.score>=80?'Forte':r.score>=65?'Manter':'Revisar';r.statusM=r.margem<5?'CRITICA':r.margem<10?'ATENCAO':'SAUDAVEL'});return rows.sort((a,b)=>b.venda-a.venda)}
+function deptRows(camp){let rows=scopeRows('departamentos').filter(r=>!camp||r.campanha==camp),tv=rows.reduce((s,r)=>s+(+r.venda||0),0);let out=sumBy(rows,r=>r.descricao_departamento,(r,k)=>({departamento:k,venda:0,lucro:0,produtos:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.produtos+=+r.produtos||0});out.forEach(r=>{r.part=tv?r.venda/tv*100:0;r.margem=r.venda?r.lucro/r.venda*100:0});return out.sort((a,b)=>b.venda-a.venda)}
+function prodRows(camp){let rows=scopeRows('produtos').filter(r=>!camp||r.campanha==camp);let out=sumBy(rows,r=>r.id_produto+'|'+r.descricao_produto,(r,k)=>({produto:r.descricao_produto,campanha:r.campanha,venda:0,lucro:0,quantidade:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.quantidade+=+r.quantidade||0});out.forEach(r=>r.margem=r.venda?r.lucro/r.venda*100:0);return out.sort((a,b)=>b.venda-a.venda)}
+function monthRows(){return monthsBetween(fInicio.value,fFim.value).map(m=>{let cs=campanhas().filter(r=>monthKey(r.mes)==m),rs=resumos().filter(r=>monthKey(r.mes)==m),v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0),vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0);return{mes:m,venda:v,lucro:l,vt,part:vt?v/vt*100:0,margem:v?l/v*100:0,inc:!rs.length||!cs.length}})}
+function storeRank(){let lojas=(fRegiao.value=='Todas'?db.empresas:db.empresas.filter(e=>e.regiao==fRegiao.value));return lojas.map(e=>{let t=total(e.nome,false);return{loja:e.nome,regiao:e.regiao,...t}}).filter(r=>r.v||r.vt).sort((a,b)=>b.v-a.v)}
+function regionRank(){return sumBy(storeRank(),r=>r.regiao,(r,k)=>({regiao:k,v:0,l:0,vt:0,ct:0,cup:0}),(a,r)=>{a.v+=r.v;a.l+=r.l;a.vt+=r.vt;a.ct+=r.ct;a.cup+=r.cup}).map(r=>({...r,part:r.vt?r.v/r.vt*100:0,margem:r.v?r.l/r.v*100:0,pen:r.ct?r.cup/r.ct*100:0})).sort((a,b)=>b.v-a.v)}
+function blocoRows(){let camps=campRows(),t=total(),order=['Dia Big','Encarte Big Nordeste','Demais encartes'];function bloco(n){let u=String(n||'').toUpperCase();if(u.includes('DIA BIG'))return'Dia Big';if(u.includes('ENCARTE BIG NORDESTE'))return'Encarte Big Nordeste';return'Demais encartes'}let rows=order.map(b=>({bloco:b,venda:0,lucro:0,cupons:0}));camps.forEach(c=>{let r=rows.find(x=>x.bloco==bloco(c.descricao));r.venda+=c.venda;r.lucro+=c.lucro;r.cupons+=c.cupons});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.part=t.vt?r.venda/t.vt*100:0;r.share=t.v?r.venda/t.v*100:0;r.pen=t.ct?r.cupons/t.ct*100:0});return rows}
+
+/* ===== KPI ===== */
+function kpi(lb,vl,delta,accent){return`<div class="kpi${accent?' kpi-accent':''}"><div class="lb">${lb}</div><div class="vl">${vl}</div>${delta?'<div class="delta">'+delta+'</div>':''}</div>`}
+
+/* ===== DASHBOARD ===== */
+function dashboard(){
+  let t=total(),camps=campRows(),ms=monthRows(),top=camps[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},depts=deptRows(top.descricao),bl=blocoRows();
+  let html=`<div class="grid kpis">${kpi('Venda total',brlShort(t.vt),'Periodo',true)}${kpi('Venda promocional',brlShort(t.v),pct(t.part)+' da venda')}${kpi('Lucro promocional',brlShort(t.l),pct(t.margem)+' margem')}${kpi('Penetracao',pct(t.pen),num(t.cup)+' cupons')}</div>`;
+  // Charts row 1: Monthly evolution + Campaign mix
+  html+=`<div class="grid g2 mt2"><div class="panel"><div class="panel-header"><div><div class="panel-title">Evolucao mensal</div><div class="panel-sub">Venda promocional e margem por mes</div></div>${csvBtn('CSV',"exportMonths()")}</div><div class="chart-xl"><canvas id="cMonth"></canvas></div></div><div class="panel"><div class="panel-header"><div><div class="panel-title">Composicao por campanha</div><div class="panel-sub">Participacao na venda promocional</div></div></div><div class="chart-xl"><canvas id="cPie"></canvas></div></div></div>`;
+  // Charts row 2: Stacked bar campaigns + Blocos
+  html+=`<div class="grid g2 mt"><div class="panel"><div class="panel-header"><div><div class="panel-title">Campanhas: venda vs lucro</div><div class="panel-sub">Comparativo absoluto por campanha</div></div>${csvBtn('CSV',"exportCamps()")}</div><div class="chart-lg"><canvas id="cCampBar"></canvas></div></div><div class="panel"><div class="panel-header"><div><div class="panel-title">Blocos comerciais</div><div class="panel-sub">Dia Big vs Encarte vs Demais</div></div></div><div class="chart-lg"><canvas id="cBloco"></canvas></div></div></div>`;
+  // Charts row 3: Margin treemap + Department breakdown
+  html+=`<div class="grid g2 mt"><div class="panel"><div class="panel-header"><div><div class="panel-title">Score vs margem por campanha</div><div class="panel-sub">Quadrante de decisao</div></div></div><div class="chart-lg"><canvas id="cScatter"></canvas></div></div><div class="panel"><div class="panel-header"><div><div class="panel-title">Departamentos (campanha lider)</div><div class="panel-sub">${top.descricao||'Sem dados'}</div></div></div><div class="chart-lg"><canvas id="cDept"></canvas></div></div></div>`;
+  // Table
+  html+=`<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Detalhamento mensal</div></div>${csvBtn('CSV',"exportMonths()")}</div>${sortableTable('tDash',['Mes','Venda total','Venda prom.','Part.','Lucro','Margem','Status'],ms.map(r=>[r.mes,brl(r.vt),brl(r.venda),pct(r.part),brl(r.lucro),pct(r.margem),r.inc?'<span class="pill p-warn">Incompleto</span>':r.margem<5?'<span class="pill p-bad">Critico</span>':'<span class="pill p-ok">OK</span>']),['text','num','num','num','num','num','text'])}</div>`;
+
+  // Render charts
+  setTimeout(()=>{
+    let mf=ms.filter(m=>!m.inc);
+    // Monthly line
+    mkChart('cMonth','line',mf.map(m=>m.mes),[{label:'Venda prom.',data:mf.map(m=>m.venda),borderColor:PAL.green,backgroundColor:PAL.greenLight,fill:true,borderWidth:2.5,pointRadius:4,pointBackgroundColor:PAL.green,tension:.3},{label:'Lucro',data:mf.map(m=>m.lucro),borderColor:PAL.gold,backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:3,tension:.3}],{plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+brl(ctx.raw)}},datalabels:{display:true,align:'top',color:PAL.dark,font:{size:10,weight:'600'},formatter:v=>brlShort(v)}},scales:{y:{ticks:{callback:v=>brlShort(v)}}}});
+    // Pie
+    if(camps.length)mkChart('cPie','doughnut',camps.map(c=>c.descricao),[{data:camps.map(c=>c.venda),backgroundColor:SOLID_COLORS.slice(0,camps.length),borderWidth:2,borderColor:'#fff'}],{plugins:{tooltip:{callbacks:{label:ctx=>ctx.label+': '+brl(ctx.raw)}}}});
+    // Campaign bar
+    if(camps.length)mkChart('cCampBar','bar',camps.map(c=>c.descricao.substring(0,20)),[{label:'Venda',data:camps.map(c=>c.venda),backgroundColor:PAL.green,borderRadius:4,barPercentage:.7},{label:'Lucro',data:camps.map(c=>c.lucro),backgroundColor:PAL.gold,borderRadius:4,barPercentage:.7}],{indexAxis:'y',plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+brl(ctx.raw)}},datalabels:{display:true,anchor:'end',align:'right',color:PAL.dark,font:{size:10,weight:'600'},formatter:v=>brlShort(v)}},scales:{x:{ticks:{callback:v=>brlShort(v)}}}});
+    // Blocos
+    if(bl.some(r=>r.venda))mkChart('cBloco','bar',bl.map(r=>r.bloco),[{label:'Venda',data:bl.map(r=>r.venda),backgroundColor:[PAL.red,PAL.green,PAL.blue],borderRadius:6,barPercentage:.6},{label:'Lucro',data:bl.map(r=>r.lucro),backgroundColor:[PAL.red+'99',PAL.green+'99',PAL.blue+'99'],borderRadius:6,barPercentage:.6}],{plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+brl(ctx.raw)}},datalabels:{display:true,anchor:'end',align:'top',color:PAL.dark,font:{size:11,weight:'700'},formatter:v=>brlShort(v)}},scales:{y:{ticks:{callback:v=>brlShort(v)}}}});
+    // Scatter
+    if(camps.length>=2)mkChart('cScatter','scatter',camps.map(c=>c.descricao),[{data:camps.map((c,i)=>({x:c.margem,y:c.score,r:Math.max(6,c.participacao*2)})),backgroundColor:SOLID_COLORS.slice(0,camps.length).map(c=>c+'99'),borderColor:SOLID_COLORS.slice(0,camps.length),borderWidth:2,pointRadius:camps.map(c=>Math.max(8,c.participacao*1.5))}],{type:'bubble',plugins:{tooltip:{callbacks:{label:ctx=>{let c=camps[ctx.dataIndex];return c.descricao+' | Margem: '+pct(c.margem)+' | Score: '+c.score}}},datalabels:{display:true,color:PAL.dark,font:{size:10,weight:'600'},formatter:(v,ctx)=>camps[ctx.dataIndex]?.descricao?.substring(0,12)||''}},scales:{x:{title:{display:true,text:'Margem %',font:{size:11,weight:'600'}},ticks:{callback:v=>v+'%'}},y:{title:{display:true,text:'Score',font:{size:11,weight:'600'}},max:100}}});
+    // Departments
+    if(depts.length)mkChart('cDept','bar',depts.slice(0,8).map(d=>d.departamento.substring(0,15)),[{label:'Venda',data:depts.slice(0,8).map(d=>d.venda),backgroundColor:COLORS.concat(COLORS).slice(0,8),borderRadius:4}],{plugins:{tooltip:{callbacks:{label:ctx=>brl(ctx.raw)+' ('+pct(depts[ctx.dataIndex]?.part||0)+')'}},datalabels:{display:true,anchor:'end',align:'top',color:PAL.dark,font:{size:10,weight:'600'},formatter:(v,ctx)=>pct(depts[ctx.dataIndex]?.part||0)}},scales:{y:{ticks:{callback:v=>brlShort(v)}}}});
+  },120);
+  return html;
+}
+function exportMonths(){let m=monthRows();exportCSV('evolucao_mensal.csv',['Mes','Venda Total','Venda Prom','Part','Lucro','Margem'],m.map(r=>[r.mes,r.vt.toFixed(2),r.venda.toFixed(2),r.part.toFixed(2),r.lucro.toFixed(2),r.margem.toFixed(2)]))}
+function exportCamps(){let c=campRows();exportCSV('campanhas.csv',['Campanha','Venda','Lucro','Margem','Penetracao','Score'],c.map(r=>[r.descricao,r.venda.toFixed(2),r.lucro.toFixed(2),r.margem.toFixed(2),r.penetracao.toFixed(2),r.score]))}
+
+/* ===== DECISAO ===== */
+function decisao(){
+  let t=total(),camps=campRows(),top=camps[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},profit=[...camps].sort((a,b)=>b.lucro-a.lucro)[0]||{},client=[...camps].sort((a,b)=>b.penetracao-a.penetracao)[0]||{},camp=fCamp.value!='Todas'?fCamp.value:(top.descricao||''),depts=deptRows(camp),prods=prodRows(camp),stores=storeRank(),regions=regionRank(),bl=blocoRows();
+  let html=`<div class="hero"><h2>Centro de Decisao Comercial</h2><div class="sub">Diagnostico, priorizacao e plano de acao para campanhas promocionais</div><div class="hero-kpis"><div class="hero-kpi"><div class="lb">Diagnostico</div><div class="vl" style="font-size:14px">${top.descricao?'Defender '+top.descricao.substring(0,20):'Importe dados'}</div></div><div class="hero-kpi"><div class="lb">Oferta pesa</div><div class="vl">${pct(t.part)}</div><div class="sub">da venda total</div></div><div class="hero-kpi"><div class="lb">Melhor campanha</div><div class="vl" style="font-size:14px">${top.descricao||'-'}</div><div class="sub">score ${top.score||0}</div></div><div class="hero-kpi"><div class="lb">Risco</div><div class="vl" style="font-size:14px">${bad.descricao||'-'}</div><div class="sub">margem ${pct(bad.margem||0)}</div></div></div></div>`;
+  // Charts: Radar + Scatter
+  html+=`<div class="grid g2">${camps.length>=2?`<div class="panel"><div class="panel-title">Radar comparativo</div><div class="panel-sub">5 dimensoes normalizadas por campanha</div><div class="chart-xl"><canvas id="cRadar"></canvas></div></div>`:''}<div class="panel"><div class="panel-title">Quadrante margem x score</div><div class="panel-sub">Tamanho = participacao na venda</div><div class="chart-xl"><canvas id="cBubble"></canvas></div></div></div>`;
+  // Blocos
+  html+=`<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Blocos comerciais: venda, lucro e margem</div><div class="panel-sub">Comparativo Dia Big vs Encarte vs Demais</div></div>${csvBtn('CSV',"exportBlocos()")}</div><div class="chart-lg"><canvas id="cBlocoD"></canvas></div></div>`;
+  // Campaign decision cards
+  html+=`<div class="panel mt"><div class="panel-title">Decisao por campanha</div><div class="panel-sub">Score 0-100 baseado em venda, lucro, penetracao e margem</div><div class="grid g2 mt">${camps.map((r,i)=>{let mx=Math.max(1,...camps.map(c=>c.venda));return`<div class="dcard"><div class="topline"><div><h4>${r.descricao}</h4><div class="desc">${r.classe} | ${r.statusM}</div></div><span class="pill ${r.statusM=='CRITICA'?'p-bad':r.statusM=='ATENCAO'?'p-warn':'p-ok'}">${pct(r.margem)}</span></div><div class="bar6"><span style="width:${Math.max(3,r.venda/mx*100)}%;background:${COLORS[i%6]}"></span></div><div class="metrics5"><div class="mbox"><div class="lb">Venda</div><b>${brlShort(r.venda)}</b></div><div class="mbox"><div class="lb">Lucro</div><b>${brlShort(r.lucro)}</b></div><div class="mbox"><div class="lb">Margem</div><b>${pct(r.margem)}</b></div><div class="mbox"><div class="lb">Pen.</div><b>${pct(r.penetracao)}</b></div><div class="mbox"><div class="lb">Score</div><b>${r.score}</b></div></div><div class="verdict">${r.score>=80?'Repetir e ampliar':r.score>=65?'Manter com ajuste':r.margem<5?'Rever custo e sortimento':'Revisar mecanica'}</div></div>`}).join('')}</div></div>`;
+  // Departments + Products
+  html+=`<div class="grid g2 mt"><div class="panel"><div class="panel-header"><div><div class="panel-title">Departamentos</div><div class="panel-sub">${camp||'Todas as campanhas'}</div></div>${csvBtn('CSV',"exportDepts()")}</div><div class="chart-lg"><canvas id="cDeptD"></canvas></div></div><div class="panel"><div class="panel-header"><div><div class="panel-title">Top produtos</div></div>${csvBtn('CSV',"exportProds()")}</div>${sortableTable('tProd',['Produto','Venda','Lucro','Margem'],prods.slice(0,10).map(r=>[r.produto,brl(r.venda),brl(r.lucro),pct(r.margem)]),['text','num','num','num'])}</div></div>`;
+  // Stores + Regions
+  html+=`<div class="grid g2 mt"><div class="panel"><div class="panel-header"><div><div class="panel-title">Ranking de lojas</div></div>${csvBtn('CSV',"exportStores()")}</div><div class="chart-lg"><canvas id="cStores"></canvas></div></div><div class="panel"><div class="panel-header"><div><div class="panel-title">Desempenho regional</div></div></div><div class="chart-lg"><canvas id="cRegion"></canvas></div></div></div>`;
+  // Action plan
+  let steps=[];
+  if(top.descricao)steps.push('Proteger verba de '+top.descricao+' — combina venda, lucro e alcance.');
+  if(bad.descricao&&bad.margem<5)steps.push('Revisar '+bad.descricao+' — margem '+pct(bad.margem)+' indica custo agressivo.');
+  if(depts[0])steps.push('Negociar abastecimento em '+depts[0].departamento+' ('+pct(depts[0].part)+' da campanha).');
+  steps.push('Comparar lojas aprovadas para replicar mecanica onde margem e penetracao forem maiores.');
+  html+=`<div class="panel mt"><div class="panel-title">Plano de acao</div><div class="panel-sub">Proximos passos recomendados</div><div class="action-list mt">${steps.map(s=>`<div class="action-step">${s}</div>`).join('')}</div></div>`;
+
+  // Render charts
+  setTimeout(()=>{
+    // Radar
+    if(camps.length>=2){let mx={v:Math.max(1,...camps.map(c=>c.venda)),l:Math.max(1,...camps.map(c=>Math.abs(c.lucro))),p:Math.max(1,...camps.map(c=>c.penetracao))};mkChart('cRadar','radar',['Venda','Lucro','Margem','Penetracao','Score'],camps.slice(0,5).map((c,i)=>({label:c.descricao.substring(0,18),data:[c.venda/mx.v*100,Math.max(0,c.lucro)/mx.l*100,Math.min(100,c.margem*3),c.penetracao/mx.p*100,c.score],borderColor:COLORS[i],backgroundColor:COLORS[i]+'20',borderWidth:2,pointRadius:4,pointBackgroundColor:COLORS[i]})))}
+    // Bubble
+    if(camps.length>=2)mkChart('cBubble','bubble',[],[{data:camps.map((c,i)=>({x:c.margem,y:c.score,r:Math.max(8,c.participacao*2)})),backgroundColor:camps.map((_,i)=>COLORS[i%6]+'80'),borderColor:camps.map((_,i)=>COLORS[i%6]),borderWidth:2}],{plugins:{tooltip:{callbacks:{label:ctx=>{let c=camps[ctx.dataIndex];return c.descricao+' | M: '+pct(c.margem)+' | S: '+c.score}}},datalabels:{display:true,color:PAL.dark,font:{size:10,weight:'700'},formatter:(v,ctx)=>camps[ctx.dataIndex]?.descricao?.substring(0,10)||''}},scales:{x:{title:{display:true,text:'Margem %'},ticks:{callback:v=>v+'%'}},y:{title:{display:true,text:'Score'},max:100}}});
+    // Blocos grouped bar
+    if(bl.some(r=>r.venda)){let bLabels=['Venda','Lucro','Margem %'];mkChart('cBlocoD','bar',bl.map(r=>r.bloco),[{label:'Venda',data:bl.map(r=>r.venda),backgroundColor:[PAL.red,PAL.green,PAL.blue],borderRadius:6,barPercentage:.5},{label:'Lucro',data:bl.map(r=>r.lucro),backgroundColor:[PAL.red+'88',PAL.green+'88',PAL.blue+'88'],borderRadius:6,barPercentage:.5}],{plugins:{datalabels:{display:true,anchor:'end',align:'top',font:{size:11,weight:'700'},color:PAL.dark,formatter:v=>brlShort(v)},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+brl(ctx.raw)}}},scales:{y:{ticks:{callback:v=>brlShort(v)}}}})}
+    // Departments horizontal
+    let d=deptRows(camp);if(d.length)mkChart('cDeptD','bar',d.slice(0,8).map(x=>x.departamento.substring(0,15)),[{label:'Venda',data:d.slice(0,8).map(x=>x.venda),backgroundColor:COLORS.concat(COLORS),borderRadius:4}],{indexAxis:'y',plugins:{datalabels:{display:true,anchor:'end',align:'right',font:{size:10,weight:'600'},color:PAL.dark,formatter:(v,ctx)=>brlShort(v)+' ('+pct(d[ctx.dataIndex]?.part||0)+')'},tooltip:{callbacks:{label:ctx=>brl(ctx.raw)}}},scales:{x:{ticks:{callback:v=>brlShort(v)}}}});
+    // Stores
+    let st=storeRank().slice(0,15);if(st.length)mkChart('cStores','bar',st.map(s=>s.loja),[{label:'Venda prom.',data:st.map(s=>s.v),backgroundColor:PAL.green,borderRadius:4},{label:'Lucro',data:st.map(s=>s.l),backgroundColor:PAL.gold,borderRadius:4}],{indexAxis:'y',plugins:{datalabels:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+brl(ctx.raw)}}},scales:{x:{ticks:{callback:v=>brlShort(v)}}}});
+    // Regions
+    let rg=regionRank();if(rg.length)mkChart('cRegion','bar',rg.map(r=>r.regiao),[{label:'Venda',data:rg.map(r=>r.v),backgroundColor:PAL.green,borderRadius:6},{label:'Lucro',data:rg.map(r=>r.l),backgroundColor:PAL.gold,borderRadius:6}],{plugins:{datalabels:{display:true,anchor:'end',align:'top',font:{size:11,weight:'700'},color:PAL.dark,formatter:v=>brlShort(v)},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+brl(ctx.raw)}}},scales:{y:{ticks:{callback:v=>brlShort(v)}}}});
+  },120);
+  return html;
+}
+function exportBlocos(){let r=blocoRows();exportCSV('blocos.csv',['Bloco','Venda','Lucro','Margem','Part','Share'],r.map(x=>[x.bloco,x.venda.toFixed(2),x.lucro.toFixed(2),x.margem.toFixed(2),x.part.toFixed(2),x.share.toFixed(2)]))}
+function exportDepts(){let d=deptRows(fCamp.value!='Todas'?fCamp.value:'');exportCSV('departamentos.csv',['Departamento','Venda','Part','Lucro','Margem'],d.map(r=>[r.departamento,r.venda.toFixed(2),r.part.toFixed(2),r.lucro.toFixed(2),r.margem.toFixed(2)]))}
+function exportProds(){let p=prodRows(fCamp.value!='Todas'?fCamp.value:'');exportCSV('produtos.csv',['Produto','Campanha','Venda','Lucro','Margem'],p.map(r=>[r.produto,r.campanha,r.venda.toFixed(2),r.lucro.toFixed(2),r.margem.toFixed(2)]))}
+function exportStores(){let s=storeRank();exportCSV('lojas.csv',['Loja','Venda','Part','Lucro','Pen'],s.map(r=>[r.loja,r.v.toFixed(2),r.part.toFixed(2),r.l.toFixed(2),r.pen.toFixed(2)]))}
+
+/* ===== IMPORTACOES ===== */
+function importacoes(){return`<div class="panel"><div class="toolbar"><div class="panel-title">Importar arquivos</div><button class="btn" onclick="template()">Baixar cabecalho</button></div><div class="drop mt"><div class="row"><select id="il">${db.empresas.map(e=>`<option ${e.nome==fLoja.value?'selected':''}>${e.nome}</option>`).join('')}</select><input id="ii" type="date" value="${fInicio.value}"><input id="ifim" type="date" value="${fFim.value}"></div><p class="muted" style="font-size:12px">Selecione a loja e importe os 5 arquivos .txt. A coluna loja do TXT fica como referencia — o destino e sempre a loja acima.</p><select id="it" style="display:none">${ORDER.map(k=>`<option value="${k}">${TYPES[k].label}</option>`).join('')}</select><textarea id="io" placeholder="Observacao opcional" rows="2"></textarea><div class="grid g2"><div><div class="lb" style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px">Arquivos .txt</div><input id="files" type="file" accept=".txt" multiple></div><div><div class="lb" style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px">Ou pasta</div><input id="folderFiles" type="file" accept=".txt" webkitdirectory multiple></div></div><div id="req" class="muted" style="font-size:11px"></div><pre id="prev" class="preview" style="display:none"></pre><div id="ir"></div><button class="btn primary" id="importBtn" onclick="processImport()" style="width:100%;justify-content:center;padding:10px">Importar todos os arquivos da loja</button></div></div><div class="panel mt"><div class="panel-header"><div class="panel-title">Historico</div>${csvBtn('CSV',"exportHistory()")}</div>${history()}</div>`}
+function exportHistory(){exportCSV('historico.csv',['Data','Arquivo','Loja','Tipo','Linhas','Ignoradas'],db.importacoes.map(i=>[i.data,i.arquivo,i.loja,TYPES[i.tipo]?.label||i.tipo,i.linhas||0,i.ignoradas||0]))}
+function history(){return db.importacoes.length?`<div class="table-wrap"><table><thead><tr><th>Data</th><th>Arquivo</th><th>Loja</th><th>Tipo</th><th>Linhas</th><th>Ign.</th><th>Obs.</th></tr></thead><tbody>${db.importacoes.map(i=>`<tr><td>${i.data}</td><td>${i.arquivo}</td><td>${i.loja}</td><td>${TYPES[i.tipo]?.label||i.tipo}</td><td>${i.linhas||0}</td><td>${i.ignoradas||0}</td><td>${i.observacao||'-'}</td></tr>`).join('')}</tbody></table></div>`:`<p class="muted" style="text-align:center;padding:24px">Nenhuma importacao registrada.</p>`}
+function showReq(){if(window.req)req.innerHTML='Colunas: '+TYPES[it.value].cols.join(', ')}
+function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'_')}
+function parseNum(v){if(v==null||String(v).trim()==='')return'';let s=String(v).trim();if(/^[-+]?\d{1,3}(\.\d{3})+,\d+$/.test(s))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');let n=Number(s);return Number.isFinite(n)?n:v}
+function monthKey(v){let s=String(v??'').trim();if(!s)return'';let m=s.match(/^(\d{4})[-\/](\d{1,2})(?:[-\/]\d{1,2})?$/);if(m)return m[1]+'-'+m[2].padStart(2,'0');m=s.match(/^(\d{1,2})[-\/](\d{4})$/);if(m)return m[2]+'-'+m[1].padStart(2,'0');m=s.match(/^\d{1,2}[-\/](\d{1,2})[-\/](\d{4})$/);if(m)return m[2]+'-'+m[1].padStart(2,'0');return s.slice(0,7)}
+async function readText(f){let b=await f.arrayBuffer(),t=new TextDecoder('utf-8').decode(b);if(t.includes('�'))t=new TextDecoder('iso-8859-1').decode(b);return t.replace(/^﻿/,'')}
+function parseTxt(text){let lines=text.split(/\r?\n/).filter(x=>x.trim()),head=lines[0].split(';').map(norm);let rows=lines.slice(1).map(line=>{let cells=line.split(';');return Object.fromEntries(head.map((h,i)=>[h,parseNum(cells[i]??'')]))});return{head,rows,preview:lines.slice(0,8).join('\n')}}
+function detectType(name,fb){let n=name.toLowerCase();if(n.includes('resumo_geral'))return'resumo_geral_loja';if(n.includes('campanhas_ofertas'))return'campanhas_ofertas';if(n.includes('produtos_campanha'))return'produtos_campanha';if(n.includes('departamento'))return'departamentos_campanha';if(n.includes('cupons'))return'cupons_totais';return fb}
+async function processImport(){let btn=document.getElementById('importBtn');if(btn){btn.disabled=true;btn.innerHTML='<span style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .5s linear infinite;margin-right:6px"></span>Importando...'}let sel=[...((window.files&&files.files)||[]),...((window.folderFiles&&folderFiles.files)||[])],fs=sel.filter(f=>f.name.toLowerCase().endsWith('.txt')),loja=il.value,ini=ii.value,fim=ifim.value,tipo=(window.it&&it.value)||'resumo_geral_loja',obs=io.value.trim()||'Sem observacao';let box=document.getElementById('ir');if(!loja||!ini||!fim){if(btn){btn.disabled=false;btn.textContent='Importar todos os arquivos da loja'}return box.innerHTML='<div class="alert a-bad">Informe loja e periodo.</div>'}if(!sel.length){if(btn){btn.disabled=false;btn.textContent='Importar todos os arquivos da loja'}return box.innerHTML='<div class="alert a-warn">Selecione arquivos ou pasta.</div>'}if(!fs.length){if(btn){btn.disabled=false;btn.textContent='Importar todos os arquivos da loja'}return box.innerHTML='<div class="alert a-bad">Nenhum .txt encontrado.</div>'}let allowed=monthsBetween(ini,fim),grouped={},hist=[],errors=[],warnings=[],totalR=0,lastPrev='';for(let f of fs){let rt=detectType(f.name,tipo),cfg=TYPES[rt];if(!cfg){errors.push(f.name+': tipo nao identificado.');continue}let p=parseTxt(await readText(f));lastPrev=p.preview;let miss=cfg.cols.filter(c=>!p.head.includes(c));if(miss.length){errors.push(f.name+' ('+cfg.label+'): colunas faltantes '+miss.join(', '));continue}let rows=p.rows.filter(r=>allowed.includes(monthKey(r.mes))).map(r=>({...r,mes:monthKey(r.mes),loja,__loja_vr:r.loja||'',__tipo:rt}));if(!rows.length)warnings.push(f.name+': nenhuma linha no periodo. Dados antigos desse arquivo/periodo serao limpos.');let key=rt+'|'+loja;(grouped[key]=grouped[key]||{tipo:rt,loja,rows:[]}).rows.push(...rows);totalR+=rows.length;hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:rt,linhas:rows.length,ignoradas:p.rows.length-rows.length,colunas_faltantes:[],observacao:obs})}let nb=document.getElementById('ir'),pv=document.getElementById('prev');if(pv&&lastPrev){pv.style.display='block';pv.textContent=lastPrev}let msg='';if(errors.length){msg=`<div class="alert a-bad"><b>Importacao cancelada.</b><br>${errors.join('<br>')}<br>Nenhum dado foi gravado para evitar lote parcial.</div>`}else{delete db.aprovacoes[periodKey(loja)];Object.values(grouped).forEach(g=>{let b=TYPES[g.tipo].bucket;db[b]=db[b].filter(r=>!(r.loja==g.loja&&allowed.includes(monthKey(r.mes))&&r.__tipo==g.tipo)).concat(g.rows)});if(hist.length)db.importacoes.unshift(...hist);save();fLoja.value=loja;setupFilters();fLoja.value=loja;msg=`<div class="alert a-ok"><b>Importacao concluida.</b> ${fs.length} arquivo(s), ${totalR} linhas. Loja: ${loja}</div>`}if(warnings.length)msg+=`<div class="alert a-warn">${warnings.join('<br>')}</div>`;if(nb)nb.innerHTML=msg;let nb2=document.getElementById('importBtn');if(nb2){nb2.disabled=false;nb2.textContent='Importar todos os arquivos da loja'}}
+function template(){let t=(window.it&&it.value)||'resumo_geral_loja',b=new Blob([TYPES[t].cols.join(';')+'\n']),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=TYPES[t].file;a.click()}
+
+/* ===== AUDITORIA ===== */
+function audit(loja=fLoja.value){if(loja=='Todas')loja='Loja 01';let months=monthsBetween(fInicio.value,fFim.value),imps=db.importacoes.filter(i=>i.loja==loja&&i.periodo==fInicio.value+' a '+fFim.value),present={};ORDER.forEach(t=>present[t]=db[TYPES[t].bucket].some(r=>r.loja==loja&&months.includes(monthKey(r.mes))&&r.__tipo==t));let missing=ORDER.filter(t=>!present[t]),t=total(loja,false),ignored=imps.reduce((s,i)=>s+(+i.ignoradas||0),0),alerts=[];if(missing.length)alerts.push('Faltam: '+missing.map(t=>TYPES[t].label).join(', '));if(!t.vt)alerts.push('Resumo geral ausente.');if(ignored)alerts.push('Linhas ignoradas.');let st='Pendente';if(ORDER.length-missing.length>0)st=missing.length?'Parcial':'Auditado';if(alerts.length&&st!='Pendente')st='Com erro';if(db.aprovacoes[periodKey(loja)]?.status=='Aprovado')st='Aprovado';return{loja,months,imps,present,missing,total:t,ignored,alerts,status:st,last:imps[0]?.data||'',obs:db.aprovacoes[periodKey(loja)]?.obs||imps[0]?.observacao||''}}
+function auditoria(){let a=audit();return`<div class="grid kpis">${kpi('Status',statusPill(a.status),'',true)}${kpi('Arquivos',a.imps.length,'importados')}${kpi('Meses',a.months.length,'no periodo')}${kpi('Ignoradas',num(a.ignored),'linhas')}</div><div class="grid g2 mt"><div class="panel"><div class="panel-title">Historico</div>${history()}</div><div class="panel"><div class="panel-title">Diagnostico</div><p style="font-size:12px;margin-top:8px">Venda total: <b>${brl(a.total.vt)}</b></p><p style="font-size:12px">Campanhas: <b>${brl(a.total.v)}</b></p><p style="font-size:12px">Diferenca: <b>${brl(a.total.vt-a.total.v)}</b></p><div class="mt"><div class="panel-title">Arquivos faltantes</div><p style="margin-top:6px">${a.missing.map(t=>`<span class="pill p-warn">${TYPES[t].label}</span> `).join('')||'<span class="pill p-ok">Nenhum</span>'}</p></div>${a.alerts.map(x=>`<div class="alert a-warn">${x}</div>`).join('')||'<div class="alert a-ok">Sem alertas.</div>'}</div></div>`}
+
+/* ===== PLANO ===== */
+function plano(){let rs=db.empresas.filter(e=>fRegiao.value=='Todas'||e.regiao==fRegiao.value).map(e=>({...audit(e.nome),regiao:e.regiao})),tot=rs.length,ap=rs.filter(r=>r.status=='Aprovado').length,pend=tot-ap;return`<div class="grid kpis">${kpi('Total',tot,'lojas',true)}${kpi('Aprovadas',ap,pct(tot?ap/tot*100:0))}${kpi('Pendentes',pend,'')}${kpi('Avanco',pct(tot?ap/tot*100:0),'')}</div><div class="panel mt"><div class="panel-header"><div class="panel-title">Plano de Coleta</div>${csvBtn('CSV',"exportPlano()")}</div><div class="table-wrap"><table><thead><tr><th>Loja</th><th>Regiao</th><th>Status</th>${ORDER.map(t=>`<th>${TYPES[t].label.substring(0,6)}</th>`).join('')}<th>Ultima</th><th>Acoes</th></tr></thead><tbody>${rs.map(r=>`<tr><td><b>${r.loja}</b></td><td>${r.regiao}</td><td>${statusPill(r.status)}</td>${ORDER.map(t=>`<td>${r.present[t]?'<span class="pill p-ok">Sim</span>':'<span class="pill p-muted">Nao</span>'}</td>`).join('')}<td style="font-size:10px">${r.last||'-'}</td><td><button class="btn" onclick="openAudit('${r.loja}')">Audit</button> <button class="btn primary" onclick="approve('${r.loja}')">OK</button></td></tr>`).join('')}</tbody></table></div></div>`}
+function exportPlano(){let rs=db.empresas.map(e=>({...audit(e.nome),regiao:e.regiao}));exportCSV('plano.csv',['Loja','Regiao','Status',...ORDER.map(t=>TYPES[t].label),'Ultima'],rs.map(r=>[r.loja,r.regiao,r.status,...ORDER.map(t=>r.present[t]?'Sim':'Nao'),r.last||'-']))}
+function openAudit(l){fLoja.value=l;go('auditoria')}
+function approve(l){let a=audit(l);if(a.missing.length&&!confirm('Lote incompleto. Aprovar?'))return;db.aprovacoes[periodKey(l)]={status:'Aprovado',data:new Date().toLocaleString('pt-BR'),obs:prompt('Obs:',a.obs||'')||''};save();render()}
+function reprocess(l){delete db.aprovacoes[periodKey(l)];fLoja.value=l;go('importacoes')}
+
+/* ===== CONSOLIDACAO ===== */
+function consolidacao(){let lojas=db.empresas.filter(e=>audit(e.nome).status=='Aprovado'),data=[];if(fVisao.value=='mensal'){lojas.forEach(e=>monthsBetween(fInicio.value,fFim.value).forEach(m=>{let cs=db.campanhas.filter(r=>r.loja==e.nome&&monthKey(r.mes)==m).map(calc),rr=db.resumos.find(r=>r.loja==e.nome&&monthKey(r.mes)==m)||{},v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0);data.push({loja:e.nome,mes:m,regiao:e.regiao,vt:+rr.venda_total||0,v,l,margem:v?l/v*100:0,part:rr.venda_total?v/rr.venda_total*100:0})}))}else{lojas.forEach(e=>{let t=total(e.nome,false);data.push({loja:e.nome,mes:'Acumulado',regiao:e.regiao,vt:t.vt,v:t.v,l:t.l,margem:t.margem,part:t.part})})}let html=`<div class="alert">Regra: apenas lojas aprovadas.</div><div class="panel mt"><div class="panel-header"><div class="panel-title">${fVisao.value=='mensal'?'Visao mensal':'Acumulado'}</div><div>${csvBtn('CSV',"exportConsol()")} <button class="btn" onclick="window.print()">Imprimir</button></div></div>${data.length?sortableTable('tCons',['Loja','Mes','Regiao','Venda total','Venda prom.','Part.','Lucro','Margem'],data.map(r=>[r.loja,r.mes,r.regiao,brl(r.vt),brl(r.v),pct(r.part),brl(r.l),pct(r.margem)]),['text','text','text','num','num','num','num','num']):'<p class="muted" style="text-align:center;padding:24px">Nenhuma loja aprovada.</p>'}</div>`;if(data.length>1){html+=`<div class="panel mt"><div class="panel-title">Comparativo entre lojas</div><div class="chart-xl"><canvas id="cConsol"></canvas></div></div>`;setTimeout(()=>{let u=[...new Set(data.map(r=>r.loja))];if(u.length)mkChart('cConsol','bar',u,[{label:'Venda prom.',data:u.map(l=>data.filter(r=>r.loja==l).reduce((s,r)=>s+r.v,0)),backgroundColor:PAL.green,borderRadius:4},{label:'Lucro',data:u.map(l=>data.filter(r=>r.loja==l).reduce((s,r)=>s+r.l,0)),backgroundColor:PAL.gold,borderRadius:4}],{plugins:{datalabels:{display:true,anchor:'end',align:'top',font:{size:10,weight:'700'},color:PAL.dark,formatter:v=>brlShort(v)},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+brl(ctx.raw)}}},scales:{y:{ticks:{callback:v=>brlShort(v)}}}})},120)}return html}
+function exportConsol(){let lojas=db.empresas.filter(e=>audit(e.nome).status=='Aprovado'),data=[];lojas.forEach(e=>{let t=total(e.nome,false);data.push({loja:e.nome,regiao:e.regiao,vt:t.vt,v:t.v,l:t.l,margem:t.margem,part:t.part})});exportCSV('consolidacao.csv',['Loja','Regiao','Venda Total','Venda Prom','Part','Lucro','Margem'],data.map(r=>[r.loja,r.regiao,r.vt.toFixed(2),r.v.toFixed(2),r.part.toFixed(2),r.l.toFixed(2),r.margem.toFixed(2)]))}
+
+/* ===== MODELOS SQL ===== */
+function modelos(){let loja=fLoja.value=='Todas'?'Loja 01':fLoja.value,tipo=(window.sqlTipo&&sqlTipo.value)||'resumo_geral_loja';return`<div class="panel"><div class="panel-title">Modelos SQL</div><div class="panel-sub">Consultas agrupadas por mes</div><div class="row mt"><select id="sqlTipo" onchange="render()">${ORDER.map(k=>`<option value="${k}" ${k==tipo?'selected':''}>${TYPES[k].label}</option>`).join('')}</select><button class="btn primary" onclick="copySql()">Copiar SQL</button></div><pre id="sqlBox" class="sql" style="margin-top:12px">${makeSql(tipo,empresa(loja),fInicio.value,fFim.value)}</pre></div>`}
+function makeSql(tipo,e,ini,fim){let id=e.id_vr||1;if(tipo=='cupons_totais')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  ct.cupons_totais,\n  t.descricao AS campanha,\n  COUNT(DISTINCT v.id) AS cupons_campanha\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id = i.id_venda\nINNER JOIN public.tipooferta t ON t.id = i.id_tipooferta\nINNER JOIN (\n  SELECT id_loja, DATE_TRUNC('month',data) AS mes_ref, COUNT(DISTINCT id) AS cupons_totais\n  FROM pdv.venda WHERE id_loja=${id} AND data>='${ini}' AND data<'${fim}' AND cancelado=FALSE\n  GROUP BY id_loja, DATE_TRUNC('month',data)\n) ct ON ct.id_loja=v.id_loja AND ct.mes_ref=DATE_TRUNC('month',v.data)\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), ct.cupons_totais, t.descricao\nORDER BY mes, cupons_campanha DESC;`;if(tipo=='departamentos_campanha')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao AS campanha,\n  p.mercadologico1, m.descricao AS descricao_departamento,\n  COUNT(DISTINCT i.id_produto) AS produtos,\n  SUM(i.quantidade) AS quantidade,\n  SUM(i.valortotal) AS venda,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id=i.id_venda\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nINNER JOIN public.produto p ON p.id=i.id_produto\nINNER JOIN public.mercadologico m ON m.mercadologico1=p.mercadologico1 AND m.nivel=1\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao, p.mercadologico1, m.descricao\nORDER BY mes, campanha, venda DESC;`;if(tipo=='produtos_campanha')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao AS campanha,\n  i.id_produto, p.descricaocompleta AS descricao_produto,\n  SUM(i.quantidade) AS quantidade,\n  SUM(i.valortotal) AS venda,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id=i.id_venda\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nINNER JOIN public.produto p ON p.id=i.id_produto\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao, i.id_produto, p.descricaocompleta\nORDER BY mes, campanha, venda DESC;`;if(tipo=='campanhas_ofertas')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao,\n  SUM(i.valortotal) AS venda,\n  SUM(i.customediocomimposto*i.quantidade) AS custo,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem,\n  SUM(i.quantidade) AS quantidade,\n  COUNT(*) AS itens,\n  COUNT(DISTINCT i.id_produto) AS produtos_distintos,\n  COUNT(DISTINCT v.id) AS cupons,\n  ROUND(SUM(i.valortotal)/NULLIF(COUNT(DISTINCT v.id),0),2) AS ticket_medio,\n  ROUND(SUM(i.valortotal)/NULLIF(SUM(i.quantidade),0),2) AS preco_medio\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda=v.id\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao\nORDER BY mes, venda DESC;`;return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  SUM(i.valortotal) AS venda_total,\n  SUM(i.customediocomimposto*i.quantidade) AS custo_total,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro_total,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem_total,\n  COUNT(DISTINCT v.id) AS cupons_totais,\n  SUM(i.quantidade) AS unidades_totais,\n  COUNT(DISTINCT i.id_produto) AS produtos_distintos\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda=v.id\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data)\nORDER BY mes;`}
+function copySql(){navigator.clipboard.writeText(sqlBox.textContent).then(()=>showToast('SQL copiado'))}
+
+/* ===== EMPRESAS ===== */
+function empresas(){return`<div class="panel"><div class="panel-header"><div class="panel-title">Empresas</div>${csvBtn('CSV',"exportEmpresas()")}</div>${sortableTable('tEmp',['Codigo','ID VR','Nome','Regiao','Cidade','UF'],db.empresas.map(e=>[e.codigo,e.id_vr,e.nome,e.regiao,e.cidade||'-',e.uf||'-']),['text','num','text','text','text','text'])}</div>`}
+function exportEmpresas(){exportCSV('empresas.csv',['Codigo','ID VR','Nome','Regiao','Cidade','UF'],db.empresas.map(e=>[e.codigo,e.id_vr,e.nome,e.regiao,e.cidade||'',e.uf||'']))}
+
+/* ===== RELATORIO ===== */
+function relatorio(){return auditoria()}
+
+/* ===== NAV ===== */
+function setupFilters(){let o=[fLoja.value,fRegiao.value,fCamp.value];fLoja.innerHTML='<option>Todas</option>'+db.empresas.map(e=>`<option>${e.nome}</option>`).join('');fRegiao.innerHTML='<option>Todas</option>'+[...new Set(db.empresas.map(e=>e.regiao))].map(r=>`<option>${r}</option>`).join('');fCamp.innerHTML='<option>Todas</option>'+[...new Set(db.campanhas.map(c=>c.descricao))].map(c=>`<option>${c}</option>`).join('');[fLoja.value,fRegiao.value,fCamp.value]=o;if(!fLoja.value)fLoja.value='Loja 01';if(!fRegiao.value)fRegiao.value='Todas';if(!fCamp.value)fCamp.value='Todas'}
+function go(p){page=p;render()}
+function render(){
+  destroyCharts();
+  let pd=document.getElementById('printDate');if(pd)pd.textContent=new Date().toLocaleString('pt-BR');
+  let ap=db.empresas.filter(e=>audit(e.nome).status=='Aprovado').length;
+  nav.innerHTML=pages.map(([id,l])=>`<button class="${id==page?'active':''}" onclick="go('${id}')">${ICONS[id]||''}${l}${id=='plano'?'<span class="nav-badge">'+ap+'/27</span>':''}</button>`).join('');
+  let meta={decisao:['Centro de Decisao','Diagnostico e plano de acao'],dashboard:['Dashboard','Visao geral do periodo'],importacoes:['Importacoes','Importar arquivos .txt'],auditoria:['Auditoria','Validar periodo'],plano:['Plano de Coleta','Controle 27 lojas'],modelos:['Modelos SQL','Consultas VR'],empresas:['Empresas','Cadastro'],consolidacao:['Consolidacao','Lojas aprovadas'],relatorio:['Relatorio','Resumo']}[page];
+  title.textContent=meta[0];sub.textContent=meta[1];
+  view.classList.add('fade');
+  setTimeout(()=>{view.innerHTML=({decisao,dashboard,importacoes,auditoria,plano,modelos,empresas,consolidacao,relatorio})[page]();view.classList.remove('fade');if(page=='importacoes')showReq()},80);
+}
+['fLoja','fRegiao','fInicio','fFim','fVisao','fCamp'].forEach(id=>document.getElementById(id).addEventListener('change',render));
+setupFilters();render();loadCloud();
+</script>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+</body>
+</html>

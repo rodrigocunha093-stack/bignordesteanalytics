@@ -1,7 +1,23 @@
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
 const path = require("path");
 const { Pool } = require("pg");
+
+function loadLocalEnv() {
+  const envPath = path.join(__dirname, ".env");
+  if (!fs.existsSync(envPath)) return;
+  const lines = fs.readFileSync(envPath, "utf8").split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!match || process.env[match[1]]) continue;
+    process.env[match[1]] = match[2].trim().replace(/^["']|["']$/g, "");
+  }
+}
+
+loadLocalEnv();
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -84,12 +100,16 @@ app.get("*", (_req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.listen(port, async () => {
-  try {
-    await ensureSchema();
-    console.log(`BIGNORDESTE ANALYTICS rodando em http://127.0.0.1:${port}`);
-    console.log(databaseUrl ? "Banco PostgreSQL configurado." : "DATABASE_URL nao configurada; API de banco desativada.");
-  } catch (error) {
-    console.error("Erro ao preparar banco:", error.message);
-  }
-});
+if (require.main === module) {
+  app.listen(port, async () => {
+    try {
+      await ensureSchema();
+      console.log(`BIGNORDESTE ANALYTICS rodando em http://127.0.0.1:${port}`);
+      console.log(databaseUrl ? "Banco PostgreSQL configurado." : "DATABASE_URL nao configurada; API de banco desativada.");
+    } catch (error) {
+      console.error("Erro ao preparar banco:", error.message);
+    }
+  });
+}
+
+module.exports = app;
