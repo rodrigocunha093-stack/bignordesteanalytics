@@ -24,6 +24,12 @@ Ordem recomendada por loja e periodo
 4. departamentos_campanha.sql -> departamentos_campanha.txt
 5. produtos_campanha.sql -> produtos_campanha.txt
 
+Consultas oficiais de apoio diario
+6. ofertas_dia_campanha.sql -> ofertas_dia_campanha.txt
+7. venda_diaria_loja.sql -> venda_diaria_loja.txt
+
+Observacao: os arquivos 6 e 7 servem para validar campanhas pelo periodo real de execucao. Eles nao sao obrigatorios no checklist mensal dos 5 arquivos.
+
 Checklist de importacao
 1. Selecionar loja
 2. Selecionar data inicial

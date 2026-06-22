@@ -133,13 +133,20 @@ Status possiveis:
 
 ## Modelos SQL oficiais
 
-A pasta `/sql` contem os 5 modelos oficiais de consulta que devem ser rodados no VR:
+A pasta `/sql` contem os 5 modelos oficiais de importacao que devem ser rodados no VR:
 
 - `sql/resumo_geral_loja.sql`
 - `sql/campanhas_ofertas.sql`
 - `sql/produtos_campanha.sql`
 - `sql/departamentos_campanha.sql`
 - `sql/cupons_totais.sql`
+
+Tambem existem 2 modelos oficiais de apoio para analise diaria de campanhas:
+
+- `sql/ofertas_dia_campanha.sql`
+- `sql/venda_diaria_loja.sql`
+
+Esses 2 modelos diarios ajudam a comparar a campanha contra o faturamento do periodo real em que ela ocorreu. Eles nao substituem os 5 arquivos obrigatorios da importacao mensal.
 
 Todos os modelos retornam `mes` com:
 

@@ -309,6 +309,21 @@ Regra de cupons:
 
 Os SQL em `sql/` devem usar parametros, nao loja fixa.
 
+Modelos obrigatorios de importacao mensal:
+
+- `resumo_geral_loja.sql`
+- `campanhas_ofertas.sql`
+- `produtos_campanha.sql`
+- `departamentos_campanha.sql`
+- `cupons_totais.sql`
+
+Modelos de apoio diario para comparar campanha contra o periodo real de execucao:
+
+- `ofertas_dia_campanha.sql`
+- `venda_diaria_loja.sql`
+
+Esses modelos diarios aparecem na tela "Modelos SQL", mas nao entram na obrigatoriedade dos 5 arquivos da Auditoria/Plano de Coleta.
+
 Padrao:
 
 ```sql
