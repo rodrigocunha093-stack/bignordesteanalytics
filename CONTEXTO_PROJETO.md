@@ -329,6 +329,14 @@ Arquivos aceitos na importacao como apoio opcional:
 
 Esses arquivos diarios aparecem na tela "Modelos SQL" e podem ser importados, mas nao entram na obrigatoriedade dos 5 arquivos da Auditoria/Plano de Coleta.
 
+Status da analise diaria:
+
+- `venda_dia_campanha.txt` e `venda_diario.txt` sao cruzados por `loja + data`.
+- O Dashboard mostra participacao no periodo real, venda por dia e penetracao real quando houver diarios importados.
+- O Centro de Decisao gera diagnostico por periodo real, comparando participacao no mes versus participacao nos dias reais da campanha.
+- Existe a tela "Periodo de Campanha", com campanhas ativas por dia, ciclos consecutivos e ranking/comparativo justo.
+- Os filtros por bloco (`Encarte Big Nordeste`, `Dia Big`, `Demais Encartes`) tambem afetam a analise diaria.
+
 Padrao:
 
 ```sql

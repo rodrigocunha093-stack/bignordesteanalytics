@@ -148,6 +148,12 @@ Tambem existem 2 modelos oficiais de apoio para analise diaria de campanhas:
 
 Esses 2 modelos diarios ajudam a comparar a campanha contra o faturamento do periodo real em que ela ocorreu. Eles podem ser importados como apoio opcional usando os arquivos `venda_dia_campanha.txt` e `venda_diario.txt`, e nao substituem os 5 arquivos obrigatorios da importacao mensal.
 
+Quando importados, os arquivos diarios alimentam:
+
+- Dashboard: participacao no periodo real, venda por dia e penetracao real.
+- Centro de Decisao: conclusoes comparando participacao mensal e participacao nos dias reais.
+- Periodo de Campanha: dias ativos, ciclos consecutivos e ranking de eficiencia por periodo.
+
 Todos os modelos retornam `mes` com:
 
 ```sql
