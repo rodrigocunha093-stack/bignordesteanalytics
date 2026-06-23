@@ -285,6 +285,7 @@ function lojaFromVr(raw,fb){let v=String(raw??'').trim();if(!v)return fb;let n=N
 async function loadCloud(){if(location.protocol=='file:')return;try{let r=await fetch('/api/state');if(r.ok){let d=await r.json();if(d&&d.empresas){db=d;normalizeDb();cloudOnline=true;localStorage.setItem('bignordeste.analytics.periodo.v1',JSON.stringify(db));setupFilters();render()}}updateCloud()}catch(e){updateCloud()}}
 function updateCloud(){let d=document.getElementById('cloudDot'),l=document.getElementById('cloudLabel');if(d)d.className='cloud-dot'+(cloudOnline?' online':'');if(l)l.textContent=cloudOnline?'Nuvem':'Local'}
 function save(){localStorage.setItem('bignordeste.analytics.periodo.v1',JSON.stringify(db));if(location.protocol!='file:')fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(db)}).then(r=>{cloudOnline=r.ok;updateCloud()}).catch(()=>updateCloud())}
+async function saveImportBatch(payload){localStorage.setItem('bignordeste.analytics.periodo.v1',JSON.stringify(db));if(location.protocol=='file:')return{ok:true};try{let r=await fetch('/api/import-batch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}),j=await r.json().catch(()=>({}));cloudOnline=r.ok;updateCloud();if(!r.ok)throw new Error(j.error||'Falha ao salvar lote na nuvem');return j}catch(e){cloudOnline=false;updateCloud();throw e}}
 function empresa(n){return db.empresas.find(e=>e.nome==n)||{}}
 
 /* ===== STATUS ===== */
@@ -420,6 +421,56 @@ async function readText(f){let b=await f.arrayBuffer(),t=new TextDecoder('utf-8'
 function parseTxt(text){let lines=text.split(/\r?\n/).filter(x=>x.trim()),head=lines[0].split(';').map(norm);let rows=lines.slice(1).map(line=>{let cells=line.split(';');return Object.fromEntries(head.map((h,i)=>[h,parseNum(cells[i]??'')]))});return{head,rows,preview:lines.slice(0,8).join('\n')}}
 function detectType(name,fb,head=[]){let n=name.toLowerCase();if(n.includes('venda_dia_campanha')||n.includes('ofertas_dia_campanha'))return'ofertas_dia_campanha';if(n.includes('venda_diario')||n.includes('venda_diaria')||n.includes('venda_diaria_loja'))return'venda_diaria_loja';if(n.includes('resumo_geral'))return'resumo_geral_loja';if(n.includes('campanhas_ofertas')||n.includes('campanha_ofertas')||n.includes('campanha_oferta'))return'campanhas_ofertas';if(n.includes('produtos_campanha')||n.includes('produto_campanha')||n.includes('produtos_loja')||n.includes('produto_loja'))return'produtos_campanha';if(n.includes('departamento'))return'departamentos_campanha';if(n.includes('cupons'))return'cupons_totais';let has=c=>head.includes(c);if(has('venda_oferta')&&has('cupons_oferta')&&has('data'))return'ofertas_dia_campanha';if(has('venda_total')&&has('cupons_totais')&&has('data')&&!has('mes'))return'venda_diaria_loja';if(has('venda_total')&&has('cupons_totais'))return'resumo_geral_loja';if(has('descricao_departamento')&&has('mercadologico1'))return'departamentos_campanha';if(has('id_produto')&&has('descricao_produto')&&has('campanha'))return'produtos_campanha';if(has('cupons_campanha')&&has('cupons_totais'))return'cupons_totais';if(has('id_tipooferta')&&has('descricao')&&has('ticket_medio'))return'campanhas_ofertas';return fb}
 async function processImport(){let btn=document.getElementById('importBtn');if(btn){btn.disabled=true;btn.innerHTML='<span style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .5s linear infinite;margin-right:6px"></span>Importando...'}let sel=[...((window.files&&files.files)||[]),...((window.folderFiles&&folderFiles.files)||[])],fs=sel.filter(f=>f.name.toLowerCase().endsWith('.txt')),loja=il.value,ini=ii.value,fim=ifim.value,tipo=(window.it&&it.value)||'resumo_geral_loja',obs=io.value.trim()||'Sem observacao';let box=document.getElementById('ir');if(!loja||!ini||!fim){if(btn){btn.disabled=false;btn.textContent='Importar arquivos da loja'}return box.innerHTML='<div class="alert a-bad">Informe loja e periodo.</div>'}if(!sel.length){if(btn){btn.disabled=false;btn.textContent='Importar arquivos da loja'}return box.innerHTML='<div class="alert a-warn">Selecione arquivos ou pasta.</div>'}if(!fs.length){if(btn){btn.disabled=false;btn.textContent='Importar arquivos da loja'}return box.innerHTML='<div class="alert a-bad">Nenhum .txt encontrado.</div>'}let atual=audit(loja),hasMonthly=false,allowed=monthsBetween(ini,fim),grouped={},hist=[],errors=[],warnings=[],totalR=0,lastPrev='';for(let f of fs){let p=parseTxt(await readText(f));let rt=detectType(f.name,tipo,p.head),cfg=TYPES[rt];if(!cfg){errors.push(f.name+': tipo nao identificado.');continue}if(!cfg.diario&&['Auditado','Aprovado'].includes(atual.status)&&!atual.reaberto){errors.push(f.name+': importacao mensal bloqueada porque '+loja+' ja esta '+atual.status.toLowerCase()+'. Retire a auditoria para reprocessar os 5 arquivos mensais.');continue}if(!cfg.diario)hasMonthly=true;lastPrev=p.preview;let miss=cfg.cols.filter(c=>!p.head.includes(c));if(miss.length){errors.push(f.name+' ('+cfg.label+'): colunas faltantes '+miss.join(', '));continue}let rows=p.rows.filter(r=>cfg.diario?inDatePeriod(r.data,ini,fim):allowed.includes(monthKey(r.mes))).map(r=>cfg.diario?({...r,data:dateKey(r.data),loja,__loja_vr:r.loja||'',__tipo:rt}):({...r,mes:monthKey(r.mes),loja,__loja_vr:r.loja||'',__tipo:rt}));if(!rows.length)warnings.push(f.name+': nenhuma linha no periodo. Dados antigos desse arquivo/periodo serao limpos.');let key=rt+'|'+loja;(grouped[key]=grouped[key]||{tipo:rt,loja,rows:[]}).rows.push(...rows);totalR+=rows.length;hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:rt,linhas:rows.length,ignoradas:p.rows.length-rows.length,colunas_faltantes:[],observacao:obs})}let nb=document.getElementById('ir'),pv=document.getElementById('prev');if(pv&&lastPrev){pv.style.display='block';pv.textContent=lastPrev}let msg='';if(errors.length){msg=`<div class="alert a-bad"><b>Importacao cancelada.</b><br>${errors.join('<br>')}<br>Nenhum dado foi gravado para evitar lote parcial.</div>`}else{if(hasMonthly)delete db.aprovacoes[periodKey(loja)];Object.values(grouped).forEach(g=>{let b=TYPES[g.tipo].bucket,cfg=TYPES[g.tipo];db[b]=db[b].filter(r=>!(r.loja==g.loja&&r.__tipo==g.tipo&&(cfg.diario?inDatePeriod(r.data,ini,fim):allowed.includes(monthKey(r.mes))))).concat(g.rows)});if(hist.length)db.importacoes.unshift(...hist);save();fLoja.value=loja;setupFilters();fLoja.value=loja;msg=`<div class="alert a-ok"><b>Importacao concluida.</b> ${fs.length} arquivo(s), ${totalR} linhas. Loja: ${loja}</div>`}if(warnings.length)msg+=`<div class="alert a-warn">${warnings.join('<br>')}</div>`;if(nb)nb.innerHTML=msg;let nb2=document.getElementById('importBtn');if(nb2){nb2.disabled=false;nb2.textContent='Importar arquivos da loja'}}
+async function processImport(){
+  let btn=document.getElementById('importBtn');
+  if(btn){btn.disabled=true;btn.innerHTML='<span style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .5s linear infinite;margin-right:6px"></span>Importando...'}
+  let sel=[...((window.files&&files.files)||[]),...((window.folderFiles&&folderFiles.files)||[])],fs=sel.filter(f=>f.name.toLowerCase().endsWith('.txt')),loja=il.value,ini=ii.value,fim=ifim.value,tipo=(window.it&&it.value)||'resumo_geral_loja',obs=io.value.trim()||'Sem observacao';
+  let box=document.getElementById('ir');
+  function done(){let b=document.getElementById('importBtn');if(b){b.disabled=false;b.textContent='Importar arquivos da loja'}}
+  if(!loja||!ini||!fim){done();return box.innerHTML='<div class="alert a-bad">Informe loja e periodo.</div>'}
+  if(!sel.length){done();return box.innerHTML='<div class="alert a-warn">Selecione arquivos ou pasta.</div>'}
+  if(!fs.length){done();return box.innerHTML='<div class="alert a-bad">Nenhum .txt encontrado.</div>'}
+
+  let atual=audit(loja),hasMonthly=false,allowed=monthsBetween(ini,fim),grouped={},hist=[],errors=[],warnings=[],totalR=0,lastPrev='';
+  for(let f of fs){
+    let p=parseTxt(await readText(f)),rt=detectType(f.name,tipo,p.head),cfg=TYPES[rt];
+    if(!cfg){errors.push(f.name+': tipo nao identificado.');continue}
+    if(!cfg.diario&&['Auditado','Aprovado'].includes(atual.status)&&!atual.reaberto){
+      errors.push(f.name+': importacao mensal bloqueada porque '+loja+' ja esta '+atual.status.toLowerCase()+'. Retire a auditoria para reprocessar os 5 arquivos mensais.');
+      continue
+    }
+    if(!cfg.diario)hasMonthly=true;
+    lastPrev=p.preview;
+    let miss=cfg.cols.filter(c=>!p.head.includes(c));
+    if(miss.length){errors.push(f.name+' ('+cfg.label+'): colunas faltantes '+miss.join(', '));continue}
+    let rows=p.rows.filter(r=>cfg.diario?inDatePeriod(r.data,ini,fim):allowed.includes(monthKey(r.mes))).map(r=>cfg.diario?({...r,data:dateKey(r.data),loja,__loja_vr:r.loja||'',__tipo:rt}):({...r,mes:monthKey(r.mes),loja,__loja_vr:r.loja||'',__tipo:rt}));
+    if(!rows.length)warnings.push(f.name+': nenhuma linha no periodo. Dados antigos desse arquivo/periodo serao limpos.');
+    let key=rt+'|'+loja;(grouped[key]=grouped[key]||{tipo:rt,loja,rows:[]}).rows.push(...rows);
+    totalR+=rows.length;
+    hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:rt,linhas:rows.length,ignoradas:p.rows.length-rows.length,colunas_faltantes:[],observacao:obs})
+  }
+
+  let nb=document.getElementById('ir'),pv=document.getElementById('prev');
+  if(pv&&lastPrev){pv.style.display='block';pv.textContent=lastPrev}
+  let msg='';
+  if(errors.length){
+    msg=`<div class="alert a-bad"><b>Importacao cancelada.</b><br>${errors.join('<br>')}<br>Nenhum dado foi gravado para evitar lote parcial.</div>`
+  }else{
+    if(hasMonthly)delete db.aprovacoes[periodKey(loja)];
+    Object.values(grouped).forEach(g=>{let b=TYPES[g.tipo].bucket,cfg=TYPES[g.tipo];db[b]=db[b].filter(r=>!(r.loja==g.loja&&r.__tipo==g.tipo&&(cfg.diario?inDatePeriod(r.data,ini,fim):allowed.includes(monthKey(r.mes))))).concat(g.rows)});
+    if(hist.length)db.importacoes.unshift(...hist);
+    try{
+      await saveImportBatch({loja,ini,fim,hasMonthly,groups:Object.values(grouped),hist});
+      fLoja.value=loja;setupFilters();fLoja.value=loja;
+      msg=`<div class="alert a-ok"><b>Importacao concluida e salva na nuvem.</b> ${fs.length} arquivo(s), ${totalR} linhas. Loja: ${loja}</div>`
+    }catch(e){
+      msg=`<div class="alert a-bad"><b>Importacao ficou apenas neste navegador.</b><br>Nao foi possivel salvar na nuvem: ${e.message}</div>`
+    }
+  }
+  if(warnings.length)msg+=`<div class="alert a-warn">${warnings.join('<br>')}</div>`;
+  if(nb)nb.innerHTML=msg;
+  done();
+}
 function template(){let t=(window.it&&it.value)||'resumo_geral_loja',b=new Blob([TYPES[t].cols.join(';')+'\n']),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=TYPES[t].file;a.click()}
 
 /* ===== AUDITORIA ===== */
