@@ -146,7 +146,7 @@ Tambem existem 2 modelos oficiais de apoio para analise diaria de campanhas:
 - `sql/ofertas_dia_campanha.sql`
 - `sql/venda_diaria_loja.sql`
 
-Esses 2 modelos diarios ajudam a comparar a campanha contra o faturamento do periodo real em que ela ocorreu. Eles nao substituem os 5 arquivos obrigatorios da importacao mensal.
+Esses 2 modelos diarios ajudam a comparar a campanha contra o faturamento do periodo real em que ela ocorreu. Eles podem ser importados como apoio opcional usando os arquivos `venda_dia_campanha.txt` e `venda_diario.txt`, e nao substituem os 5 arquivos obrigatorios da importacao mensal.
 
 Todos os modelos retornam `mes` com:
 

@@ -317,12 +317,17 @@ Modelos obrigatorios de importacao mensal:
 - `departamentos_campanha.sql`
 - `cupons_totais.sql`
 
-Modelos de apoio diario para comparar campanha contra o periodo real de execucao:
+Modelos/arquivos de apoio diario para comparar campanha contra o periodo real de execucao:
 
 - `ofertas_dia_campanha.sql`
 - `venda_diaria_loja.sql`
 
-Esses modelos diarios aparecem na tela "Modelos SQL", mas nao entram na obrigatoriedade dos 5 arquivos da Auditoria/Plano de Coleta.
+Arquivos aceitos na importacao como apoio opcional:
+
+- `venda_dia_campanha.txt`: salva no bucket `ofertasDia`.
+- `venda_diario.txt`: salva no bucket `vendasDiarias`.
+
+Esses arquivos diarios aparecem na tela "Modelos SQL" e podem ser importados, mas nao entram na obrigatoriedade dos 5 arquivos da Auditoria/Plano de Coleta.
 
 Padrao:
 
