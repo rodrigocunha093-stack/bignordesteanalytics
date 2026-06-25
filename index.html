@@ -73,10 +73,15 @@ textarea{border:1px solid var(--line);background:white;border-radius:6px;padding
 
 /* Charts - BI SIZED */
 .chart-xl{position:relative;width:100%;height:380px}
-.chart-full{position:relative;width:100%;height:min(62vh,620px);min-height:460px}
+.chart-full{position:relative;width:100%;height:calc(100vh - 190px);min-height:520px}
 .chart-lg{position:relative;width:100%;height:300px}
 .chart-md{position:relative;width:100%;height:240px}
 .chart-sm{position:relative;width:100%;height:180px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.72);z-index:100;display:flex;align-items:stretch;justify-content:center;padding:28px}
+.modal-card{background:#fff;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.35);width:min(1500px,100%);display:flex;flex-direction:column;padding:18px}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:10px}
+.modal-head h3{margin:0;font-size:18px}
+.modal-head .sub{font-size:12px;color:var(--muted);margin-top:2px}
 
 /* Tables */
 .table-wrap{overflow:auto;max-height:500px;border:1px solid var(--line);border-radius:8px}
@@ -288,7 +293,7 @@ function seed(){let empresas=Array.from({length:27},(_,i)=>({codigo:String(i+1).
 function readLocal(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'null')}catch(e){return null}}
 function cacheLocal(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true}catch(e){try{localStorage.removeItem(STORE_KEY)}catch(_){ }return false}}
 let db=readLocal()||seed();
-let page='dashboard',cloudOnline=false;
+let page='dashboard',cloudOnline=false,monthChartExpanded=false;
 function normalizeDb(){['resumos','campanhas','departamentos','produtos','cupons','importacoes','ofertasDia','vendasDiarias'].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});if(!db.aprovacoes)db.aprovacoes={};if(!Array.isArray(db.empresas))db.empresas=[]}
 normalizeDb();
 function lojaFromVr(raw,fb){let v=String(raw??'').trim();if(!v)return fb;let n=Number(v),pad=Number.isFinite(n)?String(n).padStart(2,'0'):v.padStart(2,'0');let e=db.empresas.find(x=>String(x.id_vr)==v||String(x.id_vr)==String(n)||String(x.codigo)==v||String(x.codigo)==pad||x.nome==v);return e?e.nome:fb}
@@ -319,6 +324,14 @@ function campRows(){let cs=campanhas(),t=total(fLoja.value,false),rows=sumBy(cs,
 function deptRows(camp){let rows=scopeRows('departamentos').filter(r=>!camp||blocoCampanha(r.campanha)==camp),tv=rows.reduce((s,r)=>s+(+r.venda||0),0);let out=sumBy(rows,r=>r.descricao_departamento,(r,k)=>({departamento:k,venda:0,lucro:0,produtos:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.produtos+=+r.produtos||0});out.forEach(r=>{r.part=tv?r.venda/tv*100:0;r.margem=r.venda?r.lucro/r.venda*100:0});return out.sort((a,b)=>b.venda-a.venda)}
 function prodRows(camp){let rows=scopeRows('produtos').filter(r=>!camp||blocoCampanha(r.campanha)==camp);let out=sumBy(rows,r=>r.id_produto+'|'+r.descricao_produto,(r,k)=>({produto:r.descricao_produto,campanha:blocoCampanha(r.campanha),venda:0,lucro:0,quantidade:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.quantidade+=+r.quantidade||0});out.forEach(r=>r.margem=r.venda?r.lucro/r.venda*100:0);return out.sort((a,b)=>b.venda-a.venda)}
 function monthRows(){return monthsBetween(fInicio.value,fFim.value).map(m=>{let cs=campanhas().filter(r=>monthKey(r.mes)==m),rs=resumos().filter(r=>monthKey(r.mes)==m),ps=scopeRows('produtos').filter(r=>monthKey(r.mes)==m&&passaBloco(r.campanha)),v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0),vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0),ct=rs.reduce((s,r)=>s+(+r.cupons_totais||0),0),cup=cs.reduce((s,r)=>s+(+r.cupons||0),0),prodSet=new Set(ps.map(r=>String(r.id_produto||'')).filter(Boolean)),prod=prodSet.size||cs.reduce((s,r)=>s+(+r.produtos_distintos||0),0);return{mes:m,venda:v,lucro:l,vt,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0,produtos:prod,inc:!rs.length||!cs.length}})}
+function renderMonthChart(id,rows){let mf=rows.filter(m=>!m.inc),defs=[
+['vt',{label:'Venda total',data:mf.map(m=>m.vt),backgroundColor:PAL.blueLight,borderColor:PAL.blue,borderWidth:1.5,borderRadius:5,yAxisID:'y'}],
+['venda',{label:'Venda prom.',data:mf.map(m=>m.venda),backgroundColor:PAL.green,borderColor:PAL.green,borderWidth:1,borderRadius:5,yAxisID:'y'}],
+['lucro',{label:'Lucro',type:'line',data:mf.map(m=>m.lucro),borderColor:PAL.gold,backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:3,tension:.3,yAxisID:'y'}],
+['margem',{label:'Margem %',type:'line',data:mf.map(m=>m.margem),borderColor:PAL.red,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yPct'}],
+['pen',{label:'Penetracao %',type:'line',data:mf.map(m=>m.pen),borderColor:PAL.purple,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yPct'}],
+['produtos',{label:'Prod. distintos',type:'line',data:mf.map(m=>m.produtos),borderColor:PAL.teal,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yItens'}]
+];mkChart(id,'bar',mf.map(m=>m.mes),defs.filter(([k])=>monthMetrics.includes(k)).map(([,d])=>d),{plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.yAxisID=='y'?ctx.dataset.label+': '+brl(ctx.raw):ctx.dataset.yAxisID=='yPct'?ctx.dataset.label+': '+pct(ctx.raw):ctx.dataset.label+': '+num(ctx.raw)}},datalabels:{display:ctx=>['Venda prom.','Margem %','Penetracao %','Prod. distintos'].includes(ctx.dataset.label),align:'top',anchor:'end',color:PAL.dark,font:{size:9,weight:'600'},formatter:(v,ctx)=>ctx.dataset.yAxisID=='y'?brlShort(v):ctx.dataset.yAxisID=='yPct'?pct(v):num(v)}},scales:{y:{position:'left',ticks:{callback:v=>brlShort(v)}},yPct:{position:'right',grid:{drawOnChartArea:false},ticks:{callback:v=>v+'%'}},yItens:{display:false,beginAtZero:true}}})}
 function storeRank(){let lojas=(fRegiao.value=='Todas'?db.empresas:db.empresas.filter(e=>e.regiao==fRegiao.value));return lojas.map(e=>{let t=total(e.nome,false);return{loja:e.nome,regiao:e.regiao,...t}}).filter(r=>r.v||r.vt).sort((a,b)=>b.v-a.v)}
 function regionRank(){return sumBy(storeRank(),r=>r.regiao,(r,k)=>({regiao:k,v:0,l:0,vt:0,ct:0,cup:0}),(a,r)=>{a.v+=r.v;a.l+=r.l;a.vt+=r.vt;a.ct+=r.ct;a.cup+=r.cup}).map(r=>({...r,part:r.vt?r.v/r.vt*100:0,margem:r.v?r.l/r.v*100:0,pen:r.ct?r.cup/r.ct*100:0})).sort((a,b)=>b.v-a.v)}
 function blocoRows(){let camps=campRows(),t=total(),order=['Encarte Big Nordeste','Dia Big','Demais Encartes'];let rows=order.map(b=>({bloco:b,venda:0,lucro:0,cupons:0}));camps.forEach(c=>{let r=rows.find(x=>x.bloco==blocoCampanha(c.descricao));r.venda+=c.venda;r.lucro+=c.lucro;r.cupons+=c.cupons});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.part=t.vt?r.venda/t.vt*100:0;r.share=t.v?r.venda/t.v*100:0;r.pen=t.ct?r.cupons/t.ct*100:0});return rows}
@@ -339,7 +352,8 @@ function dashboard(){
   let t=total(),camps=campRows(),ms=monthRows(),top=camps[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},selectedBlock=fCamp.value!='Todos os blocos'&&fCamp.value!='Todas'?fCamp.value:'',topBlock=selectedBlock||(top.descricao?blocoCampanha(top.descricao):''),depts=deptRows(topBlock),bl=blocoRows(),fair=dailyFairSummary(),fd=selectedBlock?(fair.find(x=>x.bloco==selectedBlock)||{}):(fair[0]||{}),bestDia=[...fair].sort((a,b)=>b.vendaDia-a.vendaDia)[0]||{},hasDaily=fair.length>0,hasSelectedDaily=!!(selectedBlock&&fd.bloco),ov=dailyOverlapInfo();
   let html=hasSelectedDaily?`<div class="grid kpis">${kpi('Venda promocional do bloco',brlShort(fd.venda),fd.diasAtivos+' dia(s)',true)}${kpi('Venda total da loja nesses dias',brlShort(fd.vendaTotalPeriodo),'base do periodo real')}${kpi('Participacao real',pct(fd.partPeriodo),'oferta / venda dos dias')}${kpi('Lucro do bloco',brlShort(fd.lucro),pct(fd.margem)+' margem')}${kpi('Penetracao real',pct(fd.penPeriodo),num(fd.cupons||0)+' cupons')}</div>${ov.sobrepostos?`<div class="alert a-warn mt">Existem ${ov.sobrepostos} dia(s) com mais de um bloco ativo. A venda total dos dias e base de calculo e nao deve ser somada entre blocos.</div>`:''}`:hasDaily?`<div class="grid kpis">${kpi('Venda total',brlShort(t.vt),'Periodo',true)}${kpi('Venda promocional',brlShort(t.v),pct(t.part)+' da venda mensal')}${kpi('Part. periodo real',pct(fd.partPeriodo),fd.bloco)}${kpi('Maior venda/dia',brlShort(bestDia.vendaDia),bestDia.bloco)}${kpi('Penetracao real',pct(fd.penPeriodo),num(fd.cupons||0)+' cupons')}</div>`:selectedBlock?`<div class="grid kpis">${kpi('Venda promocional do bloco',brlShort(t.v),pct(t.part)+' da venda mensal',true)}${kpi('Venda total da loja nesses dias','-','importe diarios')}${kpi('Part. periodo real','-','sem venda_diario.txt')}${kpi('Penetracao real','-','sem venda_dia_campanha.txt')}</div><div class="alert a-warn mt">Nao da para medir o periodo real de ${selectedBlock} ainda. Importe venda_diario.txt e venda_dia_campanha.txt para cruzar os dias do encarte com a venda total desses mesmos dias.</div>`:`<div class="grid kpis">${kpi('Venda total',brlShort(t.vt),'Periodo',true)}${kpi('Venda promocional',brlShort(t.v),pct(t.part)+' da venda mensal')}${kpi('Lucro promocional',brlShort(t.l),pct(t.margem)+' margem')}${kpi('Penetracao mensal',pct(t.pen),num(t.cup)+' cupons')}</div><div class="alert a-warn mt">Analise diaria ainda sem dados salvos. Importe venda_diario.txt e venda_dia_campanha.txt para ativar participacao no periodo real.</div>`;
   // Charts row 1: Monthly evolution + Campaign mix
-  html+=`<div class="panel mt2"><div class="panel-header"><div><div class="panel-title">Evolucao mensal</div><div class="panel-sub">Escolha a combinacao de indicadores para comparar mes a mes</div></div><div class="metric-controls">${monthMetricControls()}${csvBtn('CSV',"exportMonths()")}</div></div><div class="chart-full"><canvas id="cMonth"></canvas></div></div>`;
+  html+=`<div class="panel mt2"><div class="panel-header"><div><div class="panel-title">Evolucao mensal</div><div class="panel-sub">Escolha a combinacao de indicadores para comparar mes a mes</div></div><div class="metric-controls">${monthMetricControls()}<button class="btn" onclick="monthChartExpanded=true;render()">Ampliar</button>${csvBtn('CSV',"exportMonths()")}</div></div><div class="chart-xl"><canvas id="cMonth"></canvas></div></div>`;
+  if(monthChartExpanded)html+=`<div class="modal"><div class="modal-card"><div class="modal-head"><div><h3>Evolucao mensal</h3><div class="sub">Analise ampliada dos indicadores selecionados</div></div><div class="metric-controls">${monthMetricControls()}<button class="btn" onclick="monthChartExpanded=false;render()">Fechar</button>${csvBtn('CSV',"exportMonths()")}</div></div><div class="chart-full"><canvas id="cMonthFull"></canvas></div></div></div>`;
   // Charts row 2: Stacked bar campaigns + Blocos
   html+=`<div class="grid g2 mt"><div class="panel"><div class="panel-header"><div><div class="panel-title">Composicao por campanha</div><div class="panel-sub">Participacao na venda promocional</div></div></div><div class="chart-lg"><canvas id="cPie"></canvas></div></div><div class="panel"><div class="panel-header"><div><div class="panel-title">Campanhas: venda vs lucro</div><div class="panel-sub">Comparativo absoluto por campanha</div></div>${csvBtn('CSV',"exportCamps()")}</div><div class="chart-lg"><canvas id="cCampBar"></canvas></div></div></div>`;
   html+=`<div class="grid g2 mt"><div class="panel"><div class="panel-header"><div><div class="panel-title">Blocos comerciais</div><div class="panel-sub">Dia Big vs Encarte vs Demais</div></div></div><div class="chart-lg"><canvas id="cBloco"></canvas></div></div></div>`;
@@ -351,17 +365,8 @@ function dashboard(){
 
   // Render charts
   setTimeout(()=>{
-    let mf=ms.filter(m=>!m.inc);
-    // Monthly line
-    let monthDefs=[
-      ['vt',{label:'Venda total',data:mf.map(m=>m.vt),backgroundColor:PAL.blueLight,borderColor:PAL.blue,borderWidth:1.5,borderRadius:5,yAxisID:'y'}],
-      ['venda',{label:'Venda prom.',data:mf.map(m=>m.venda),backgroundColor:PAL.green,borderColor:PAL.green,borderWidth:1,borderRadius:5,yAxisID:'y'}],
-      ['lucro',{label:'Lucro',type:'line',data:mf.map(m=>m.lucro),borderColor:PAL.gold,backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:3,tension:.3,yAxisID:'y'}],
-      ['margem',{label:'Margem %',type:'line',data:mf.map(m=>m.margem),borderColor:PAL.red,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yPct'}],
-      ['pen',{label:'Penetracao %',type:'line',data:mf.map(m=>m.pen),borderColor:PAL.purple,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yPct'}],
-      ['produtos',{label:'Prod. distintos',type:'line',data:mf.map(m=>m.produtos),borderColor:PAL.teal,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yItens'}]
-    ];
-    mkChart('cMonth','bar',mf.map(m=>m.mes),monthDefs.filter(([k])=>monthMetrics.includes(k)).map(([,d])=>d),{plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.yAxisID=='y'?ctx.dataset.label+': '+brl(ctx.raw):ctx.dataset.yAxisID=='yPct'?ctx.dataset.label+': '+pct(ctx.raw):ctx.dataset.label+': '+num(ctx.raw)}},datalabels:{display:ctx=>['Venda prom.','Margem %','Penetracao %','Prod. distintos'].includes(ctx.dataset.label),align:'top',anchor:'end',color:PAL.dark,font:{size:9,weight:'600'},formatter:(v,ctx)=>ctx.dataset.yAxisID=='y'?brlShort(v):ctx.dataset.yAxisID=='yPct'?pct(v):num(v)}},scales:{y:{position:'left',ticks:{callback:v=>brlShort(v)}},yPct:{position:'right',grid:{drawOnChartArea:false},ticks:{callback:v=>v+'%'}},yItens:{display:false,beginAtZero:true}}});
+    renderMonthChart('cMonth',ms);
+    if(monthChartExpanded)renderMonthChart('cMonthFull',ms);
     // Pie
     if(camps.length)mkChart('cPie','doughnut',camps.map(c=>c.descricao),[{data:camps.map(c=>c.venda),backgroundColor:SOLID_COLORS.slice(0,camps.length),borderWidth:2,borderColor:'#fff'}],{plugins:{tooltip:{callbacks:{label:ctx=>ctx.label+': '+brl(ctx.raw)}}}});
     // Campaign bar
