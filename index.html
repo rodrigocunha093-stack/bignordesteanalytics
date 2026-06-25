@@ -286,7 +286,9 @@ const SQL_MODELS={...TYPES,ofertas_dia_campanha:{...TYPES.ofertas_dia_campanha,l
 const SQL_ORDER=[...ORDER,...DAILY_ORDER];
 
 /* ===== PAGES ===== */
-const pages=[['decisao','Centro de Decisao'],['dashboard','Dashboard'],['periodo','Periodo de Campanha'],['importacoes','Importacoes'],['auditoria','Auditoria'],['plano','Plano de Coleta'],['modelos','Modelos SQL'],['empresas','Empresas'],['consolidacao','Consolidacao'],['relatorio','Relatorio']];
+const SHARE_MODE=new URLSearchParams(location.search).get('share')=='executivo';
+const allPages=[['decisao','Centro de Decisao'],['dashboard','Dashboard'],['periodo','Periodo de Campanha'],['importacoes','Importacoes'],['auditoria','Auditoria'],['plano','Plano de Coleta'],['modelos','Modelos SQL'],['empresas','Empresas'],['consolidacao','Consolidacao'],['relatorio','Relatorio']];
+const pages=SHARE_MODE?allPages.slice(0,2):allPages;
 
 /* ===== PERIOD ===== */
 function monthsBetween(ini,fim){let out=[],d=new Date(ini+'T00:00:00'),end=new Date(fim+'T00:00:00');while(d<end){out.push(d.toISOString().slice(0,7));d=new Date(d.getFullYear(),d.getMonth()+1,1)}return out}
@@ -300,7 +302,7 @@ function seed(){let empresas=Array.from({length:27},(_,i)=>({codigo:String(i+1).
 function readLocal(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'null')}catch(e){return null}}
 function cacheLocal(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true}catch(e){try{localStorage.removeItem(STORE_KEY)}catch(_){ }return false}}
 let db=readLocal()||seed();
-let page='dashboard',cloudOnline=false,monthChartExpanded=false;
+let page=SHARE_MODE?'decisao':'dashboard',cloudOnline=false,monthChartExpanded=false;
 function normalizeDb(){['resumos','campanhas','departamentos','produtos','cupons','importacoes','ofertasDia','vendasDiarias'].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});if(!db.aprovacoes)db.aprovacoes={};if(!Array.isArray(db.empresas))db.empresas=[]}
 normalizeDb();
 function lojaFromVr(raw,fb){let v=String(raw??'').trim();if(!v)return fb;let n=Number(v),pad=Number.isFinite(n)?String(n).padStart(2,'0'):v.padStart(2,'0');let e=db.empresas.find(x=>String(x.id_vr)==v||String(x.id_vr)==String(n)||String(x.codigo)==v||String(x.codigo)==pad||x.nome==v);return e?e.nome:fb}
@@ -549,9 +551,10 @@ function relatorio(){return auditoria()}
 
 /* ===== NAV ===== */
 function setupFilters(){let o=[fLoja.value,fRegiao.value,fCamp.value];fLoja.innerHTML='<option>Todas</option>'+db.empresas.map(e=>`<option>${e.nome}</option>`).join('');fRegiao.innerHTML='<option>Todas</option>'+[...new Set(db.empresas.map(e=>e.regiao))].map(r=>`<option>${r}</option>`).join('');let blocos=['Todos os blocos','Encarte Big Nordeste','Dia Big','Demais Encartes'];fCamp.innerHTML=blocos.map(c=>`<option>${c}</option>`).join('');[fLoja.value,fRegiao.value,fCamp.value]=o;if(!fLoja.value)fLoja.value='Loja 01';if(!fRegiao.value)fRegiao.value='Todas';if(!blocos.includes(fCamp.value))fCamp.value='Todos os blocos'}
-function go(p){page=p;render()}
+function go(p){if(SHARE_MODE&&!pages.some(([id])=>id==p))p='decisao';page=p;render()}
 function render(){
   destroyCharts();
+  if(!pages.some(([id])=>id==page))page=pages[0][0];
   let pd=document.getElementById('printDate');if(pd)pd.textContent=new Date().toLocaleString('pt-BR');
   let ap=db.empresas.filter(e=>audit(e.nome).status=='Aprovado').length;
   nav.innerHTML=pages.map(([id,l])=>`<button class="${id==page?'active':''}" onclick="go('${id}')">${ICONS[id]||''}${l}${id=='plano'?'<span class="nav-badge">'+ap+'/27</span>':''}</button>`).join('');
