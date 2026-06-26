@@ -304,7 +304,7 @@ function seed(){let empresas=Array.from({length:27},(_,i)=>({codigo:String(i+1).
 
 /* ===== STATE ===== */
 function readLocal(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'null')}catch(e){return null}}
-function cacheLocal(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true}catch(e){try{localStorage.removeItem(STORE_KEY)}catch(_){ }return false}}
+function cacheLocal(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true}catch(e){console.warn('Nao foi possivel atualizar cache local:',e.message);return false}}
 let db=readLocal()||seed();
 let page=SHARE_MODE?'decisao':'dashboard',cloudOnline=false,cloudError='',monthChartExpanded=false;
 function ofertaKey(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim()}
