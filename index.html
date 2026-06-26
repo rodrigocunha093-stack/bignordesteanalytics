@@ -324,7 +324,7 @@ function storeAllowed(loja,selected=fLoja.value){if(selected!='Todas')return loj
 function scopeRows(bucket,loja=fLoja.value){return db[bucket].filter(r=>storeAllowed(r.loja,loja)&&inPeriod(r.mes)&&(fRegiao.value=='Todas'||empresa(r.loja).regiao==fRegiao.value))}
 function resumos(loja=fLoja.value){return scopeRows('resumos',loja)}
 function campanhaCupons(r){let m=monthKey(r.mes),nome=ofertaKey(r.descricao||r.campanha);return (db.cupons||[]).find(c=>c.loja==r.loja&&monthKey(c.mes)==m&&ofertaKey(c.campanha)==nome)||{}}
-function blocoCampanha(n){let u=ofertaKey(n);if(u.includes('DIA BIG'))return'Dia Big';if(u.includes('ENCARTE BIG NORDESTE'))return'Encarte Big Nordeste';return'Demais Encartes'}
+function blocoCampanha(n){let u=ofertaKey(n);if(u==='DIA BIG')return'Dia Big';if(u.includes('ENCARTE BIG NORDESTE'))return'Encarte Big Nordeste';return'Demais Encartes'}
 function encarteIdsMensais(loja=fLoja.value){let ids=new Set();(db.campanhas||[]).filter(r=>(loja=='Todas'||r.loja==loja)&&inPeriod(r.mes)&&(fRegiao.value=='Todas'||empresa(r.loja).regiao==fRegiao.value)&&blocoCampanha(r.descricao)=='Encarte Big Nordeste').forEach(r=>ids.add(String(r.id_tipooferta)));return ids}
 function blocoOfertaDia(r,ids){return ids&&ids.has(String(r.id_tipooferta))?'Encarte Big Nordeste':blocoCampanha(r.campanha)}
 function passaBloco(camp){return fCamp.value=='Todos os blocos'||fCamp.value=='Todas'||blocoCampanha(camp)==fCamp.value}
