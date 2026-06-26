@@ -99,7 +99,14 @@ function getPool() {
   if (!pool) {
     pool = new Pool({
       connectionString: databaseUrl,
-      ssl: process.env.PGSSL === "false" ? false : { rejectUnauthorized: false }
+      ssl: process.env.PGSSL === "false" ? false : { rejectUnauthorized: false },
+      max: Number(process.env.PGPOOL_MAX || 2),
+      idleTimeoutMillis: Number(process.env.PGPOOL_IDLE_TIMEOUT_MS || 5000),
+      connectionTimeoutMillis: Number(process.env.PGPOOL_CONNECTION_TIMEOUT_MS || 10000),
+      allowExitOnIdle: true
+    });
+    pool.on("error", (error) => {
+      console.error("Erro no pool PostgreSQL:", error.message);
     });
   }
   return pool;
@@ -122,7 +129,15 @@ app.get("/api/health", async (_req, res) => {
     const db = getPool();
     if (!db) return res.json({ ok: true, database: "not_configured" });
     await db.query("SELECT 1");
-    res.json({ ok: true, database: "connected" });
+    res.json({
+      ok: true,
+      database: "connected",
+      pool: {
+        total: db.totalCount,
+        idle: db.idleCount,
+        waiting: db.waitingCount
+      }
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

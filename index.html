@@ -306,15 +306,17 @@ function seed(){let empresas=Array.from({length:27},(_,i)=>({codigo:String(i+1).
 function readLocal(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'null')}catch(e){return null}}
 function cacheLocal(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true}catch(e){try{localStorage.removeItem(STORE_KEY)}catch(_){ }return false}}
 let db=readLocal()||seed();
-let page=SHARE_MODE?'decisao':'dashboard',cloudOnline=false,monthChartExpanded=false;
+let page=SHARE_MODE?'decisao':'dashboard',cloudOnline=false,cloudError='',monthChartExpanded=false;
 function ofertaKey(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim()}
 function ofertaNome(s){let k=ofertaKey(s);return k||String(s||'').trim()}
 function normalizeOfferRow(r){if(r&&'descricao'in r)r.descricao=ofertaNome(r.descricao);if(r&&'campanha'in r)r.campanha=ofertaNome(r.campanha);return r}
 function normalizeDb(){['resumos','campanhas','departamentos','produtos','cupons','importacoes','ofertasDia','vendasDiarias'].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});['campanhas','departamentos','produtos','cupons','ofertasDia'].forEach(k=>db[k].forEach(normalizeOfferRow));if(!db.aprovacoes)db.aprovacoes={};if(!Array.isArray(db.empresas))db.empresas=[]}
 normalizeDb();
 function lojaFromVr(raw,fb){let v=String(raw??'').trim();if(!v)return fb;let n=Number(v),pad=Number.isFinite(n)?String(n).padStart(2,'0'):v.padStart(2,'0');let e=db.empresas.find(x=>String(x.id_vr)==v||String(x.id_vr)==String(n)||String(x.codigo)==v||String(x.codigo)==pad||x.nome==v);return e?e.nome:fb}
-async function loadCloud(){if(location.protocol=='file:')return;try{let r=await fetch('/api/state',{headers:authHeaders()});if(r.status===401){let t=prompt('Token de acesso da API:');if(t)setApiToken(t);return}if(r.ok){let d=await r.json();if(d&&d.empresas){db=d;normalizeDb();cloudOnline=true;cacheLocal();setupFilters();render()}}updateCloud()}catch(e){updateCloud()}}
-function updateCloud(){let d=document.getElementById('cloudDot'),l=document.getElementById('cloudLabel');if(d)d.className='cloud-dot'+(cloudOnline?' online':'');if(l)l.textContent=cloudOnline?'Nuvem':'Local'}
+function hasBusinessData(){return ['resumos','campanhas','departamentos','produtos','cupons','ofertasDia','vendasDiarias'].some(k=>(db[k]||[]).length)}
+function cloudWarning(){return cloudError&&!hasBusinessData()?`<div class="alert a-bad mt"><b>Dados da nuvem nao carregaram.</b> ${esc(cloudError)} Atualize a pagina em alguns segundos. Os dados nao foram apagados; a tela esta sem base porque a API nao respondeu.</div>`:''}
+async function loadCloud(){if(location.protocol=='file:')return;try{let r=await fetch('/api/state',{headers:authHeaders()});if(r.status===401){let t=prompt('Token de acesso da API:');if(t)setApiToken(t);return}if(!r.ok)throw new Error('API /api/state retornou HTTP '+r.status);let d=await r.json();if(d&&d.empresas){db=d;normalizeDb();cloudOnline=true;cloudError='';cacheLocal();setupFilters();render()}else{cloudError='A API respondeu, mas nao retornou a base principal.';render()}updateCloud()}catch(e){cloudOnline=false;cloudError=e.message||'Falha ao conectar na API.';updateCloud();render()}}
+function updateCloud(){let d=document.getElementById('cloudDot'),l=document.getElementById('cloudLabel');if(d)d.className='cloud-dot'+(cloudOnline?' online':'');if(l)l.textContent=cloudOnline?'Nuvem':(cloudError?'Nuvem indisponivel':'Local')}
 function save(){cacheLocal();if(location.protocol!='file:')fetch('/api/state',{method:'PUT',headers:authHeaders(true),body:JSON.stringify(db)}).then(r=>{if(r.status===401){let t=prompt('Token de acesso da API:');if(t)setApiToken(t);return}cloudOnline=r.ok;updateCloud()}).catch(()=>updateCloud())}
 async function saveImportBatch(payload){cacheLocal();if(location.protocol=='file:')return{ok:true};try{let r=await fetch('/api/import-batch',{method:'POST',headers:authHeaders(true),body:JSON.stringify(payload)}),j=await r.json().catch(()=>({}));cloudOnline=r.ok;updateCloud();if(!r.ok)throw new Error(j.error||'Falha ao salvar lote na nuvem');return j}catch(e){cloudOnline=false;updateCloud();throw e}}
 function empresa(n){return db.empresas.find(e=>e.nome==n)||{}}
@@ -575,7 +577,7 @@ function render(){
   let meta={decisao:['Centro de Decisao','Diagnostico e plano de acao'],dashboard:['Dashboard','Visao geral do periodo'],periodo:['Periodo de Campanha','Analise diaria e comparativo justo'],importacoes:['Importacoes','Importar arquivos .txt'],auditoria:['Auditoria','Validar periodo'],plano:['Plano de Coleta','Controle 27 lojas'],modelos:['Modelos SQL','Consultas VR'],empresas:['Empresas','Cadastro'],consolidacao:['Consolidacao','Lojas aprovadas'],relatorio:['Relatorio','Resumo']}[page];
   title.textContent=meta[0];sub.textContent=meta[1];
   view.classList.add('fade');
-  setTimeout(()=>{view.innerHTML=({decisao,dashboard,periodo:periodoCampanha,importacoes,auditoria,plano,modelos,empresas,consolidacao,relatorio})[page]();view.classList.remove('fade');if(page=='importacoes')showReq()},80);
+  setTimeout(()=>{view.innerHTML=cloudWarning()+({decisao,dashboard,periodo:periodoCampanha,importacoes,auditoria,plano,modelos,empresas,consolidacao,relatorio})[page]();view.classList.remove('fade');if(page=='importacoes')showReq()},80);
 }
 ['fLoja','fRegiao','fInicio','fFim','fVisao','fCamp'].forEach(id=>document.getElementById(id).addEventListener('change',render));
 setupFilters();render();loadCloud();
