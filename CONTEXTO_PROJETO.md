@@ -128,12 +128,12 @@ Para Vercel/serverless, usar preferencialmente a connection string **Transaction
 A chave publishable/anon do Supabase nao e suficiente para a persistencia atual, porque o servidor usa PostgreSQL via `pg` e `DATABASE_URL`.
 Nao versionar senhas, service role keys ou `.env`.
 
-Status em 2026-06-22:
+Status em 2026-06-30:
 
 - `DATABASE_URL` configurada na Vercel em Production como variavel sensivel.
 - Deploy de producao executado e alias `https://bignordesteanalytics.vercel.app` atualizado.
-- `GET /api/health` em producao retornou `{"ok":true,"database":"connected"}`.
 - Tabela `app_state` foi criada/validada automaticamente pelo servidor.
+- Em 2026-06-30, senha do Supabase expirou/invalidou. Necessario reset via dashboard Supabase e atualizacao da DATABASE_URL na Vercel.
 
 Arquivo local esperado:
 
@@ -146,6 +146,8 @@ Exemplo:
 ```env
 DATABASE_URL="postgresql://usuario:senha@host:5432/banco?sslmode=require"
 PORT=8080
+API_TOKEN="seu-token-secreto-aqui"
+# ALLOWED_ORIGINS=https://bignordesteanalytics.vercel.app
 ```
 
 Importante:
@@ -169,8 +171,9 @@ Arquivos principais:
 Rotas da API:
 
 - `GET /api/health`: verifica se o app esta vivo e se ha banco configurado.
-- `GET /api/state`: carrega estado compartilhado do PostgreSQL.
-- `PUT /api/state`: salva estado compartilhado no PostgreSQL.
+- `GET /api/state`: carrega estado compartilhado do PostgreSQL. Requer `Authorization: Bearer <API_TOKEN>`.
+- `PUT /api/state`: salva estado compartilhado no PostgreSQL. Requer auth. Usa transacao com `SELECT FOR UPDATE`.
+- `POST /api/import-batch`: importacao atomica por loja/periodo. Requer auth. Usa transacao. Substitui dados do mesmo loja+tipo+periodo.
 
 Tabela criada automaticamente quando ha banco:
 
@@ -372,6 +375,33 @@ Cuidados:
 - Nao esconder o menu em mobile sem alternativa.
 - Nao remover as telas de auditoria/plano/consolidacao.
 - Nao trocar o fluxo para importacao arquivo a arquivo; a operacao desejada e importar todos os arquivos da loja selecionada.
+
+## Auditoria e correcoes (2026-06-26 a 2026-06-30)
+
+Seguranca:
+
+- `authRequired` middleware no server.js protege `GET/PUT /api/state` e `POST /api/import-batch` com `Bearer API_TOKEN`.
+- Frontend envia token via `authHeaders()` e solicita token ao usuario em caso de 401.
+- Funcao `esc()` adicionada para sanitizar interpolacoes em templates (XSS).
+- CORS configuravel via `ALLOWED_ORIGINS`.
+- Transacoes com `BEGIN/SELECT FOR UPDATE/COMMIT/ROLLBACK` em todas as escritas do banco.
+
+Bugs corrigidos:
+
+- Funcao `processImport` duplicada removida (versao antiga conflitava com versao nova que usa `saveImportBatch`).
+- `seed()` limpa: retorna apenas empresas com arrays vazios, sem dados mock.
+- `parseTxt` preserva colunas de texto (`TEXT_COLS`) como strings em vez de converter para numero.
+- `monthsBetween` corrigido: usa `getFullYear()/getMonth()` em vez de `toISOString()` para evitar bugs de timezone.
+- `storeAllowed` so filtra lojas aprovadas na pagina consolidacao, nao em todas as paginas.
+- `audit('Todas')` usa primeira empresa do banco em vez de hardcoded 'Loja 01'.
+- `auditoria()` mostra aviso quando "Todas" esta selecionado.
+
+Correcoes de dados (2026-06-30):
+
+- `blocoOfertaDia` agora usa `encarteIdsMensais` como fallback para classificar ofertas diarias cujo nome nao contem "ENCARTE BIG NORDESTE" mas cujo `id_tipooferta` pertence ao Encarte.
+- `blockDateAllowed` (isEncarteBigDate: dias 1-5 e 25-31) agora e aplicado em TODOS os modos de filtro, nao so quando um bloco especifico e selecionado. Isso garante que os mesmos dados aparecam na visao geral e na visao por bloco.
+- KPI "Venda Encarte Big NE" no Dashboard usa `encFair` (dados diarios via `dailyFairSummary`) com `partPeriodo` para consistencia com a tabela "Comparativo justo por periodo real".
+- Quando dados diarios nao estao disponiveis, o fallback usa `enc` (dados mensais via `blocoRows`) com `part` mensal.
 
 ## Limitacoes conhecidas
 
