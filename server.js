@@ -187,11 +187,12 @@ async function backupState(client, prevData, reason) {
 app.get("/api/health", async (_req, res) => {
   try {
     const db = getPool();
-    if (!db) return res.json({ ok: true, database: "not_configured" });
+    if (!db) return res.json({ ok: true, database: "not_configured", protected: Boolean(apiToken) });
     await db.query("SELECT 1");
     res.json({
       ok: true,
       database: "connected",
+      protected: Boolean(apiToken),
       pool: {
         total: db.totalCount,
         idle: db.idleCount,
@@ -220,7 +221,10 @@ app.put("/api/state", authRequired, async (req, res) => {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
     await ensureSchemaOnce();
-    const force = req.query.force === "1" || req.headers["x-force-write"] === "1";
+    // Fail-safe: o bypass "force" so e honrado quando ha API_TOKEN configurado (e portanto
+    // a requisicao passou pela autenticacao). Sem token, o guarda anti-encolhimento e SEMPRE
+    // aplicado, para que ninguem anonimo consiga apagar a base.
+    const force = Boolean(apiToken) && (req.query.force === "1" || req.headers["x-force-write"] === "1");
     const incoming = normalizeState(req.body);
     const client = await db.connect();
     try {
@@ -341,6 +345,9 @@ app.post("/api/restore/:id", authRequired, async (req, res) => {
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    // Restauracao substitui o estado inteiro (operacao destrutiva que ignora o guarda).
+    // So permitida quando a API esta protegida por token, para nao ficar exposta a anonimos.
+    if (!apiToken) return res.status(403).json({ error: "Restauracao desabilitada: configure API_TOKEN para habilitar" });
     await ensureSchemaOnce();
     const backupId = req.params.id;
     const client = await db.connect();
