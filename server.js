@@ -122,6 +122,48 @@ async function ensureSchema() {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS app_state_backup (
+      id BIGSERIAL PRIMARY KEY,
+      state_id TEXT NOT NULL,
+      data JSONB NOT NULL,
+      reason TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+  await db.query(`CREATE INDEX IF NOT EXISTS idx_app_state_backup_state ON app_state_backup (state_id, created_at DESC);`);
+}
+
+const GUARDED_BUCKETS = ["empresas", "resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias"];
+const BACKUP_KEEP = Number(process.env.BACKUP_KEEP || 30);
+
+function bucketCounts(state) {
+  const out = {};
+  for (const key of GUARDED_BUCKETS) out[key] = Array.isArray(state && state[key]) ? state[key].length : 0;
+  return out;
+}
+
+// Detecta buckets que ENCOLHERIAM (perda de dados). Edicoes legitimas nunca reduzem volume;
+// importacoes usam /api/import-batch (merge). Logo, qualquer reducao via PUT e um clobber.
+function detectShrink(prev, incoming) {
+  if (!prev) return [];
+  return GUARDED_BUCKETS
+    .map((bucket) => ({ bucket, from: (prev[bucket] || []).length, to: (incoming[bucket] || []).length }))
+    .filter((x) => x.to < x.from);
+}
+
+async function backupState(client, prevData, reason) {
+  if (!prevData) return;
+  await client.query(
+    "INSERT INTO app_state_backup (state_id, data, reason) VALUES ($1, $2::jsonb, $3)",
+    ["main", JSON.stringify(prevData), reason || ""]
+  );
+  await client.query(
+    `DELETE FROM app_state_backup WHERE id IN (
+       SELECT id FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC OFFSET $2
+     )`,
+    ["main", BACKUP_KEEP]
+  );
 }
 
 app.get("/api/health", async (_req, res) => {
@@ -158,19 +200,32 @@ app.put("/api/state", authRequired, async (req, res) => {
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    const force = req.query.force === "1" || req.headers["x-force-write"] === "1";
+    const incoming = normalizeState(req.body);
     const client = await db.connect();
     try {
       await client.query("BEGIN");
-      await client.query("SELECT 1 FROM app_state WHERE id = $1 FOR UPDATE", ["main"]);
+      const current = await client.query("SELECT data FROM app_state WHERE id = $1 FOR UPDATE", ["main"]);
+      const prev = current.rows[0]?.data || null;
+      const shrunk = detectShrink(prev, incoming);
+      if (shrunk.length && !force) {
+        await client.query("ROLLBACK");
+        return res.status(409).json({
+          error: "Gravacao bloqueada: reduziria dados existentes",
+          shrunk,
+          counts: bucketCounts(prev)
+        });
+      }
+      await backupState(client, prev, "put");
       await client.query(
         `INSERT INTO app_state (id, data, updated_at)
          VALUES ($1, $2::jsonb, NOW())
          ON CONFLICT (id)
          DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
-        ["main", JSON.stringify(req.body)]
+        ["main", JSON.stringify(incoming)]
       );
       await client.query("COMMIT");
-      res.json({ ok: true });
+      res.json({ ok: true, counts: bucketCounts(incoming) });
     } catch (err) {
       await client.query("ROLLBACK");
       throw err;
@@ -195,7 +250,9 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
     try {
       await client.query("BEGIN");
       const result = await client.query("SELECT data FROM app_state WHERE id = $1 FOR UPDATE", ["main"]);
-      const state = normalizeState(result.rows[0]?.data || {});
+      const prevState = result.rows[0]?.data || null;
+      await backupState(client, prevState, "import:" + loja);
+      const state = normalizeState(prevState || {});
       const allowedMonths = monthsBetween(ini, fim);
 
       if (hasMonthly) delete state.aprovacoes[periodKey(loja)];
@@ -228,6 +285,61 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
         ofertasDia: state.ofertasDia.length,
         vendasDiarias: state.vendasDiarias.length
       });
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/backups", authRequired, async (_req, res) => {
+  try {
+    const db = getPool();
+    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    const result = await db.query(
+      "SELECT id, reason, created_at, data FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC LIMIT $2",
+      ["main", BACKUP_KEEP]
+    );
+    res.json(result.rows.map((row) => ({
+      id: row.id,
+      reason: row.reason,
+      created_at: row.created_at,
+      counts: bucketCounts(row.data)
+    })));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/restore/:id", authRequired, async (req, res) => {
+  try {
+    const db = getPool();
+    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    const backupId = req.params.id;
+    const client = await db.connect();
+    try {
+      await client.query("BEGIN");
+      const backup = await client.query("SELECT data FROM app_state_backup WHERE id = $1 AND state_id = $2", [backupId, "main"]);
+      if (!backup.rows[0]) {
+        await client.query("ROLLBACK");
+        return res.status(404).json({ error: "Backup nao encontrado" });
+      }
+      const restoreData = backup.rows[0].data;
+      const current = await client.query("SELECT data FROM app_state WHERE id = $1 FOR UPDATE", ["main"]);
+      await backupState(client, current.rows[0]?.data || null, "pre-restore");
+      await client.query(
+        `INSERT INTO app_state (id, data, updated_at)
+         VALUES ($1, $2::jsonb, NOW())
+         ON CONFLICT (id)
+         DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
+        ["main", JSON.stringify(restoreData)]
+      );
+      await client.query("COMMIT");
+      res.json({ ok: true, restored: backupId, counts: bucketCounts(restoreData) });
     } catch (err) {
       await client.query("ROLLBACK");
       throw err;
