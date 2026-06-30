@@ -134,6 +134,19 @@ async function ensureSchema() {
   await db.query(`CREATE INDEX IF NOT EXISTS idx_app_state_backup_state ON app_state_backup (state_id, created_at DESC);`);
 }
 
+// Em serverless (Vercel) o bloco require.main nao roda, entao garantimos o schema
+// uma vez por instancia (cold start), de forma idempotente, antes de cada escrita.
+let schemaReady = null;
+function ensureSchemaOnce() {
+  if (!schemaReady) {
+    schemaReady = ensureSchema().catch((error) => {
+      schemaReady = null;
+      throw error;
+    });
+  }
+  return schemaReady;
+}
+
 const GUARDED_BUCKETS = ["empresas", "resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias"];
 const BACKUP_KEEP = Number(process.env.BACKUP_KEEP || 30);
 
@@ -154,16 +167,21 @@ function detectShrink(prev, incoming) {
 
 async function backupState(client, prevData, reason) {
   if (!prevData) return;
-  await client.query(
-    "INSERT INTO app_state_backup (state_id, data, reason) VALUES ($1, $2::jsonb, $3)",
-    ["main", JSON.stringify(prevData), reason || ""]
-  );
-  await client.query(
-    `DELETE FROM app_state_backup WHERE id IN (
-       SELECT id FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC OFFSET $2
-     )`,
-    ["main", BACKUP_KEEP]
-  );
+  // Backup e seguro secundario: nunca deve quebrar a escrita principal (merge/PUT).
+  try {
+    await client.query(
+      "INSERT INTO app_state_backup (state_id, data, reason) VALUES ($1, $2::jsonb, $3)",
+      ["main", JSON.stringify(prevData), reason || ""]
+    );
+    await client.query(
+      `DELETE FROM app_state_backup WHERE id IN (
+         SELECT id FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC OFFSET $2
+       )`,
+      ["main", BACKUP_KEEP]
+    );
+  } catch (error) {
+    console.error("Falha ao gravar backup (escrita principal continua):", error.message);
+  }
 }
 
 app.get("/api/health", async (_req, res) => {
@@ -189,6 +207,7 @@ app.get("/api/state", authRequired, async (_req, res) => {
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
     const result = await db.query("SELECT data FROM app_state WHERE id = $1", ["main"]);
     res.json(result.rows[0]?.data || null);
   } catch (error) {
@@ -200,6 +219,7 @@ app.put("/api/state", authRequired, async (req, res) => {
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
     const force = req.query.force === "1" || req.headers["x-force-write"] === "1";
     const incoming = normalizeState(req.body);
     const client = await db.connect();
@@ -245,6 +265,7 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
     if (!loja || !ini || !fim || !Array.isArray(groups)) {
       return res.status(400).json({ error: "Payload de importacao invalido" });
     }
+    await ensureSchemaOnce();
 
     const client = await db.connect();
     try {
@@ -300,6 +321,7 @@ app.get("/api/backups", authRequired, async (_req, res) => {
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
     const result = await db.query(
       "SELECT id, reason, created_at, data FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC LIMIT $2",
       ["main", BACKUP_KEEP]
@@ -319,6 +341,7 @@ app.post("/api/restore/:id", authRequired, async (req, res) => {
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
     const backupId = req.params.id;
     const client = await db.connect();
     try {
