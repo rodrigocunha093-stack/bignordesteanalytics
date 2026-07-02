@@ -157,3 +157,55 @@ enum TipoArquivo {
   DEPARTAMENTOS_CAMPANHA
   CUPONS_CAMPANHA
 }
+
+model EncarteBenchmark {
+  id                 String   @id @default(cuid())
+  rede               String
+  campanha           String
+  dataInicio          DateTime @map("data_inicio") @db.Date
+  dataFim             DateTime @map("data_fim") @db.Date
+  quantidadePaginas  Int      @default(1) @map("quantidade_paginas")
+  totalEstimado       Int?     @map("total_estimado")
+  arquivoOrigem      String?  @map("arquivo_origem")
+  observacao         String?
+  notaVisual          Decimal  @default(70) @map("nota_visual") @db.Decimal(5, 2)
+  notaMix             Decimal  @default(70) @map("nota_mix") @db.Decimal(5, 2)
+  status              String   @default("Em revisao")
+  criadoEm            DateTime @default(now()) @map("criado_em")
+  atualizadoEm        DateTime @updatedAt @map("atualizado_em")
+
+  itens EncarteItemBenchmark[]
+
+  @@index([rede, dataInicio, dataFim])
+  @@map("benchmark_encartes")
+}
+
+model EncarteItemBenchmark {
+  id                  String   @id @default(cuid())
+  encarteId           String   @map("encarte_id")
+  pagina              Int      @default(1)
+  departamento        String
+  categoriaFuncional  String   @map("categoria_funcional")
+  subcategoria        String?
+  produto             String
+  marca               String?
+  embalagem           String?
+  unidadeComparacao   String?  @map("unidade_comparacao")
+  quantidadeEmbalagem Decimal? @map("quantidade_embalagem") @db.Decimal(12, 3)
+  precoDe             Decimal? @map("preco_de") @db.Decimal(12, 2)
+  precoPor            Decimal  @map("preco_por") @db.Decimal(12, 2)
+  precoNormalizado    Decimal? @map("preco_normalizado") @db.Decimal(12, 4)
+  tipoProduto         String?  @map("tipo_produto")
+  produtoAncora       Boolean  @default(false) @map("produto_ancora")
+  destaqueCapa        Boolean  @default(false) @map("destaque_capa")
+  revisado            Boolean  @default(false)
+  observacao          String?
+  criadoEm            DateTime @default(now()) @map("criado_em")
+  atualizadoEm        DateTime @updatedAt @map("atualizado_em")
+
+  encarte EncarteBenchmark @relation(fields: [encarteId], references: [id], onDelete: Cascade)
+
+  @@index([encarteId, categoriaFuncional])
+  @@index([departamento])
+  @@map("benchmark_encarte_itens")
+}

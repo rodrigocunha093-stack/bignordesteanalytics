@@ -434,6 +434,26 @@ Invoke-WebRequest -Uri 'https://bignordesteanalytics.vercel.app/index.html' -Use
 Invoke-RestMethod -Uri 'https://bignordesteanalytics.vercel.app/api/health'
 ```
 
+## Modulo Benchmark de Encartes
+
+Implementado em julho de 2026 no menu `Benchmark Encartes`.
+
+Funcionalidades:
+
+- cadastro de encartes por rede, campanha e validade;
+- importacao de itens por TXT/CSV separado por `;`;
+- revisao manual obrigatoria de produto, marca, embalagem, categoria e preco;
+- comparacao por categoria funcional e familia de unidade;
+- preco normalizado por kg, litro ou unidade;
+- filtros de departamento, categoria, ancora e capa;
+- ICP, ICB, IAE e ISE;
+- dashboard executivo e diagnostico automatico;
+- base inicial Rede Paraiba x Big Nordeste de 01/07/2026;
+- miniaturas dos materiais em `assets/benchmark/`;
+- modelos Prisma `EncarteBenchmark` e `EncarteItemBenchmark`.
+
+Os exemplos iniciais ficam com status de revisao. Divergencias entre texto-base e imagem devem ser corrigidas na tela de revisao antes da consolidacao.
+
 ## Regras para agentes de IA
 
 Antes de continuar o desenvolvimento:
