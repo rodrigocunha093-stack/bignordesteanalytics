@@ -4,9 +4,25 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "benchmark-data.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "assets/benchmark/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/benchmark-data.js",
+      "dest": "/benchmark-data.js"
+    },
+    {
+      "src": "/assets/benchmark/(.*)",
+      "dest": "/assets/benchmark/$1"
+    },
     {
       "src": "/api/(.*)",
       "dest": "server.js"
