@@ -452,6 +452,16 @@ Funcionalidades:
 - miniaturas dos materiais em `assets/benchmark/`;
 - modelos Prisma `EncarteBenchmark` e `EncarteItemBenchmark`.
 
+Base e indicadores:
+
+- 81 blocos de oferta da Rede Paraiba e 59 da Big Nordeste, totalizando 140 ofertas cadastradas;
+- variacoes de sabor ou fragrancia dentro do mesmo bloco nao sao infladas como ofertas separadas;
+- `ICP-Preco`: vitorias de preco sobre itens funcionalmente comparaveis;
+- `ICP-Cobertura`: categorias funcionais presentes sobre o universo conjunto das redes;
+- cobertura por Mercearia basica, Carnes e proteinas, Laticinios e frios, Biscoitos e massas, Higiene, Limpeza e Bebidas;
+- matriz com categorias comparaveis, parciais e sem equivalente;
+- catalogo inicial auditavel no arquivo `benchmark-data.js`.
+
 Os exemplos iniciais ficam com status de revisao. Divergencias entre texto-base e imagem devem ser corrigidas na tela de revisao antes da consolidacao.
 
 ## Regras para agentes de IA
