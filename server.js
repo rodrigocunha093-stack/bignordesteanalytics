@@ -381,6 +381,101 @@ app.post("/api/restore/:id", authRequired, async (req, res) => {
   }
 });
 
+app.patch("/api/empresas", authRequired, async (req, res) => {
+  try {
+    const db = getPool();
+    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
+    const { empresas, regioes, renames } = req.body || {};
+    if (!Array.isArray(empresas)) return res.status(400).json({ error: "empresas deve ser um array" });
+
+    const client = await db.connect();
+    try {
+      await client.query("BEGIN");
+      const result = await client.query("SELECT data FROM app_state WHERE id = $1 FOR UPDATE", ["main"]);
+      const prev = result.rows[0]?.data || null;
+      await backupState(client, prev, "patch-empresas");
+      const state = normalizeState(prev || {});
+
+      if (Array.isArray(renames)) {
+        for (const { from, to } of renames) {
+          if (!from || !to || from === to) continue;
+          ["resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias"].forEach((bucket) => {
+            (state[bucket] || []).forEach((row) => { if (row.loja === from) row.loja = to; });
+          });
+          (state.importacoes || []).forEach((row) => { if (row.loja === from) row.loja = to; });
+          const newAprov = {};
+          Object.entries(state.aprovacoes || {}).forEach(([key, val]) => {
+            const parts = key.split("|");
+            if (parts[0] === from) parts[0] = to;
+            newAprov[parts.join("|")] = val;
+          });
+          state.aprovacoes = newAprov;
+        }
+      }
+
+      state.empresas = empresas;
+      if (Array.isArray(regioes)) state.regioes = regioes;
+
+      await client.query(
+        `INSERT INTO app_state (id, data, updated_at)
+         VALUES ($1, $2::jsonb, NOW())
+         ON CONFLICT (id)
+         DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
+        ["main", JSON.stringify(state)]
+      );
+      await client.query("COMMIT");
+      res.json({ ok: true, counts: bucketCounts(state) });
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.patch("/api/aprovacoes", authRequired, async (req, res) => {
+  try {
+    const db = getPool();
+    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
+    const { updates } = req.body || {};
+    if (!updates || typeof updates !== "object") return res.status(400).json({ error: "updates deve ser um objeto" });
+
+    const client = await db.connect();
+    try {
+      await client.query("BEGIN");
+      const result = await client.query("SELECT data FROM app_state WHERE id = $1 FOR UPDATE", ["main"]);
+      const prev = result.rows[0]?.data || null;
+      await backupState(client, prev, "patch-aprovacoes");
+      const state = normalizeState(prev || {});
+
+      if (!state.aprovacoes) state.aprovacoes = {};
+      Object.entries(updates).forEach(([key, val]) => { state.aprovacoes[key] = val; });
+
+      await client.query(
+        `INSERT INTO app_state (id, data, updated_at)
+         VALUES ($1, $2::jsonb, NOW())
+         ON CONFLICT (id)
+         DO UPDATE SET data = EXCLUDED.data, updated_at = NOW()`,
+        ["main", JSON.stringify(state)]
+      );
+      await client.query("COMMIT");
+      res.json({ ok: true });
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.all("/api/*", (_req, res) => {
   res.status(404).json({ error: "Endpoint nao encontrado" });
 });
