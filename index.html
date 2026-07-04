@@ -13,12 +13,14 @@
 :root{--bg:#f0f2f5;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--panel:#fff;--brand:#0d9f5e;--brand-dark:#064e30;--brand-light:#ecfdf5;--gold:#f59e0b;--bad:#ef4444;--warn:#f97316;--ok:#10b981;--blue:#3b82f6;--purple:#8b5cf6;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03)}
 *{box-sizing:border-box;margin:0}
 body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh;transition:grid-template-columns .2s ease}
+.app.sidebar-collapsed{grid-template-columns:72px 1fr}
 
 /* Sidebar */
-aside{background:#111827;color:white;padding:0;display:flex;flex-direction:column}
+aside{background:#111827;color:white;padding:0;display:flex;flex-direction:column;position:relative;min-width:0}
 .brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .brand-logo{display:flex;align-items:center;gap:10px}
+.brand-copy,.nav-label,.sidebar-footer-copy{transition:opacity .12s ease}
 .brand-icon{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .brand-icon svg{width:18px;height:18px;fill:white}
 .brand b{display:block;font-size:15px;font-weight:700;letter-spacing:.2px}
@@ -29,6 +31,17 @@ nav button:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
 nav button.active{background:rgba(255,255,255,.1);color:white;font-weight:600}
 nav button svg{width:16px;height:16px;opacity:.5;flex-shrink:0}
 nav button.active svg{opacity:.9}
+.sidebar-toggle{position:absolute;top:26px;right:-12px;width:24px;height:24px;border:1px solid #374151;border-radius:50%;background:#111827;color:#d1d5db;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:25;box-shadow:0 2px 6px rgba(0,0,0,.25);padding:0}
+.sidebar-toggle:hover{background:#1f2937;color:white}
+.sidebar-toggle svg{width:13px;height:13px;transition:transform .2s ease}
+.app.sidebar-collapsed .sidebar-toggle svg{transform:rotate(180deg)}
+.app.sidebar-collapsed .brand{padding-left:19px;padding-right:19px}
+.app.sidebar-collapsed .brand-copy,.app.sidebar-collapsed .nav-label,.app.sidebar-collapsed .sidebar-footer-copy{display:none}
+.app.sidebar-collapsed nav button{justify-content:center;gap:0;padding-left:8px;padding-right:8px;position:relative}
+.app.sidebar-collapsed nav button svg{width:18px;height:18px}
+.app.sidebar-collapsed .nav-badge{position:absolute;top:2px;right:1px;padding:1px 3px;min-width:14px;font-size:7px}
+.app.sidebar-collapsed .sidebar-footer{padding-left:0;padding-right:0;text-align:center}
+.app.sidebar-collapsed .sidebar-footer .cloud-status{justify-content:center}
 .nav-badge{margin-left:auto;background:var(--brand);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;min-width:18px;text-align:center}
 .sidebar-footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.3)}
 .sidebar-footer .cloud-status{display:flex;align-items:center;gap:5px;margin-bottom:3px}
@@ -220,10 +233,15 @@ td b{font-weight:600}
 /* Responsive */
 @media(max-width:980px){
   .app{grid-template-columns:1fr}
+  .app.sidebar-collapsed{grid-template-columns:1fr}
   aside{display:block;position:sticky;top:0;z-index:20}
   aside .brand,.sidebar-footer{display:none}
+  .sidebar-toggle{display:none}
   nav{flex-direction:row;overflow:auto;padding:8px;background:#111827}
   nav button{white-space:nowrap;flex:0 0 auto}
+  .app.sidebar-collapsed nav button{justify-content:flex-start;gap:9px;padding:8px 10px}
+  .app.sidebar-collapsed .nav-label{display:inline}
+  .app.sidebar-collapsed .nav-badge{position:static;padding:2px 6px;min-width:18px;font-size:9px}
   header{flex-direction:column;align-items:stretch}
   .kpis,.g2,.g3,.g4,.row,.hero-kpis,.metrics5{grid-template-columns:1fr}
   .filters{justify-content:flex-start}
@@ -265,9 +283,10 @@ td b{font-weight:600}
 <div class="toast" id="toast"></div>
 <div class="app">
 <aside>
-  <div class="brand"><div class="brand-logo"><div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div><div><b>BIGNORDESTE</b><span>analytics</span></div></div></div>
+  <div class="brand"><div class="brand-logo"><div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div><div class="brand-copy"><b>BIGNORDESTE</b><span>analytics</span></div></div></div>
+  <button class="sidebar-toggle" type="button" onclick="toggleSidebar()" title="Recolher menu" aria-label="Recolher menu" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg></button>
   <nav id="nav"></nav>
-  <div class="sidebar-footer"><div class="cloud-status"><span class="cloud-dot" id="cloudDot"></span> <span id="cloudLabel">Offline</span></div><div>v2.0</div></div>
+  <div class="sidebar-footer"><div class="cloud-status"><span class="cloud-dot" id="cloudDot"></span> <span class="sidebar-footer-copy" id="cloudLabel">Offline</span></div><div class="sidebar-footer-copy">v2.0</div></div>
 </aside>
 <main>
   <header>
@@ -562,6 +581,9 @@ function readLocal(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'nul
 function cacheLocal(){try{let lite={...db,produtos:[]};localStorage.setItem(STORE_KEY,JSON.stringify(lite));return true}catch(e){console.warn('Nao foi possivel atualizar cache local:',e.message);try{localStorage.removeItem(STORE_KEY)}catch(_){};return false}}
 let db=readLocal()||seed();
 let page=SHARE_MODE?'decisao':'dashboard',cloudOnline=false,cloudError='',cloudLoading=false,cloudLoaded=false,apiProtected=null,monthChartExpanded=false,agruparVariantes=true,agruparCampanhas=true;
+let sidebarCollapsed=localStorage.getItem('bignordeste.sidebar_collapsed')==='true';
+function applySidebarState(){let app=document.querySelector('.app'),btn=document.querySelector('.sidebar-toggle');if(app)app.classList.toggle('sidebar-collapsed',sidebarCollapsed);if(btn){let label=sidebarCollapsed?'Expandir menu':'Recolher menu';btn.title=label;btn.setAttribute('aria-label',label);btn.setAttribute('aria-expanded',String(!sidebarCollapsed))}}
+function toggleSidebar(){sidebarCollapsed=!sidebarCollapsed;localStorage.setItem('bignordeste.sidebar_collapsed',String(sidebarCollapsed));applySidebarState()}
 function ofertaKey(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim()}
 function ofertaNome(s){let k=ofertaKey(s);return k||String(s||'').trim()}
 function normalizeOfferRow(r){if(r&&'descricao'in r)r.descricao=ofertaNome(r.descricao);if(r&&'campanha'in r)r.campanha=ofertaNome(r.campanha);return r}
@@ -768,9 +790,7 @@ function margemItemTree(){
     if(!lojaTotals[loja])lojaTotals[loja]={v:0,l:0};
     lojaTotals[loja].v+=+r.venda||0;lojaTotals[loja].l+=+r.lucro||0;
   });
-  let lojaVendaTotal={};
-  resumos().forEach(r=>{let lj=r.loja||'Sem loja';lojaVendaTotal[lj]=(lojaVendaTotal[lj]||0)+(+r.venda_total||0)});
-  let grandVendaTotal=Object.values(lojaVendaTotal).reduce((s,v)=>s+v,0);
+  let grandPromTotal=Object.values(lojaTotals).reduce((s,t)=>s+t.v,0);
   let lojas=Array.from(lojaSet).sort((a,b)=>(lojaTotals[b]?.v||0)-(lojaTotals[a]?.v||0));
   if(fLoja.value!='Todas')lojas=lojas.filter(l=>l==fLoja.value);
   let catTotals={};
@@ -779,18 +799,18 @@ function margemItemTree(){
   let shortN=l=>l.replace(/^.*-\s*/,'');
   let h='<div class="table-wrap" style="max-height:700px;overflow:auto"><table class="pivot-cat"><thead><tr><th class="pivot-cat-th" style="min-width:130px;position:sticky;left:0;z-index:2;background:#fff">Categoria</th>';
   lojas.forEach(lj=>{
-    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0,lvt=lojaVendaTotal[lj]||0,lpart=lvt?lt.v/lvt*100:0;
-    h+='<th class="pivot-loja-th" title="'+esc(lj)+' — Venda total: '+brl(lvt)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div><div style="font-size:9px;color:var(--muted)">'+pct(lpart)+' da venda total</div></th>';
+    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0,lpart=grandPromTotal?lt.v/grandPromTotal*100:0;
+    h+='<th class="pivot-loja-th" title="'+esc(lj)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div><div style="font-size:9px;color:var(--muted)">'+pct(lpart)+' do total</div></th>';
   });
   h+='</tr></thead><tbody>';
   cats.forEach(cat=>{
     let ct=catTotals[cat],cm=ct.v?ct.l/ct.v*100:0,ck='CAT|'+cat,cOpen=!!_treeOpen[ck];
-    let catPart=grandVendaTotal?ct.v/grandVendaTotal*100:0;
-    h+='<tr class="pivot-cat-row" onclick="toggleTree(\''+ck+'\')"><td class="pivot-cat-name" style="position:sticky;left:0;z-index:1;background:#fff"><span class="tree-toggle">'+(cOpen?'▼':'▶')+'</span>'+esc(cat)+'<div class="pivot-cat-total">'+brlShort(ct.v)+' <span class="'+mc(cm)+'">'+pct(cm)+'</span></div><div style="font-size:9px;color:var(--muted)">'+pct(catPart)+' da venda total</div></td>';
+    let catPart=grandPromTotal?ct.v/grandPromTotal*100:0;
+    h+='<tr class="pivot-cat-row" onclick="toggleTree(\''+ck+'\')"><td class="pivot-cat-name" style="position:sticky;left:0;z-index:1;background:#fff"><span class="tree-toggle">'+(cOpen?'▼':'▶')+'</span>'+esc(cat)+'<div class="pivot-cat-total">'+brlShort(ct.v)+' <span class="'+mc(cm)+'">'+pct(cm)+'</span></div><div style="font-size:9px;color:var(--muted)">'+pct(catPart)+' do total</div></td>';
     lojas.forEach(lj=>{
       let d=pivot[cat+'||'+lj];
       if(!d)h+='<td class="pivot-cell pivot-empty">-</td>';
-      else{let m=d.v?d.l/d.v*100:0,lvt=lojaVendaTotal[lj]||0,cp=lvt?d.v/lvt*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+pct(cp)+'</div></td>'}
+      else{let m=d.v?d.l/d.v*100:0,cp=ct.v?d.v/ct.v*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+pct(cp)+'</div></td>'}
     });
     h+='</tr>';
     if(cOpen){
@@ -1284,7 +1304,7 @@ function render(){
   document.querySelector('header .filters').style.display=page=='benchmark'?'none':'';
   let pd=document.getElementById('printDate');if(pd)pd.textContent=new Date().toLocaleString('pt-BR');
   let ap=db.empresas.filter(e=>(fRegiao.value=='Todas'||e.regiao==fRegiao.value)&&audit(e.nome).status=='Aprovado').length;
-  nav.innerHTML=pages.map(([id,l])=>`<button class="${id==page?'active':''}" onclick="go('${id}')">${ICONS[id]||''}${l}${id=='plano'?'<span class="nav-badge">'+ap+'/27</span>':''}</button>`).join('');
+  nav.innerHTML=pages.map(([id,l])=>`<button class="${id==page?'active':''}" onclick="go('${id}')" title="${l}">${ICONS[id]||''}<span class="nav-label">${l}</span>${id=='plano'?'<span class="nav-badge">'+ap+'/27</span>':''}</button>`).join('');
   let meta={decisao:['Centro de Decisao','Diagnostico e plano de acao'],dashboard:['Dashboard','Visao geral do periodo'],encarte:['Encarte Big Nordeste','Analise por loja — fluxo, ticket, canibalizacao e eficiencia'],benchmark:['Benchmark de Encartes','Comparacao funcional de preco, variedade e atratividade'],periodo:['Periodo de Campanha','Analise diaria e comparativo justo'],importacoes:['Importacoes','Importar arquivos .txt'],auditoria:['Auditoria','Validar periodo'],plano:['Plano de Coleta','Controle de '+db.empresas.length+' lojas'],modelos:['Modelos SQL','Consultas VR'],empresas:['Empresas','Cadastro'],consolidacao:['Consolidacao','Lojas aprovadas'],masterdata:['Master Data','Cadastro unico, reconciliacao e auditoria de produtos'],relatorio:['Relatorio','Resumo'],backups:['Seguranca e Backups','Protecao e restauracao da base']}[page];
   title.textContent=meta[0];sub.textContent=meta[1];
   let vis={decisao:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],dashboard:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],encarte:['fLoja','fRegiao','fInicio','fFim','fReset'],periodo:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],importacoes:['fInicio','fFim','fReset'],auditoria:['fLoja','fInicio','fFim','fReset'],plano:['fRegiao','fInicio','fFim','fReset'],modelos:['fLoja','fInicio','fFim','fReset'],empresas:[],masterdata:[],consolidacao:['fRegiao','fInicio','fFim','fReset','fVisao'],relatorio:['fLoja','fInicio','fFim','fReset'],backups:[]}[page]||[];
@@ -1293,7 +1313,7 @@ function render(){
   setTimeout(()=>{view.innerHTML=securityWarning()+cloudWarning()+approvalWarning()+({decisao,dashboard,encarte:encarteAnalise,benchmark,periodo:periodoCampanha,importacoes,auditoria,plano,modelos,empresas,masterdata,consolidacao,relatorio,backups})[page]();view.classList.remove('fade');if(page=='importacoes')showReq()},80);
 }
 ['fLoja','fRegiao','fInicio','fFim','fVisao','fCamp'].forEach(id=>document.getElementById(id).addEventListener('change',render));
-setupFilters();render();loadCloud();checkHealth();
+setupFilters();applySidebarState();render();loadCloud();checkHealth();
 </script>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 </body>
