@@ -327,7 +327,7 @@ function readMD(){try{return JSON.parse(localStorage.getItem(MD_KEY)||'null')||{
 function saveMD(md){try{localStorage.setItem(MD_KEY,JSON.stringify(md))}catch(e){console.warn('MD save fail',e)}}
 function mdAuditLog(action,detail){let md=readMD();md.audit.unshift({ts:new Date().toISOString(),action,detail});if(md.audit.length>500)md.audit=md.audit.slice(0,500);saveMD(md)}
 const _MD_PREFIXES=/^(CARNE\s+DE\s+|CARNE\s+|FRANGO\s+|PEIXE\s+|PORCO\s+|SUINO\s+|BOVINO\s+|FILE\s+DE\s+|CORTE\s+DE\s+|PEDACO\s+DE\s+)/;
-const _MD_SUFFIXES=/\s+(KG|1KG|POR\s*KG|P\/?KG|\/KG)\s*$/;
+const _MD_SUFFIXES=/\s+(KG|K|1KG|POR\s*KG|P\/?KG|\/KG)\s*$/;
 const _MD_PREPS=/\b(DE|DO|DA|DOS|DAS|EM|COM|POR|PARA|AO|AOS|NO|NA|NOS|NAS|E)\b/gi;
 const _MD_PKG=/\b(PET|SACHE|PACOTE|PCT|CX|CAIXA|LATA|LT|GARRAFA|GRF|VIDRO|BAG|SQUEEZE|REFIL|DISPLAY|UNID|BANDEJA|BANDEIJA|BDJ|BD|ALM|ALMOFADA)\b/gi;
 const _MD_QUAL=/\b(TIPO\s*\d+|TP\s*\d+|T\s*\d|LIGHT|DIET|ZERO|PREMIUM|ESPECIAL|EXTRA|TRADICIONAL|TRAD|CLASSICO|COMUM|REGULAR|STANDARD|FINO|SELETO|SUPERIOR|NOBRE)\b/gi;
@@ -346,10 +346,11 @@ _MD_TYPOS.forEach(([from,to])=>{s=s.replace(new RegExp('\\b'+from+'\\b','gi'),to
 _MD_COMPOUNDS.forEach(([re,to])=>{s=s.replace(new RegExp(re,'gi'),to)});
 _MD_GENDER.forEach(([f,t])=>{s=s.replace(new RegExp('\\b'+f+'\\b','gi'),t)});
 s=s.replace(_MD_PREFIXES,'');
-s=s.replace(/\b\d+\s+(ML|G|GR|KG|LT?|UND?|UN|PC|PCT)\b/gi,'');
-s=s.replace(/\d+\s*X\s*\d+\s*(ML|G|GR|KG|LT?|UND?|UN)\b/gi,'');
-s=s.replace(/\d+(?:[.,]\d+)?\s*(ML|G|GR|KG|LT?|UND?|UN|PC|PCT)\b/gi,'');
+s=s.replace(/\b\d+\s+(ML|G|GR|KG|K|LT?|UND?|UN|PC|PCT)\b/gi,'');
+s=s.replace(/\d+\s*X\s*\d+\s*(ML|G|GR|KG|K|LT?|UND?|UN)\b/gi,'');
+s=s.replace(/\d+(?:[.,]\d+)?\s*(ML|G|GR|KG|K|LT?|UND?|UN|PC|PCT)\b/gi,'');
 s=s.replace(_MD_SUFFIXES,'');
+s=s.replace(/\b(KG|K|ML|GR?|LT)\b/gi,' ');
 s=s.replace(_MD_PREPS,' ');
 s=s.replace(_MD_PKG,' ');
 s=s.replace(_MD_QUAL,' ');
