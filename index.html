@@ -768,6 +768,9 @@ function margemItemTree(){
     if(!lojaTotals[loja])lojaTotals[loja]={v:0,l:0};
     lojaTotals[loja].v+=+r.venda||0;lojaTotals[loja].l+=+r.lucro||0;
   });
+  let lojaVendaTotal={};
+  resumos().forEach(r=>{let lj=r.loja||'Sem loja';lojaVendaTotal[lj]=(lojaVendaTotal[lj]||0)+(+r.venda_total||0)});
+  let grandVendaTotal=Object.values(lojaVendaTotal).reduce((s,v)=>s+v,0);
   let lojas=Array.from(lojaSet).sort((a,b)=>(lojaTotals[b]?.v||0)-(lojaTotals[a]?.v||0));
   if(fLoja.value!='Todas')lojas=lojas.filter(l=>l==fLoja.value);
   let catTotals={};
@@ -776,17 +779,18 @@ function margemItemTree(){
   let shortN=l=>l.replace(/^.*-\s*/,'');
   let h='<div class="table-wrap" style="max-height:700px;overflow:auto"><table class="pivot-cat"><thead><tr><th class="pivot-cat-th" style="min-width:130px;position:sticky;left:0;z-index:2;background:#fff">Categoria</th>';
   lojas.forEach(lj=>{
-    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0;
-    h+='<th class="pivot-loja-th" title="'+esc(lj)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div></th>';
+    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0,lvt=lojaVendaTotal[lj]||0,lpart=lvt?lt.v/lvt*100:0;
+    h+='<th class="pivot-loja-th" title="'+esc(lj)+' — Venda total: '+brl(lvt)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div><div style="font-size:9px;color:var(--muted)">'+pct(lpart)+' da venda total</div></th>';
   });
   h+='</tr></thead><tbody>';
   cats.forEach(cat=>{
     let ct=catTotals[cat],cm=ct.v?ct.l/ct.v*100:0,ck='CAT|'+cat,cOpen=!!_treeOpen[ck];
-    h+='<tr class="pivot-cat-row" onclick="toggleTree(\''+ck+'\')"><td class="pivot-cat-name" style="position:sticky;left:0;z-index:1;background:#fff"><span class="tree-toggle">'+(cOpen?'▼':'▶')+'</span>'+esc(cat)+'<div class="pivot-cat-total">'+brlShort(ct.v)+' <span class="'+mc(cm)+'">'+pct(cm)+'</span></div></td>';
+    let catPart=grandVendaTotal?ct.v/grandVendaTotal*100:0;
+    h+='<tr class="pivot-cat-row" onclick="toggleTree(\''+ck+'\')"><td class="pivot-cat-name" style="position:sticky;left:0;z-index:1;background:#fff"><span class="tree-toggle">'+(cOpen?'▼':'▶')+'</span>'+esc(cat)+'<div class="pivot-cat-total">'+brlShort(ct.v)+' <span class="'+mc(cm)+'">'+pct(cm)+'</span></div><div style="font-size:9px;color:var(--muted)">'+pct(catPart)+' da venda total</div></td>';
     lojas.forEach(lj=>{
       let d=pivot[cat+'||'+lj];
       if(!d)h+='<td class="pivot-cell pivot-empty">-</td>';
-      else{let m=d.v?d.l/d.v*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div></td>'}
+      else{let m=d.v?d.l/d.v*100:0,lvt=lojaVendaTotal[lj]||0,cp=lvt?d.v/lvt*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+pct(cp)+'</div></td>'}
     });
     h+='</tr>';
     if(cOpen){
