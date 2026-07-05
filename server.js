@@ -50,6 +50,7 @@ const bucketsByType = {
   produtos_campanha: "produtos",
   departamentos_campanha: "departamentos",
   cupons_totais: "cupons",
+  venda_departamento_total: "deptTotais",
   ofertas_dia_campanha: "ofertasDia",
   venda_diaria_loja: "vendasDiarias"
 };
@@ -58,7 +59,7 @@ const dailyTypes = new Set(["ofertas_dia_campanha", "venda_diaria_loja"]);
 
 function normalizeState(data) {
   const state = data && typeof data === "object" ? data : {};
-  ["resumos", "campanhas", "departamentos", "produtos", "cupons", "importacoes", "ofertasDia", "vendasDiarias"].forEach((key) => {
+  ["resumos", "campanhas", "departamentos", "produtos", "cupons", "importacoes", "ofertasDia", "vendasDiarias", "deptTotais"].forEach((key) => {
     if (!Array.isArray(state[key])) state[key] = [];
   });
   if (!state.aprovacoes || typeof state.aprovacoes !== "object") state.aprovacoes = {};
@@ -147,7 +148,7 @@ function ensureSchemaOnce() {
   return schemaReady;
 }
 
-const GUARDED_BUCKETS = ["empresas", "resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias"];
+const GUARDED_BUCKETS = ["empresas", "resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias", "deptTotais"];
 const BACKUP_KEEP = Number(process.env.BACKUP_KEEP || 30);
 
 function bucketCounts(state) {
@@ -421,7 +422,7 @@ app.patch("/api/empresas", authRequired, async (req, res) => {
       if (Array.isArray(renames)) {
         for (const { from, to } of renames) {
           if (!from || !to || from === to) continue;
-          ["resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias"].forEach((bucket) => {
+          ["resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias", "deptTotais"].forEach((bucket) => {
             (state[bucket] || []).forEach((row) => { if (row.loja === from) row.loja = to; });
           });
           (state.importacoes || []).forEach((row) => { if (row.loja === from) row.loja = to; });
