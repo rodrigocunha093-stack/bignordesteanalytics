@@ -817,6 +817,8 @@ function margemItemTree(){
   let lojaVendaTotal={};
   resumos().forEach(r=>{let lj=r.loja||'Sem loja';lojaVendaTotal[lj]=(lojaVendaTotal[lj]||0)+(+r.venda_total||0)});
   let grandVendaTotal=Object.values(lojaVendaTotal).reduce((s,v)=>s+v,0);
+  let lojaOficial={};
+  scopeRows('campanhas').forEach(r=>{if(!passaBloco(r.descricao))return;let lj=r.loja||'Sem loja';lojaOficial[lj]=(lojaOficial[lj]||0)+(+r.venda||0)});
   let catLojaTotalAll={};
   scopeRows('produtos').forEach(r=>{let loja=r.loja||'Sem loja',cat=classifyCategory(r),k=cat+'||'+loja;catLojaTotalAll[k]=(catLojaTotalAll[k]||0)+(+r.venda||0)});
   let lojas=Array.from(lojaSet).sort((a,b)=>(lojaTotals[b]?.v||0)-(lojaTotals[a]?.v||0));
@@ -827,8 +829,8 @@ function margemItemTree(){
   let shortN=l=>l.replace(/^.*-\s*/,'');
   let h='<div class="table-wrap" style="max-height:700px;overflow:auto"><table class="pivot-cat"><thead><tr><th class="pivot-cat-th" style="min-width:130px;position:sticky;left:0;z-index:2;background:#fff">Categoria</th>';
   lojas.forEach(lj=>{
-    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0,lvt=lojaVendaTotal[lj]||0,lpart=lvt?lt.v/lvt*100:0;
-    h+='<th class="pivot-loja-th" title="'+esc(lj)+' — Venda total da loja no periodo: '+brl(lvt)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div><div style="font-size:9px;color:var(--muted)" title="Venda em oferta dividida pela venda total da loja no periodo">'+pct(lpart)+' oferta/venda da loja</div></th>';
+    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0,lvt=lojaVendaTotal[lj]||0,lofc=lojaOficial[lj]||0,lpart=lvt?lofc/lvt*100:0;
+    h+='<th class="pivot-loja-th" title="'+esc(lj)+' — Venda total da loja no periodo: '+brl(lvt)+' | Venda promocional oficial (campanhas): '+brl(lofc)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div><div style="font-size:9px;color:var(--muted)" title="Venda promocional oficial (arquivo campanhas_ofertas) dividida pela venda total da loja no periodo">'+pct(lpart)+' oferta/venda da loja</div></th>';
   });
   h+='</tr></thead><tbody>';
   cats.forEach(cat=>{
@@ -857,7 +859,9 @@ function margemItemTree(){
     }
   });
   h+='</tbody></table></div>';
-  return'<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos. % cinza: loja = oferta/venda total da loja | categoria = oferta/venda da rede | celula = bloco/venda promocional da categoria na loja</div></div>'+csvBtn('CSV','exportMargemTree()')+'</div>'+h+'</div>';
+  let sumProd=lojas.reduce((s,lj)=>s+(lojaTotals[lj]?.v||0),0),sumOfic=lojas.reduce((s,lj)=>s+(lojaOficial[lj]||0),0),divg=sumOfic?(sumProd-sumOfic)/sumOfic*100:0;
+  let aviso=Math.abs(divg)>5?'<div class="alert a-warn" style="margin-bottom:10px"><b>Confiabilidade:</b> os itens desta tabela somam <b>'+brlShort(sumProd)+'</b>, mas o total oficial das campanhas no mesmo filtro e <b>'+brlShort(sumOfic)+'</b> ('+(divg>0?'+':'')+divg.toFixed(1)+'%). O arquivo produtos_campanha.txt pode conter duplicidade ou criterio diferente de venda. Os % de loja ja usam o total oficial. Detalhes em <b>Auditoria &gt; Reconciliacao de fontes</b>.</div>':'';
+  return'<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos. % cinza: loja = venda promocional oficial/venda total da loja | categoria = oferta/venda da rede | celula = bloco/venda promocional da categoria na loja</div></div>'+csvBtn('CSV','exportMargemTree()')+'</div>'+aviso+h+'</div>';
 }
 function exportMargemTree(){
   let rows=scopeRows('produtos').filter(r=>passaBloco(r.campanha)),out=[];
@@ -1020,10 +1024,19 @@ async function processImport(){
     let miss=cfg.cols.filter(c=>!p.head.includes(c));
     if(miss.length){errors.push(f.name+' ('+cfg.label+'): colunas faltantes '+miss.join(', '));continue}
     let rows=p.rows.filter(r=>cfg.diario?inDatePeriod(r.data,ini,fim):allowed.includes(monthKey(r.mes))).map(r=>cfg.diario?({...r,data:dateKey(r.data),loja,__loja_vr:r.loja||'',__tipo:rt}):({...r,mes:monthKey(r.mes),loja,__loja_vr:r.loja||'',__tipo:rt}));
+    if(cfg.bucket=='produtos'||cfg.bucket=='departamentos'){let seen=new Set(),antes=rows.length;rows=rows.filter(r=>{let k=_dupKey(cfg.bucket,r);if(seen.has(k))return false;seen.add(k);return true});if(antes>rows.length)warnings.push(f.name+': '+num(antes-rows.length)+' linha(s) exatamente identicas removidas automaticamente (mesmo produto, oferta e valores repetidos no arquivo).')}
     if(!rows.length)warnings.push(f.name+': nenhuma linha no periodo. Dados antigos desse arquivo/periodo serao limpos.');
     let key=rt+'|'+loja;(grouped[key]=grouped[key]||{tipo:rt,loja,rows:[]}).rows.push(...rows);
     totalR+=rows.length;
     hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:rt,linhas:rows.length,ignoradas:p.rows.length-rows.length,colunas_faltantes:[],observacao:obs})
+  }
+  if(!errors.length){
+    let sum=g=>g?g.rows.reduce((s,r)=>s+(+r.venda||0),0):null,vc=sum(grouped['campanhas_ofertas|'+loja]);
+    if(vc!=null&&vc>0)[['produtos_campanha','produtos'],['departamentos_campanha','departamentos']].forEach(([t,nm])=>{
+      let v=sum(grouped[t+'|'+loja]);if(v==null)return;
+      let d=(v-vc)/vc*100;
+      if(Math.abs(d)>5)warnings.push('<b>Validacao cruzada:</b> a soma de '+nm+' ('+brl(v)+') difere '+(d>0?'+':'')+d.toFixed(1)+'% do total oficial das campanhas ('+brl(vc)+') neste lote. Confira a consulta no VR antes de aprovar. Detalhes em Auditoria > Reconciliacao de fontes.')
+    })
   }
 
   let nb=document.getElementById('ir'),pv=document.getElementById('prev');
@@ -1049,9 +1062,54 @@ async function processImport(){
 }
 function template(){let t=(window.it&&it.value)||'resumo_geral_loja',b=new Blob([TYPES[t].cols.join(';')+'\n']),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=TYPES[t].file;a.click()}
 
+/* ===== RECONCILIACAO DE FONTES ===== */
+function reconcileRows(loja=fLoja.value){
+  let map={},ensure=r=>{let k=r.loja+'|'+monthKey(r.mes)+'|'+String(r.id_tipooferta??'');return map[k]||(map[k]={loja:r.loja,mes:monthKey(r.mes),nome:'',vCamp:0,vProd:0,vDept:0,temCamp:false,temProd:false,temDept:false})};
+  scopeRows('campanhas',loja).forEach(r=>{let o=ensure(r);o.vCamp+=+r.venda||0;o.temCamp=true;o.nome=o.nome||r.descricao||''});
+  scopeRows('produtos',loja).forEach(r=>{let o=ensure(r);o.vProd+=+r.venda||0;o.temProd=true;o.nome=o.nome||r.campanha||''});
+  scopeRows('departamentos',loja).forEach(r=>{let o=ensure(r);o.vDept+=+r.venda||0;o.temDept=true;o.nome=o.nome||r.campanha||''});
+  return Object.values(map).map(r=>{
+    let dP=r.temProd?(r.vCamp?(r.vProd-r.vCamp)/r.vCamp*100:999):null;
+    let dD=r.temDept?(r.vCamp?(r.vDept-r.vCamp)/r.vCamp*100:999):null;
+    let worst=Math.max(dP==null?0:Math.abs(dP),dD==null?0:Math.abs(dD),r.temCamp?0:999);
+    return{...r,dProd:dP,dDept:dD,worst}
+  }).sort((a,b)=>b.worst-a.worst)
+}
+function reconcileDailyRows(loja=fLoja.value){
+  let rs={},vd={};
+  resumos(loja).forEach(r=>{let m=monthKey(r.mes);rs[m]=(rs[m]||0)+(+r.venda_total||0)});
+  (db.vendasDiarias||[]).forEach(r=>{if(!storeAllowed(r.loja,loja))return;let m=monthKey(dateKey(r.data));if(!inPeriod(m))return;vd[m]=(vd[m]||0)+(+r.venda_total||0)});
+  return Object.keys(rs).sort().map(m=>{let a=rs[m]||0,b=vd[m]||0,d=a?(b-a)/a*100:(b?999:0);return{mes:m,resumo:a,diario:b,temDiario:m in vd,diff:d}}).filter(r=>r.temDiario)
+}
+function _dupKey(b,r){return[b,r.loja,monthKey(r.mes),String(r.id_tipooferta??''),r.id_produto??'',r.descricao_produto??'',r.mercadologico1??'',r.descricao_departamento??'',+r.quantidade||0,+r.venda||0,+r.lucro||0].join('|')}
+function exactDupCount(){let n=0;['produtos','departamentos'].forEach(b=>{let seen=new Set();(db[b]||[]).forEach(r=>{let k=_dupKey(b,r);if(seen.has(k))n++;else seen.add(k)})});return n}
+function removeExactDupes(){
+  let n=exactDupCount();
+  if(!n){alert('Nenhuma linha duplicada exata encontrada em produtos/departamentos.');return}
+  if(!confirm(n+' linha(s) exatamente identicas (mesma loja, mes, oferta, produto e valores) serao removidas da base inteira de produtos/departamentos. Um backup automatico e criado no servidor antes da gravacao. Continuar?'))return;
+  ['produtos','departamentos'].forEach(b=>{let seen=new Set();db[b]=(db[b]||[]).filter(r=>{let k=_dupKey(b,r);if(seen.has(k))return false;seen.add(k);return true})});
+  save(true,ok=>{showToast(ok?num(n)+' duplicado(s) removido(s) e salvos na nuvem':'Removido localmente, mas a nuvem NAO confirmou a gravacao');render()})
+}
+function reconPanel(loja){
+  let rows=reconcileRows(loja);
+  if(!rows.length)return'';
+  let vC=rows.reduce((s,r)=>s+r.vCamp,0),vP=rows.reduce((s,r)=>s+r.vProd,0),vD=rows.reduce((s,r)=>s+r.vDept,0);
+  let dT=x=>vC?(x-vC)/vC*100:0,dP=dT(vP),dD=dT(vD);
+  let pill=w=>w>5?'<span class="pill p-bad">Divergente</span>':w>1?'<span class="pill p-warn">Atencao</span>':'<span class="pill p-ok">OK</span>';
+  let fd=d=>d==null?'-':`<span class="${Math.abs(d)>5?'m-bad':Math.abs(d)>1?'m-warn':'m-good'}">${(d>0?'+':'')+(d>500?'&gt;500':d.toFixed(1))}%</span>`;
+  let ok=Math.abs(dP)<=5&&Math.abs(dD)<=5;
+  let head=`<div class="alert ${ok?'a-ok':'a-warn'}">Total oficial (campanhas): <b>${brl(vC)}</b> | Σ Produtos: <b>${brl(vP)}</b> (${(dP>0?'+':'')+dP.toFixed(1)}%) | Σ Departamentos: <b>${brl(vD)}</b> (${(dD>0?'+':'')+dD.toFixed(1)}%). ${ok?'Fontes consistentes.':'O detalhamento deveria somar o total oficial de cada campanha — diferenca acima de 5% indica duplicidade ou erro na extracao do VR.'}</div>`;
+  let dup=exactDupCount();
+  let dupHtml=dup?`<div class="alert a-warn mt">${num(dup)} linha(s) exatamente identicas na base inteira de produtos/departamentos (provavel duplicidade de importacao). <button class="btn" onclick="removeExactDupes()">Remover duplicados exatos</button></div>`:'';
+  let t=`<div class="table-wrap mt" style="max-height:340px;overflow:auto"><table><thead><tr><th>Mes</th><th>Campanha</th><th>Oficial</th><th>Σ Produtos</th><th>Dif.</th><th>Σ Deptos</th><th>Dif.</th><th>Status</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.mes}</td><td title="${esc(r.nome)}">${esc(String(r.nome).length>40?String(r.nome).slice(0,40)+'...':r.nome)}${r.temCamp?'':' <span class="pill p-bad">sem campanha oficial</span>'}</td><td><b>${r.temCamp?brlShort(r.vCamp):'-'}</b></td><td>${r.temProd?brlShort(r.vProd):'-'}</td><td>${fd(r.dProd)}</td><td>${r.temDept?brlShort(r.vDept):'-'}</td><td>${fd(r.dDept)}</td><td>${pill(r.worst)}</td></tr>`).join('')}</tbody></table></div>`;
+  let dl=reconcileDailyRows(loja);
+  let t2=dl.length?`<div class="mt"><div class="panel-title" style="font-size:13px">Venda total: resumo mensal vs base diaria</div><div class="table-wrap mt" style="max-height:200px;overflow:auto"><table><thead><tr><th>Mes</th><th>Resumo mensal</th><th>Σ Venda diaria</th><th>Dif.</th></tr></thead><tbody>${dl.map(r=>`<tr><td>${r.mes}</td><td>${brlShort(r.resumo)}</td><td>${brlShort(r.diario)}</td><td>${fd(r.diff)}</td></tr>`).join('')}</tbody></table></div></div>`:'';
+  return`<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Reconciliacao de fontes</div><div class="panel-sub">Cruzamento entre os arquivos importados por campanha. O arquivo campanhas_ofertas e a fonte oficial; produtos e departamentos sao detalhamento e devem somar o mesmo valor.</div></div></div>${head}${dupHtml}${t}${t2}</div>`
+}
+
 /* ===== AUDITORIA ===== */
 function audit(loja=fLoja.value){if(loja=='Todas')loja=db.empresas[0]?.nome||'Loja 01';let months=monthsBetween(fInicio.value,fFim.value),key=periodKey(loja),mark=db.aprovacoes[key]||{},imps=db.importacoes.filter(i=>i.loja==loja&&i.periodo==fInicio.value+' a '+fFim.value),present={};ORDER.forEach(t=>present[t]=db[TYPES[t].bucket].some(r=>r.loja==loja&&months.includes(monthKey(r.mes))&&r.__tipo==t));let missing=ORDER.filter(t=>!present[t]),t=total(loja,false),ignored=imps.reduce((s,i)=>s+(+i.ignoradas||0),0),alerts=[];if(missing.length)alerts.push('Faltam: '+missing.map(t=>TYPES[t].label).join(', '));if(!t.vt)alerts.push('Resumo geral sem venda no periodo.');if(ignored)alerts.push(num(ignored)+' linha(s) fora do periodo ignoradas na importacao (esperado quando o TXT cobre mais meses).');let st='Pendente';if(ORDER.length-missing.length>0)st=missing.length?'Parcial':'Auditado';if(st=='Auditado'&&!t.vt)st='Com erro';if(mark.status=='Reaberto'&&st=='Auditado')st='Reaberto';if(mark.status=='Aprovado')st='Aprovado';return{loja,months,imps,present,missing,total:t,ignored,alerts,status:st,reaberto:mark.status=='Reaberto',last:imps[0]?.data||'',obs:mark.obs||imps[0]?.observacao||''}}
-function auditoria(){if(fLoja.value=='Todas')return'<div class="alert a-warn">Selecione uma loja especifica para auditar.</div>';let a=audit(),lock=['Auditado','Aprovado'].includes(a.status)&&!a.reaberto;return`<div class="grid kpis">${kpi('Status',statusPill(a.status),'',true)}${kpi('Arquivos',a.imps.length,'importados')}${kpi('Meses',a.months.length,'no periodo')}${kpi('Ignoradas',num(a.ignored),'linhas')}</div><div class="panel mt"><div class="panel-title">Controle do lote</div><div class="panel-sub">${lock?'Lote bloqueado para reimportacao. Retire a auditoria para corrigir arquivos.':'Lote liberado para ajustes e importacao.'}</div><div class="row mt">${lock?`<button class="btn" onclick="unlockAudit('${a.loja}',true)">Retirar auditoria</button>`:''}<button class="btn" onclick="go('importacoes')">Ir para importacao</button></div></div><div class="grid g2 mt"><div class="panel"><div class="panel-title">Historico</div>${history()}</div><div class="panel"><div class="panel-title">Diagnostico</div><p style="font-size:12px;margin-top:8px">Venda total: <b>${brl(a.total.vt)}</b></p><p style="font-size:12px">Campanhas: <b>${brl(a.total.v)}</b></p><p style="font-size:12px">Diferenca: <b>${brl(a.total.vt-a.total.v)}</b></p><div class="mt"><div class="panel-title">Arquivos faltantes</div><p style="margin-top:6px">${a.missing.map(t=>`<span class="pill p-warn">${TYPES[t].label}</span> `).join('')||'<span class="pill p-ok">Nenhum</span>'}</p></div>${a.alerts.map(x=>`<div class="alert a-warn">${x}</div>`).join('')||'<div class="alert a-ok">Sem alertas.</div>'}</div></div>`}
+function auditoria(){if(fLoja.value=='Todas')return'<div class="alert a-warn">Selecione uma loja especifica para auditar.</div>';let a=audit(),lock=['Auditado','Aprovado'].includes(a.status)&&!a.reaberto;return`<div class="grid kpis">${kpi('Status',statusPill(a.status),'',true)}${kpi('Arquivos',a.imps.length,'importados')}${kpi('Meses',a.months.length,'no periodo')}${kpi('Ignoradas',num(a.ignored),'linhas')}</div><div class="panel mt"><div class="panel-title">Controle do lote</div><div class="panel-sub">${lock?'Lote bloqueado para reimportacao. Retire a auditoria para corrigir arquivos.':'Lote liberado para ajustes e importacao.'}</div><div class="row mt">${lock?`<button class="btn" onclick="unlockAudit('${a.loja}',true)">Retirar auditoria</button>`:''}<button class="btn" onclick="go('importacoes')">Ir para importacao</button></div></div><div class="grid g2 mt"><div class="panel"><div class="panel-title">Historico</div>${history()}</div><div class="panel"><div class="panel-title">Diagnostico</div><p style="font-size:12px;margin-top:8px">Venda total: <b>${brl(a.total.vt)}</b></p><p style="font-size:12px">Campanhas: <b>${brl(a.total.v)}</b></p><p style="font-size:12px">Diferenca: <b>${brl(a.total.vt-a.total.v)}</b></p><div class="mt"><div class="panel-title">Arquivos faltantes</div><p style="margin-top:6px">${a.missing.map(t=>`<span class="pill p-warn">${TYPES[t].label}</span> `).join('')||'<span class="pill p-ok">Nenhum</span>'}</p></div>${a.alerts.map(x=>`<div class="alert a-warn">${x}</div>`).join('')||'<div class="alert a-ok">Sem alertas.</div>'}</div></div>${reconPanel(a.loja)}`}
 
 /* ===== PLANO ===== */
 function plano(){let rs=db.empresas.filter(e=>fRegiao.value=='Todas'||e.regiao==fRegiao.value).map(e=>({...audit(e.nome),regiao:e.regiao})),tot=rs.length,ap=rs.filter(r=>r.status=='Aprovado').length,err=rs.filter(r=>r.status=='Com erro').length,pend=rs.filter(r=>!['Aprovado','Auditado'].includes(r.status)).length;return`<div class="grid kpis">${kpi('Total',tot,'lojas',true)}${kpi('Aprovadas',ap,pct(tot?ap/tot*100:0))}${kpi('Pendentes',pend,'')}${kpi('Com erro',err,'')}</div><div class="panel mt"><div class="panel-header"><div class="panel-title">Plano de Coleta</div>${csvBtn('CSV',"exportPlano()")}</div><div class="table-wrap"><table><thead><tr><th>Loja</th><th>Regiao</th><th>Status</th>${ORDER.map(t=>`<th>${TYPES[t].label.substring(0,6)}</th>`).join('')}<th>Ultima</th><th>Acoes</th></tr></thead><tbody>${rs.map(r=>{let lock=['Auditado','Aprovado'].includes(r.status)&&!r.reaberto;return`<tr><td><b>${r.loja}</b></td><td>${r.regiao}</td><td>${statusPill(r.status)}</td>${ORDER.map(t=>`<td>${r.present[t]?'<span class="pill p-ok">Sim</span>':'<span class="pill p-muted">Nao</span>'}</td>`).join('')}<td style="font-size:10px">${r.last||'-'}</td><td><button class="btn" onclick="openAudit('${r.loja}')">Ver auditoria</button> ${r.status!='Aprovado'?`<button class="btn primary" onclick="approve('${r.loja}')">Aprovar lote</button>`:''} ${lock?`<button class="btn" onclick="unlockAudit('${r.loja}',false)">Retirar auditoria</button>`:`<button class="btn" onclick="reprocess('${r.loja}')">Reprocessar</button>`}</td></tr>`}).join('')}</tbody></table></div></div>`}
