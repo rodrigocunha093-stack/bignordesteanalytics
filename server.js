@@ -216,6 +216,27 @@ app.get("/api/state", authRequired, async (_req, res) => {
   }
 });
 
+app.get("/api/audit/unclassified-products", authRequired, async (_req, res) => {
+  try {
+    const db = getPool();
+    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
+    const result = await db.query(`
+      SELECT
+        DISTINCT COALESCE(NULLIF(BTRIM(product->>'descricao_produto'), ''), '[VAZIO]') AS descricao
+      FROM app_state state
+      CROSS JOIN LATERAL jsonb_array_elements(COALESCE(state.data->'produtos', '[]'::jsonb)) product
+      WHERE state.id = $1
+        AND UPPER(BTRIM(COALESCE(product->>'descricao_departamento', ''))) IN
+          ('', 'OUTROS', 'A ACERTAR', 'SEM DEPARTAMENTO', 'NAO DEFINIDO', 'INDEFINIDO', 'SEM CLASSIFICACAO')
+      ORDER BY 1
+    `, ["main"]);
+    res.json({ produtos: result.rows });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.put("/api/state", authRequired, async (req, res) => {
   try {
     const db = getPool();
