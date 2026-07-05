@@ -793,6 +793,8 @@ function margemItemTree(){
   let lojaVendaTotal={};
   resumos().forEach(r=>{let lj=r.loja||'Sem loja';lojaVendaTotal[lj]=(lojaVendaTotal[lj]||0)+(+r.venda_total||0)});
   let grandVendaTotal=Object.values(lojaVendaTotal).reduce((s,v)=>s+v,0);
+  let catLojaTotalAll={};
+  scopeRows('produtos').forEach(r=>{let loja=r.loja||'Sem loja',cat=classifyCategory(r),k=cat+'||'+loja;catLojaTotalAll[k]=(catLojaTotalAll[k]||0)+(+r.venda||0)});
   let lojas=Array.from(lojaSet).sort((a,b)=>(lojaTotals[b]?.v||0)-(lojaTotals[a]?.v||0));
   if(fLoja.value!='Todas')lojas=lojas.filter(l=>l==fLoja.value);
   let catTotals={};
@@ -812,7 +814,7 @@ function margemItemTree(){
     lojas.forEach(lj=>{
       let d=pivot[cat+'||'+lj];
       if(!d)h+='<td class="pivot-cell pivot-empty">-</td>';
-      else{let m=d.v?d.l/d.v*100:0,lt=lojaTotals[lj],cp=lt&&lt.v?d.v/lt.v*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+pct(cp)+'</div></td>'}
+      else{let m=d.v?d.l/d.v*100:0,clt=catLojaTotalAll[cat+'||'+lj]||0,cp=clt?d.v/clt*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+pct(cp)+'</div></td>'}
     });
     h+='</tr>';
     if(cOpen){
