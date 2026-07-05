@@ -812,7 +812,7 @@ function margemItemTree(){
     lojas.forEach(lj=>{
       let d=pivot[cat+'||'+lj];
       if(!d)h+='<td class="pivot-cell pivot-empty">-</td>';
-      else{let m=d.v?d.l/d.v*100:0,cp=ct.v?d.v/ct.v*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+pct(cp)+'</div></td>'}
+      else{let m=d.v?d.l/d.v*100:0,lt=lojaTotals[lj],cp=lt&&lt.v?d.v/lt.v*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+pct(cp)+'</div></td>'}
     });
     h+='</tr>';
     if(cOpen){
