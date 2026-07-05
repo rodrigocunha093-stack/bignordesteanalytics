@@ -407,6 +407,61 @@ function mdIgnore(tipo,key){let md=readMD();if(!md.ignored.includes(key)){md.ign
 function mdUndoIgnore(key){let md=readMD();md.ignored=md.ignored.filter(k=>k!==key);saveMD(md);showToast('Restaurado');render()}
 function mdClearAll(){if(!confirm('Limpar TODAS as correcoes do Master Data?'))return;try{localStorage.removeItem(MD_KEY)}catch(e){}saveMD(_mdDefault());showToast('Master Data limpo');render()}
 function mdApplySimilar(keep,remove){let md=readMD();md.catalogo[remove]=keep;mdAuditLog('UNIFICAR','Manter "'+keep+'" — unificar "'+remove+'"',md);saveMD(md);showToast('Produtos unificados');render()}
+const _JUNK_DEPTS=new Set(['OUTROS','A ACERTAR','SEM DEPARTAMENTO','NAO DEFINIDO','INDEFINIDO','SEM CLASSIFICACAO','CADASTRO A REVISAR']);
+const _CAT_PADRAO=['MERCEARIA','CARNES','FRIOS E LATICINIOS','HORTIFRUTI','BEBIDAS','LIMPEZA','HIGIENE E PERFUMARIA','BISCOITOS','BOMBONIERE','CAFE','CONGELADOS','PADARIA','PET SHOP','TABACARIA','DESCARTAVEIS','UTILIDADES','BAZAR'];
+function mdCatOptions(){let set=new Set(_CAT_PADRAO);(db.produtos||[]).forEach(r=>{let d=(r.descricao_departamento||'').trim().toUpperCase();if(d&&!_JUNK_DEPTS.has(d))set.add(d)});return Array.from(set).sort()}
+function mdPendentes(){
+  let pend={};
+  (db.produtos||[]).forEach(r=>{
+    let cat=String(classifyCategory(r)||'').trim().toUpperCase();
+    if(!_JUNK_DEPTS.has(cat))return;
+    let n=(r.descricao_produto||'').trim().toUpperCase()||'(SEM DESCRICAO)';
+    if(!pend[n])pend[n]={nome:n,venda:0,count:0,lojasSet:new Set()};
+    pend[n].venda+=+r.venda||0;pend[n].count++;pend[n].lojasSet.add(r.loja);
+  });
+  return Object.values(pend).map(p=>({nome:p.nome,venda:p.venda,count:p.count,lojas:p.lojasSet.size,lojasList:Array.from(p.lojasSet)})).sort((a,b)=>b.venda-a.venda);
+}
+function mdVoteMap(){
+  let votes={};
+  (db.produtos||[]).forEach(r=>{
+    let dept=(r.descricao_departamento||'').trim().toUpperCase();
+    if(!dept||_JUNK_DEPTS.has(dept))return;
+    let v=(+r.venda||0)+1;
+    mdNormalize(r.descricao_produto||'').split(' ').forEach(w=>{
+      if(w.length<3)return;
+      if(!votes[w])votes[w]={};votes[w][dept]=(votes[w][dept]||0)+v;
+    });
+  });
+  return votes;
+}
+function mdSuggestCat(nome,votes){
+  let byRule=productCategory(nome);
+  if(byRule&&byRule!=='CADASTRO A REVISAR')return{cat:byRule,conf:1,fonte:'regra'};
+  let score={};
+  mdNormalize(nome).split(' ').forEach(w=>{if(w.length<3)return;let vv=votes[w];if(!vv)return;Object.entries(vv).forEach(([c,s])=>score[c]=(score[c]||0)+s)});
+  let entries=Object.entries(score).sort((a,b)=>b[1]-a[1]);
+  if(!entries.length)return null;
+  let total=entries.reduce((s,e)=>s+e[1],0),conf=total?entries[0][1]/total:0;
+  return conf>=0.5?{cat:entries[0][0],conf,fonte:'similaridade'}:null;
+}
+let _mdPendCache=[];
+function mdClassificarIdx(i,selId){
+  let p=_mdPendCache[i];if(!p)return;
+  let dept=(document.getElementById(selId)||{}).value;if(!dept)return;
+  let md=readMD();
+  p.lojasList.forEach(l=>{md.mercMap[p.nome+'|'+l]=dept});md.mercMap[p.nome+'|*']=dept;
+  mdAuditLog('MERCADOLOGICO','"'+p.nome+'" → '+dept,md);saveMD(md);showToast('Classificado em '+dept);render();
+}
+function mdAplicarSugestoes(){
+  let votes=mdVoteMap(),pend=mdPendentes(),plan=[];
+  pend.forEach(p=>{let s=mdSuggestCat(p.nome,votes);if(s)plan.push({p,cat:s.cat})});
+  if(!plan.length){alert('Nenhuma sugestao com confianca suficiente. Classifique manualmente pelos seletores.');return}
+  if(!confirm(plan.length+' de '+pend.length+' produto(s) sem mercadologico serao classificados automaticamente (regras + similaridade com itens ja classificados da rede). Tudo fica registrado na Auditoria do Master Data e pode ser ajustado item a item depois. Continuar?'))return;
+  let md=readMD();
+  plan.forEach(({p,cat})=>{p.lojasList.forEach(l=>{md.mercMap[p.nome+'|'+l]=cat});md.mercMap[p.nome+'|*']=cat});
+  mdAuditLog('CLASSIFICAR_LOTE',plan.length+' produtos sem mercadologico classificados automaticamente',md);
+  saveMD(md);showToast(plan.length+' produtos classificados');render();
+}
 function mdApplyMercAll(produto,dept){let md=readMD();let cat=mdAnalysis().catalogo.find(c=>c.original===produto||(c.originals||[]).includes(produto));let lojas=cat?cat.lojasList:[];if(!lojas.length)lojas=Array.from(new Set((db.produtos||[]).filter(p=>(p.descricao_produto||'').trim().toUpperCase()===produto).map(p=>p.loja)));lojas.forEach(l=>{md.mercMap[produto+'|'+l]=dept});mdAuditLog('PADRONIZAR_MERC','Produto "'+produto+'" → '+dept+' em todas as lojas',md);saveMD(md);showToast('Mercadologico padronizado');render()}
 let _mdAnalysisRes=null,_mdAnalysisKey='';
 function mdAnalysis(){let md=readMD();let key=(db.produtos||[]).length+'|'+Object.keys(md.catalogo||{}).length+'|'+Object.keys(md.mercMap||{}).length+'|'+(md.audit||[]).length;if(_mdAnalysisRes&&_mdAnalysisKey===key)return _mdAnalysisRes;_mdAnalysisKey=key;_mdAnalysisRes={duplicatas:findDuplicateProdutos(),similares:findSimilarProdutos(),inconsistentes:analyzeInconsistentMercadologicos(),catalogo:buildCatalogo()};return _mdAnalysisRes}
@@ -417,10 +472,12 @@ let md=readMD(),{duplicatas,similares,inconsistentes,catalogo}=mdAnalysis();
 let totalProds=new Set((db.produtos||[]).map(p=>(p.descricao_produto||'').trim().toUpperCase()).filter(Boolean)).size;
 let totalVariantes=duplicatas.filter(d=>d.hasVariants).length;
 let totalInconsist=inconsistentes.length,totalSimilar=similares.length,totalCorrecoes=md.audit.length;
-let tabs=[['analise','Analise',totalInconsist+totalSimilar],['catalogo','Cadastro Unico',totalProds],['reconciliacao','Reconciliacao',inconsistentes.filter(i=>!md.ignored.includes('inc:'+i.nome)).length+similares.filter(s=>!md.ignored.includes('sim:'+s.produto1+'|'+s.produto2)).length],['auditoria','Auditoria',totalCorrecoes]];
+let pendentes=mdPendentes();
+let tabs=[['pendentes','Sem mercadologico',pendentes.length],['analise','Analise',totalInconsist+totalSimilar],['catalogo','Cadastro Unico',totalProds],['reconciliacao','Reconciliacao',inconsistentes.filter(i=>!md.ignored.includes('inc:'+i.nome)).length+similares.filter(s=>!md.ignored.includes('sim:'+s.produto1+'|'+s.produto2)).length],['auditoria','Auditoria',totalCorrecoes]];
 let html='<div class="md-kpis"><div class="kpi kpi-accent"><div class="lb">PRODUTOS UNICOS</div><div class="vl">'+num(totalProds)+'</div></div><div class="kpi"><div class="lb">VARIACOES DE NOME</div><div class="vl" style="color:var(--purple)">'+totalVariantes+'</div><div class="delta" style="font-size:10px;color:var(--muted)">mesmo produto, nomes diferentes</div></div><div class="kpi"><div class="lb">INCONSIST. MERC.</div><div class="vl" style="color:var(--bad)">'+totalInconsist+'</div></div><div class="kpi"><div class="lb">SIMILARES FUZZY</div><div class="vl" style="color:var(--warn)">'+totalSimilar+'</div></div><div class="kpi"><div class="lb">CORRECOES</div><div class="vl" style="color:var(--ok)">'+totalCorrecoes+'</div></div></div>';
 html+='<div class="md-tabs">'+tabs.map(([id,label,badge])=>'<button class="'+(mdTab===id?'active':'')+'" onclick="mdTab=\''+id+'\';render()">'+label+(badge?'<span class="tab-badge">'+badge+'</span>':'')+'</button>').join('')+'</div>';
-if(mdTab==='analise')html+=mdTabAnalise(duplicatas,similares,inconsistentes,md);
+if(mdTab==='pendentes')html+=mdTabPendentes(pendentes);
+else if(mdTab==='analise')html+=mdTabAnalise(duplicatas,similares,inconsistentes,md);
 else if(mdTab==='catalogo')html+=mdTabCatalogo(catalogo,md);
 else if(mdTab==='reconciliacao')html+=mdTabReconciliacao(similares,inconsistentes,md);
 else if(mdTab==='auditoria')html+=mdTabAuditoria(md);
@@ -441,6 +498,24 @@ html+='</div><div class="md-actions"><button class="btn btn-approve" onclick="'+
 html+='</div><div class="panel mt"><div class="panel-header"><div><div class="panel-title">Inconsistencias de Mercadologicos</div><div class="panel-sub">Produtos classificados em departamentos diferentes entre lojas</div></div></div>';
 html+=sortableTable('tIncon',['Produto','Depts','Lojas','Principal','Outros','Venda'],inconsistentes.slice(0,40).map(i=>[esc(i.nome.substring(0,30)),i.depts.length,i.lojas,'<span class="pill p-ok">'+esc(i.principal)+'</span>',i.depts.slice(1).map(d=>'<span class="pill p-warn">'+esc(d)+'</span>').join(' '),brl(i.venda)]),['text','num','num','text','text','num']);
 html+='</div>';return html}
+function mdTabPendentes(pendentes){
+  _mdPendCache=pendentes;
+  if(!pendentes.length)return'<div class="panel"><div class="panel-title">Sem mercadologico</div><div class="alert a-ok mt">Todos os itens estao classificados. Nenhum produto caindo em OUTROS ou CADASTRO A REVISAR.</div></div>';
+  let votes=mdVoteMap(),cats=mdCatOptions();
+  let comSugestao=0;
+  let rows=pendentes.slice(0,150).map((p,i)=>{
+    let s=mdSuggestCat(p.nome,votes);if(s)comSugestao++;
+    let selId='mdSelP'+i;
+    let opts='<option value="">selecione...</option>'+cats.map(c=>'<option'+(s&&s.cat===c?' selected':'')+'>'+esc(c)+'</option>').join('');
+    let sug=s?'<span class="pill '+(s.fonte==='regra'?'p-ok':'p-info')+'" title="'+(s.fonte==='regra'?'Regra de palavra-chave':'Similaridade com itens ja classificados: '+Math.round(s.conf*100)+'%')+'">'+esc(s.cat)+(s.fonte==='regra'?'':' ~'+Math.round(s.conf*100)+'%')+'</span>':'<span class="pill p-muted">sem sugestao</span>';
+    return'<tr><td title="'+esc(p.nome)+'">'+esc(p.nome.substring(0,42))+'</td><td>'+brl(p.venda)+'</td><td>'+p.lojas+'</td><td>'+sug+'</td><td><select id="'+selId+'" style="max-width:180px">'+opts+'</select></td><td><button class="btn btn-approve" onclick="mdClassificarIdx('+i+',\''+selId+'\')">✓ Aplicar</button></td></tr>';
+  }).join('');
+  let totalSug=pendentes.filter(p=>mdSuggestCat(p.nome,votes)).length;
+  let h='<div class="panel"><div class="panel-header"><div><div class="panel-title">Produtos sem mercadologico ('+num(pendentes.length)+')</div><div class="panel-sub">Itens caindo em OUTROS / CADASTRO A REVISAR. A sugestao vem das regras de palavra-chave e da similaridade com produtos ja classificados da propria rede. A classificacao vale para todas as lojas e para importacoes futuras, e fica registrada na Auditoria.</div></div><button class="btn primary" onclick="mdAplicarSugestoes()">Aplicar '+num(totalSug)+' sugestoes automaticas</button></div>';
+  if(pendentes.length>150)h+='<div class="alert a-info">Mostrando os 150 itens de maior venda de '+num(pendentes.length)+'. Classifique-os e os proximos aparecem aqui.</div>';
+  h+='<div class="table-wrap mt" style="max-height:620px;overflow:auto"><table><thead><tr><th>Produto</th><th>Venda</th><th>Lojas</th><th>Sugestao</th><th>Categoria</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  return h;
+}
 function mdTabCatalogo(catalogo,md){
 let filtered=catalogo;
 if(mdSearch){let q=mdSearch.toUpperCase();filtered=catalogo.filter(c=>c.original.includes(q)||c.canonical.includes(q)||(c.originals&&c.originals.some(o=>o.includes(q))))}
@@ -808,7 +883,7 @@ function toggleTree(key){_treeOpen[key]=!_treeOpen[key];render()}
 function mdCanon(desc){let u=String(desc||'').trim().toUpperCase();if(!u)return u;let md=readMD();return md.catalogo[u]||u}
 function classifyCategory(r){
   let md=readMD(),u=String(r.descricao_produto||'').trim().toUpperCase();
-  if(u){let ov=md.mercMap[u+'|'+(r.loja||'')];if(ov)return ov}
+  if(u){let ov=md.mercMap[u+'|'+(r.loja||'')]||md.mercMap[u+'|*'];if(ov)return ov}
   let dept=(r.descricao_departamento||'').trim().toUpperCase();
   if(dept&&dept!=='OUTROS'&&dept!=='A ACERTAR'&&dept!=='SEM DEPARTAMENTO'&&dept!=='NAO DEFINIDO'&&dept!=='INDEFINIDO'&&dept!=='SEM CLASSIFICACAO')return r.descricao_departamento;
   return productCategory(r.descricao_produto)||r.descricao_departamento||'OUTROS';
