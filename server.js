@@ -288,9 +288,14 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
         if (!bucket) continue;
         const diario = dailyTypes.has(tipo);
         const rows = Array.isArray(group.rows) ? group.rows : [];
-        state[bucket] = state[bucket]
-          .filter((row) => !(row.loja == loja && row.__tipo == tipo && (diario ? inDatePeriod(row.data, ini, fim) : allowedMonths.includes(monthKey(row.mes)))))
-          .concat(rows);
+        const before = state[bucket].length;
+        const filtered = state[bucket]
+          .filter((row) => !(row.loja == loja && row.__tipo == tipo && (diario ? inDatePeriod(row.data, ini, fim) : allowedMonths.includes(monthKey(row.mes)))));
+        const deleted = before - filtered.length;
+        if (deleted > 0 && rows.length === 0) {
+          throw new Error(`Seguranca: tentativa de deletar ${deleted} rows do bucket ${bucket} SEM adicionar dados novos para ${loja}/${tipo}. Isso indica um problema na importacao.`);
+        }
+        state[bucket] = filtered.concat(rows);
       }
 
       if (hist.length) state.importacoes.unshift(...hist);

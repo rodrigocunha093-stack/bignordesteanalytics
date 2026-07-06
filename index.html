@@ -768,7 +768,7 @@ async function processImport(){
     let miss=cfg.cols.filter(c=>!p.head.includes(c));
     if(miss.length){errors.push(f.name+' ('+cfg.label+'): colunas faltantes '+miss.join(', '));continue}
     let rows=p.rows.filter(r=>cfg.diario?inDatePeriod(r.data,ini,fim):allowed.includes(monthKey(r.mes))).map(r=>cfg.diario?({...r,data:dateKey(r.data),loja,__loja_vr:r.loja||'',__tipo:rt}):({...r,mes:monthKey(r.mes),loja,__loja_vr:r.loja||'',__tipo:rt}));
-    if(!rows.length)warnings.push(f.name+': nenhuma linha no periodo. Dados antigos desse arquivo/periodo serao limpos.');
+    if(!rows.length){warnings.push(f.name+': nenhuma linha no periodo. Nao sera importado (para evitar deletar dados sem adicionar).');continue}
     let key=rt+'|'+loja;(grouped[key]=grouped[key]||{tipo:rt,loja,rows:[]}).rows.push(...rows);
     totalR+=rows.length;
     hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:rt,linhas:rows.length,ignoradas:p.rows.length-rows.length,colunas_faltantes:[],observacao:obs})
