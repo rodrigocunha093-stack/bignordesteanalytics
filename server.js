@@ -207,7 +207,11 @@ app.get("/api/health", async (_req, res) => {
 app.get("/api/state", authRequired, async (_req, res) => {
   try {
     const db = getPool();
-    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    if (!db) {
+      // Sem banco de dados, retorna vazio para o frontend usar localStorage
+      console.log("DATABASE_URL nao configurada, usando localStorage fallback");
+      return res.json(null);
+    }
     await ensureSchemaOnce();
     const result = await db.query("SELECT data FROM app_state WHERE id = $1", ["main"]);
     res.json(result.rows[0]?.data || null);
