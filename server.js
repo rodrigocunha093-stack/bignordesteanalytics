@@ -189,19 +189,25 @@ app.get("/api/health", async (_req, res) => {
   try {
     const db = getPool();
     if (!db) return res.json({ ok: true, database: "not_configured", protected: Boolean(apiToken) });
-    await db.query("SELECT 1");
-    res.json({
-      ok: true,
-      database: "connected",
-      protected: Boolean(apiToken),
-      pool: {
-        total: db.totalCount,
-        idle: db.idleCount,
-        waiting: db.waitingCount
-      }
-    });
+    try {
+      await db.query("SELECT 1");
+      res.json({
+        ok: true,
+        database: "connected",
+        protected: Boolean(apiToken),
+        pool: {
+          total: db.totalCount,
+          idle: db.idleCount,
+          waiting: db.waitingCount
+        }
+      });
+    } catch (dbError) {
+      console.log("Erro ao conectar ao banco em /api/health:", dbError.message);
+      res.json({ ok: true, database: "disconnected", protected: Boolean(apiToken) });
+    }
   } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
+    console.error("Erro em /api/health:", error.message);
+    res.json({ ok: true, database: "disconnected", protected: Boolean(apiToken) });
   }
 });
 
