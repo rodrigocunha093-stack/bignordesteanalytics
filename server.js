@@ -24,8 +24,34 @@ const port = process.env.PORT || 8080;
 const databaseUrl = process.env.DATABASE_URL;
 const apiToken = process.env.API_TOKEN || "";
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || "").split(",").filter(Boolean);
-app.use(cors(allowedOrigins.length ? { origin: allowedOrigins } : undefined));
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "https://bignordesteanalytics.vercel.app").split(",").filter(Boolean);
+app.use(cors({ origin: allowedOrigins, credentials: true, methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], maxAge: 3600 }));
+
+// Security Headers
+app.use((req, res, next) => {
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  next();
+});
+
+// Rate limiting (simple)
+const requestCounts = new Map();
+app.use((req, res, next) => {
+  const ip = req.ip || req.connection.remoteAddress;
+  const count = (requestCounts.get(ip) || 0) + 1;
+  requestCounts.set(ip, count);
+  if (count > 1000 && Math.random() > 0.99) requestCounts.delete(ip);
+  if (count > 1000) return res.status(429).json({ error: "Rate limit exceeded" });
+  next();
+});
+
+// Audit logging
+const auditLog = (action, user, details) => console.log(`[AUDIT] ${new Date().toISOString()} | ${action} | ${user || 'ANON'} | ${JSON.stringify(details)}`);
+
 app.use(express.json({ limit: "50mb" }));
 app.use((req, res, next) => {
   if (req.path === "/" || req.path.endsWith(".html")) {
@@ -211,7 +237,8 @@ app.get("/api/health", async (_req, res) => {
   }
 });
 
-app.get("/api/state", authRequired, async (_req, res) => {
+app.get("/api/state", authRequired, async (req, res) => {
+  auditLog("GET_STATE", req.headers.authorization ? "AUTHENTICATED" : "ANONYMOUS", { ip: req.ip });
   try {
     const db = getPool();
     if (!db) {
@@ -254,6 +281,7 @@ app.get("/api/audit/unclassified-products", authRequired, async (_req, res) => {
 });
 
 app.put("/api/state", authRequired, async (req, res) => {
+  auditLog("PUT_STATE", req.headers.authorization ? "AUTHENTICATED" : "ANONYMOUS", { ip: req.ip, size_bytes: JSON.stringify(req.body).length });
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
