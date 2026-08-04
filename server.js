@@ -208,15 +208,20 @@ app.get("/api/state", authRequired, async (_req, res) => {
   try {
     const db = getPool();
     if (!db) {
-      // Sem banco de dados, retorna vazio para o frontend usar localStorage
       console.log("DATABASE_URL nao configurada, usando localStorage fallback");
       return res.json(null);
     }
-    await ensureSchemaOnce();
-    const result = await db.query("SELECT data FROM app_state WHERE id = $1", ["main"]);
-    res.json(result.rows[0]?.data || null);
+    try {
+      await ensureSchemaOnce();
+      const result = await db.query("SELECT data FROM app_state WHERE id = $1", ["main"]);
+      res.json(result.rows[0]?.data || null);
+    } catch (dbError) {
+      console.log("Erro ao conectar banco, usando localStorage fallback:", dbError.message);
+      res.json(null);
+    }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Erro em /api/state:", error.message);
+    res.json(null);
   }
 });
 
