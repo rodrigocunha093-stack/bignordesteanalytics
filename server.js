@@ -338,20 +338,29 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
 app.get("/api/backups", authRequired, async (_req, res) => {
   try {
     const db = getPool();
-    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
-    await ensureSchemaOnce();
-    const result = await db.query(
-      "SELECT id, reason, created_at, data FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC LIMIT $2",
-      ["main", BACKUP_KEEP]
-    );
-    res.json(result.rows.map((row) => ({
-      id: row.id,
-      reason: row.reason,
-      created_at: row.created_at,
-      counts: bucketCounts(row.data)
-    })));
+    if (!db) {
+      console.log("DATABASE_URL nao configurada, retornando backups vazio");
+      return res.json([]);
+    }
+    try {
+      await ensureSchemaOnce();
+      const result = await db.query(
+        "SELECT id, reason, created_at, data FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC LIMIT $2",
+        ["main", BACKUP_KEEP]
+      );
+      res.json(result.rows.map((row) => ({
+        id: row.id,
+        reason: row.reason,
+        created_at: row.created_at,
+        counts: bucketCounts(row.data)
+      })));
+    } catch (dbError) {
+      console.log("Erro ao carregar backups, retornando vazio:", dbError.message);
+      res.json([]);
+    }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Erro em /api/backups:", error.message);
+    res.json([]);
   }
 });
 
