@@ -50,6 +50,7 @@ const bucketsByType = {
   produtos_campanha: "produtos",
   departamentos_campanha: "departamentos",
   cupons_totais: "cupons",
+  venda_departamento_total: "deptTotais",
   ofertas_dia_campanha: "ofertasDia",
   venda_diaria_loja: "vendasDiarias"
 };
@@ -58,7 +59,7 @@ const dailyTypes = new Set(["ofertas_dia_campanha", "venda_diaria_loja"]);
 
 function normalizeState(data) {
   const state = data && typeof data === "object" ? data : {};
-  ["resumos", "campanhas", "departamentos", "produtos", "cupons", "importacoes", "ofertasDia", "vendasDiarias"].forEach((key) => {
+  ["resumos", "campanhas", "departamentos", "produtos", "cupons", "importacoes", "ofertasDia", "vendasDiarias", "deptTotais"].forEach((key) => {
     if (!Array.isArray(state[key])) state[key] = [];
   });
   if (!state.aprovacoes || typeof state.aprovacoes !== "object") state.aprovacoes = {};
@@ -147,7 +148,7 @@ function ensureSchemaOnce() {
   return schemaReady;
 }
 
-const GUARDED_BUCKETS = ["empresas", "resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias"];
+const GUARDED_BUCKETS = ["empresas", "resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias", "deptTotais"];
 const BACKUP_KEEP = Number(process.env.BACKUP_KEEP || 30);
 
 function bucketCounts(state) {
@@ -222,6 +223,27 @@ app.get("/api/state", authRequired, async (_req, res) => {
   } catch (error) {
     console.error("Erro em /api/state:", error.message);
     res.json(null);
+  }
+});
+
+app.get("/api/audit/unclassified-products", authRequired, async (_req, res) => {
+  try {
+    const db = getPool();
+    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
+    await ensureSchemaOnce();
+    const result = await db.query(`
+      SELECT
+        DISTINCT COALESCE(NULLIF(BTRIM(product->>'descricao_produto'), ''), '[VAZIO]') AS descricao
+      FROM app_state state
+      CROSS JOIN LATERAL jsonb_array_elements(COALESCE(state.data->'produtos', '[]'::jsonb)) product
+      WHERE state.id = $1
+        AND UPPER(BTRIM(COALESCE(product->>'descricao_departamento', ''))) IN
+          ('', 'OUTROS', 'A ACERTAR', 'SEM DEPARTAMENTO', 'NAO DEFINIDO', 'INDEFINIDO', 'SEM CLASSIFICACAO')
+      ORDER BY 1
+    `, ["main"]);
+    res.json({ produtos: result.rows });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -423,7 +445,7 @@ app.patch("/api/empresas", authRequired, async (req, res) => {
       if (Array.isArray(renames)) {
         for (const { from, to } of renames) {
           if (!from || !to || from === to) continue;
-          ["resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias"].forEach((bucket) => {
+          ["resumos", "campanhas", "departamentos", "produtos", "cupons", "ofertasDia", "vendasDiarias", "deptTotais"].forEach((bucket) => {
             (state[bucket] || []).forEach((row) => { if (row.loja === from) row.loja = to; });
           });
           (state.importacoes || []).forEach((row) => { if (row.loja === from) row.loja = to; });
