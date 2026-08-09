@@ -60,9 +60,10 @@ async function sbGetState() {
 
 async function sbUpsertState(state) {
   await sbRest("app_state", {
-    method: "POST",
-    body: { id: "main", data: state, updated_at: new Date().toISOString() },
-    prefer: "resolution=merge-duplicates",
+    method: "PATCH",
+    filter: { id: "eq.main" },
+    body: { data: state, updated_at: new Date().toISOString() },
+    prefer: "return=minimal",
   });
 }
 
