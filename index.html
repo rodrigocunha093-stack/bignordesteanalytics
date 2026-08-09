@@ -13,14 +13,12 @@
 :root{--bg:#f0f2f5;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--panel:#fff;--brand:#0d9f5e;--brand-dark:#064e30;--brand-light:#ecfdf5;--gold:#f59e0b;--bad:#ef4444;--warn:#f97316;--ok:#10b981;--blue:#3b82f6;--purple:#8b5cf6;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.03)}
 *{box-sizing:border-box;margin:0}
 body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh;transition:grid-template-columns .2s ease}
-.app.sidebar-collapsed{grid-template-columns:72px 1fr}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
 
 /* Sidebar */
-aside{background:#111827;color:white;padding:0;display:flex;flex-direction:column;position:relative;min-width:0}
+aside{background:#111827;color:white;padding:0;display:flex;flex-direction:column}
 .brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .brand-logo{display:flex;align-items:center;gap:10px}
-.brand-copy,.nav-label,.sidebar-footer-copy{transition:opacity .12s ease}
 .brand-icon{width:34px;height:34px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center}
 .brand-icon svg{width:18px;height:18px;fill:white}
 .brand b{display:block;font-size:15px;font-weight:700;letter-spacing:.2px}
@@ -31,17 +29,6 @@ nav button:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
 nav button.active{background:rgba(255,255,255,.1);color:white;font-weight:600}
 nav button svg{width:16px;height:16px;opacity:.5;flex-shrink:0}
 nav button.active svg{opacity:.9}
-.sidebar-toggle{position:absolute;top:26px;right:-12px;width:24px;height:24px;border:1px solid #374151;border-radius:50%;background:#111827;color:#d1d5db;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:25;box-shadow:0 2px 6px rgba(0,0,0,.25);padding:0}
-.sidebar-toggle:hover{background:#1f2937;color:white}
-.sidebar-toggle svg{width:13px;height:13px;transition:transform .2s ease}
-.app.sidebar-collapsed .sidebar-toggle svg{transform:rotate(180deg)}
-.app.sidebar-collapsed .brand{padding-left:19px;padding-right:19px}
-.app.sidebar-collapsed .brand-copy,.app.sidebar-collapsed .nav-label,.app.sidebar-collapsed .sidebar-footer-copy{display:none}
-.app.sidebar-collapsed nav button{justify-content:center;gap:0;padding-left:8px;padding-right:8px;position:relative}
-.app.sidebar-collapsed nav button svg{width:18px;height:18px}
-.app.sidebar-collapsed .nav-badge{position:absolute;top:2px;right:1px;padding:1px 3px;min-width:14px;font-size:7px}
-.app.sidebar-collapsed .sidebar-footer{padding-left:0;padding-right:0;text-align:center}
-.app.sidebar-collapsed .sidebar-footer .cloud-status{justify-content:center}
 .nav-badge{margin-left:auto;background:var(--brand);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:99px;min-width:18px;text-align:center}
 .sidebar-footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,.06);font-size:10px;color:rgba(255,255,255,.3)}
 .sidebar-footer .cloud-status{display:flex;align-items:center;gap:5px;margin-bottom:3px}
@@ -233,48 +220,16 @@ td b{font-weight:600}
 /* Responsive */
 @media(max-width:980px){
   .app{grid-template-columns:1fr}
-  .app.sidebar-collapsed{grid-template-columns:1fr}
   aside{display:block;position:sticky;top:0;z-index:20}
   aside .brand,.sidebar-footer{display:none}
-  .sidebar-toggle{display:none}
   nav{flex-direction:row;overflow:auto;padding:8px;background:#111827}
   nav button{white-space:nowrap;flex:0 0 auto}
-  .app.sidebar-collapsed nav button{justify-content:flex-start;gap:9px;padding:8px 10px}
-  .app.sidebar-collapsed .nav-label{display:inline}
-  .app.sidebar-collapsed .nav-badge{position:static;padding:2px 6px;min-width:18px;font-size:9px}
   header{flex-direction:column;align-items:stretch}
   .kpis,.g2,.g3,.g4,.row,.hero-kpis,.metrics5{grid-template-columns:1fr}
   .filters{justify-content:flex-start}
 }
 .bench-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}.bench-tabs button{border:0;background:transparent;color:var(--muted);padding:9px 13px;font-weight:700;font-size:12px;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent}.bench-tabs button.active{color:var(--green);border-bottom-color:var(--green)}
 .bench-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.bench-flyer{display:grid;grid-template-columns:190px 1fr;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;min-height:260px}.bench-flyer>img{width:100%;height:100%;object-fit:cover;object-position:top;background:#111}.bench-flyer-body{padding:16px;min-width:0}.bench-flyer h3{font-size:17px;margin-top:3px}.bench-filterbar{display:grid;grid-template-columns:1.3fr 1.3fr 1fr 1fr auto auto;gap:8px;align-items:end;background:#fff;border:1px solid var(--line);padding:12px;border-radius:8px}.bench-filterbar label,.form-grid label,.field-wide{display:flex;flex-direction:column;gap:4px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase}.bench-filterbar .check{flex-direction:row;align-items:center;padding-bottom:9px;white-space:nowrap}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.field-wide{margin-top:9px}.bench-review{max-height:620px}.bench-review input,.bench-review select{min-width:76px;padding:6px;font-size:11px}.bench-review td:nth-child(4) input,.bench-review td:nth-child(5) input{min-width:170px}.bench-review td:nth-child(3) input{min-width:120px}.insight-panel{border-left:3px solid var(--green)}.insight-panel>p{font-size:13px;line-height:1.65;margin-top:10px;color:var(--text)}
-.md-tabs{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:16px;overflow-x:auto}
-.md-tabs button{border:0;background:transparent;color:var(--muted);padding:10px 16px;font-weight:700;font-size:12px;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
-.md-tabs button:hover{color:var(--ink)}
-.md-tabs button.active{color:var(--brand);border-bottom-color:var(--brand)}
-.md-tabs button .tab-badge{background:var(--bad);color:#fff;font-size:9px;padding:1px 5px;border-radius:99px;margin-left:5px;font-weight:800}
-.md-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px;transition:all .15s}
-.md-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.md-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.md-card-header h4{font-size:13px;font-weight:700;margin:0}
-.md-card .md-detail{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
-.md-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.md-actions .btn{font-size:10px;padding:4px 8px}
-.md-actions .btn-approve{background:#dcfce7;border-color:#86efac;color:#166534}
-.md-actions .btn-approve:hover{background:#bbf7d0}
-.md-actions .btn-reject{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
-.md-actions .btn-reject:hover{background:#fecaca}
-.md-actions .btn-edit{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
-.md-actions .btn-edit:hover{background:#bfdbfe}
-.md-stat{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--muted);margin-right:12px}
-.md-stat svg{width:12px;height:12px}
-.md-search{display:flex;gap:8px;margin-bottom:12px;align-items:center}
-.md-search input{flex:1;border:1px solid var(--line);border-radius:6px;padding:7px 10px;font-size:12px;max-width:300px}
-.md-search input:focus{outline:none;border-color:var(--brand)}
-.md-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
-.md-log{font-size:11px;border-left:2px solid var(--line);padding-left:10px;margin:4px 0}
-.md-log-time{color:var(--muted);font-size:10px;font-weight:600}
-.md-log-action{font-weight:600;margin-left:4px}
 @media(max-width:1100px){.bench-list{grid-template-columns:1fr}.bench-filterbar{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.bench-flyer{grid-template-columns:1fr}.bench-flyer>img{height:220px}.form-grid,.bench-filterbar{grid-template-columns:1fr}}
 </style>
 </head>
@@ -283,10 +238,9 @@ td b{font-weight:600}
 <div class="toast" id="toast"></div>
 <div class="app">
 <aside>
-  <div class="brand"><div class="brand-logo"><div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div><div class="brand-copy"><b>BIGNORDESTE</b><span>analytics</span></div></div></div>
-  <button class="sidebar-toggle" type="button" onclick="toggleSidebar()" title="Recolher menu" aria-label="Recolher menu" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg></button>
+  <div class="brand"><div class="brand-logo"><div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div><div><b>BIGNORDESTE</b><span>analytics</span></div></div></div>
   <nav id="nav"></nav>
-  <div class="sidebar-footer"><div class="cloud-status"><span class="cloud-dot" id="cloudDot"></span> <span class="sidebar-footer-copy" id="cloudLabel">Offline</span></div><div class="sidebar-footer-copy">v2.0</div></div>
+  <div class="sidebar-footer"><div class="cloud-status"><span class="cloud-dot" id="cloudDot"></span> <span id="cloudLabel">Offline</span></div><div>v2.0</div></div>
 </aside>
 <main>
   <header>
@@ -309,7 +263,7 @@ td b{font-weight:600}
 const PAL={green:'#0d9f5e',greenLight:'rgba(13,159,94,.12)',gold:'#f59e0b',goldLight:'rgba(245,158,11,.12)',blue:'#3b82f6',blueLight:'rgba(59,130,246,.12)',red:'#ef4444',redLight:'rgba(239,68,68,.12)',purple:'#8b5cf6',purpleLight:'rgba(139,92,246,.12)',teal:'#14b8a6',gray:'#6b7280',dark:'#111827'};
 const COLORS=[PAL.green,PAL.gold,PAL.blue,PAL.red,PAL.purple,PAL.teal];
 const BG_COLORS=[PAL.greenLight,PAL.goldLight,PAL.blueLight,PAL.redLight,PAL.purpleLight,'rgba(20,184,166,.12)'];
-const SOLID_COLORS=['#059669','#d97706','#2563eb','#dc2626','#7c3aed','#0d9488','#db2777','#65a30d','#64748b'];
+const SOLID_COLORS=['#059669','#d97706','#2563eb','#dc2626','#7c3aed','#0d9488'];
 
 /* ===== FORMATTERS ===== */
 const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}),nf=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:1}),STORE_KEY='bignordeste.analytics.periodo.v1',MONTH_METRICS_KEY='bignordeste.analytics.monthMetrics.v1';
@@ -328,7 +282,6 @@ function monthMetricControls(){let opts=[['vt','Venda total'],['venda','Venda pr
 const ICONS={encarte:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>',decisao:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',dashboard:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>',importacoes:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>',auditoria:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>',plano:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>',modelos:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>',empresas:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>',consolidacao:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>',relatorio:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',exp:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>'};
 
 ICONS.benchmark='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10v2H7V3zm-2 4h14l2 4v2h-1v8h-7v-6h-2v6H4v-8H3v-2l2-4zm2 2-1 2h12l-1-2H7z"/></svg>';
-ICONS.masterdata='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>';
 
 /* ===== CHART ENGINE ===== */
 let activeCharts={};
@@ -339,258 +292,13 @@ Chart.defaults.font.size=11;
 Chart.defaults.color='#6b7280';
 Chart.defaults.plugins.datalabels={display:false};
 
-/* ===== MASTER DATA & FUZZY MATCHING ===== */
-const MD_KEY='bignordeste.analytics.masterdata.v1';
-let mdTab='analise',mdSearch='',mdPage=0;
-function _mdDefault(){return{catalogo:{},mercMap:{},audit:[],ignored:[]}}
-function readMD(){if(typeof db!=='undefined'&&db&&db.masterdata&&typeof db.masterdata==='object'&&!Array.isArray(db.masterdata))return db.masterdata;try{return JSON.parse(localStorage.getItem(MD_KEY)||'null')||_mdDefault()}catch(e){return _mdDefault()}}
-function saveMD(md){if(typeof db!=='undefined'&&db)db.masterdata=md;try{localStorage.setItem(MD_KEY,JSON.stringify(md))}catch(e){console.warn('MD save fail',e)}if(typeof save==='function')save()}
-function mdAuditLog(action,detail,md){md=md||readMD();if(!Array.isArray(md.audit))md.audit=[];md.audit.unshift({ts:new Date().toISOString(),action,detail});if(md.audit.length>500)md.audit=md.audit.slice(0,500)}
-const _MD_PREFIXES=/^(CARNE\s+DE\s+|CARNE\s+|FRANGO\s+|PEIXE\s+|PORCO\s+|SUINO\s+|BOVINO\s+|FILE\s+DE\s+|CORTE\s+DE\s+|PEDACO\s+DE\s+)/;
-const _MD_SUFFIXES=/\s+(KG|K|1KG|POR\s*KG|P\/?KG|\/KG)\s*$/;
-const _MD_PREPS=/\b(DE|DO|DA|DOS|DAS|EM|COM|POR|PARA|AO|AOS|NO|NA|NOS|NAS|E)\b/gi;
-const _MD_PKG=/\b(PET|SACHE|PACOTE|PCT|CX|CAIXA|LATA|LT|GARRAFA|GRF|VIDRO|BAG|SQUEEZE|REFIL|DISPLAY|UNID|BANDEJA|BANDEIJA|BDJ|BD|ALM|ALMOFADA)\b/gi;
-const _MD_QUAL=/\b(TIPO\s*\d+|TP\s*\d+|T\s*\d|LIGHT|DIET|ZERO|PREMIUM|ESPECIAL|EXTRA|TRADICIONAL|TRAD|CLASSICO|COMUM|REGULAR|STANDARD|FINO|SELETO|SUPERIOR|NOBRE)\b/gi;
-const _MD_PROC=/\b(CONG|CONGELADO|CONGELADA|FAT|FATIADO|FATIADA|SERRADO|SERRADA|RESFRIADO|RESFRIADA|RESF|DESOSSADO|DESOSSADA|DESOSS|MOIDO|MOIDA|TEMPERADO|TEMPERADA|TEMP|DEFUMADO|DEFUMADA|COZIDO|COZIDA|ASSADO|ASSADA|RECHEADO|RECHEADA|INTERFOLHADO|INTERFOLHADA)\b/gi;
-const _MD_CONTEXT=/\b(FRANGO|GALINHA|PEIXE)\b/gi;
-const _MD_TYPOS=[['CARRER','CARRE'],['BANDEIJA','BANDEJA'],['BANDJA','BANDEJA'],['QUEIGO','QUEIJO'],['REFRIG','REFRIGERANTE'],['BISCT','BISCOITO'],['DETERG','DETERGENTE']];
-const _MD_GENDER=[['SUINA','SUINO'],['BOVINA','BOVINO'],['RESFRIADA','RESFRIADO'],['CONGELADA','CONGELADO'],['FATIADA','FATIADO'],['MOIDA','MOIDO']];
-const _MD_COMPOUNDS=[['SOBRE\\s+COXA','SOBRECOXA'],['CONTRA\\s+FILE','CONTRAFILE'],['CREAM\\s+CHEESE','CREAMCHEESE'],['LEITE\\s+CONDENSADO','LEITECONDENSADO']];
-const _MD_SYNONYMS=[['BISTECA','CARRE']];
-const _MD_TYPOS_RE=_MD_TYPOS.map(([f,t])=>[new RegExp('\\b'+f+'\\b','gi'),t]);
-const _MD_COMPOUNDS_RE=_MD_COMPOUNDS.map(([re,to])=>[new RegExp(re,'gi'),to]);
-const _MD_GENDER_RE=_MD_GENDER.map(([f,t])=>[new RegExp('\\b'+f+'\\b','gi'),t]);
-const _MD_SYNONYMS_RE=_MD_SYNONYMS.map(([f,t])=>[new RegExp('\\b'+f+'\\b','gi'),t]);
-function _mdNormPass(s,stripCtx){
-s=s.toUpperCase().trim();
-s=s.replace(/[;.,\/\-()]+/g,' ');
-s=s.replace(/(\d)(KG|ML|G|LT|UN)([A-Z])/gi,'$1$2 $3');
-s=s.replace(/\s+/g,' ');
-_MD_TYPOS_RE.forEach(([re,to])=>{s=s.replace(re,to)});
-_MD_COMPOUNDS_RE.forEach(([re,to])=>{s=s.replace(re,to)});
-_MD_GENDER_RE.forEach(([re,to])=>{s=s.replace(re,to)});
-s=s.replace(_MD_PREFIXES,'');
-s=s.replace(/\b\d+\s+(ML|G|GR|KG|K|LT?|UND?|UN|PC|PCT)\b/gi,'');
-s=s.replace(/\d+\s*X\s*\d+\s*(ML|G|GR|KG|K|LT?|UND?|UN)\b/gi,'');
-s=s.replace(/\d+(?:[.,]\d+)?\s*(ML|G|GR|KG|K|LT?|UND?|UN|PC|PCT)\b/gi,'');
-s=s.replace(_MD_SUFFIXES,'');
-s=s.replace(/\b(KG|K|ML|GR?|LT)\b/gi,' ');
-s=s.replace(_MD_PREPS,' ');
-s=s.replace(_MD_PKG,' ');
-s=s.replace(_MD_QUAL,' ');
-s=s.replace(_MD_PROC,' ');
-if(stripCtx)s=s.replace(_MD_CONTEXT,' ');
-_MD_SYNONYMS_RE.forEach(([re,to])=>{s=s.replace(re,to)});
-s=s.replace(/\bTD\b/g,'TODO');
-s=s.replace(/\b\d+\b/g,' ');
-s=s.replace(/\s+/g,' ').trim();
-let words=[...new Set(s.split(' ').filter(w=>w.length>0))];
-words.sort();
-return words.join(' ')}
-const _mdNormCache=new Map();
-function mdNormalize(s0){
-let hit=_mdNormCache.get(s0);if(hit!==undefined)return hit;
-let out=_mdNormPass(s0,true);
-if(out.split(' ').filter(Boolean).length<2)out=_mdNormPass(s0,false);
-if(_mdNormCache.size>30000)_mdNormCache.clear();
-_mdNormCache.set(s0,out);
-return out}
-function levenshtein(a,b){if(a===b)return 0;let m=a.length,n=b.length;if(!m)return n;if(!n)return m;let prev=Array(n+1);for(let j=0;j<=n;j++)prev[j]=j;for(let i=1;i<=m;i++){let cur=[i];for(let j=1;j<=n;j++)cur[j]=a[i-1]===b[j-1]?prev[j-1]:1+Math.min(prev[j],cur[j-1],prev[j-1]);prev=cur}return prev[n]}
-function similarity(a,b){let la=a.toLowerCase(),lb=b.toLowerCase();if(la===lb)return 1;let dist=levenshtein(la,lb);return 1-dist/Math.max(a.length,b.length)}
-function findDuplicateProdutos(){let grouped={};(db.produtos||[]).forEach(p=>{let n=(p.descricao_produto||'').trim().toUpperCase();if(!n)return;let key=mdNormalize(n);if(!key)return;(grouped[key]=grouped[key]||[]).push({...p,_original:n})});let res=[];Object.entries(grouped).forEach(([key,items])=>{if(items.length>1){let nomes=Array.from(new Set(items.map(i=>i._original)));let lojas=new Set(items.map(i=>i.loja));res.push({nome:key,nomes,count:items.length,lojas:lojas.size,lojasList:Array.from(lojas),vendaTotal:items.reduce((s,i)=>s+(+i.venda||0),0),mercs:Array.from(new Set(items.map(i=>i.descricao_departamento||'').filter(Boolean))),hasVariants:nomes.length>1})}});return res.sort((a,b)=>b.count-a.count)}
-function findSimilarProdutos(threshold=0.8){let names=new Map();(db.produtos||[]).forEach(p=>{let n=(p.descricao_produto||'').trim().toUpperCase();if(!n)return;let norm=mdNormalize(n);if(!norm)return;if(!names.has(norm)){names.set(norm,{originals:new Set(),count:0,lojas:new Set(),venda:0})}let e=names.get(norm);e.originals.add(n);e.count++;e.lojas.add(p.loja);e.venda+=(+p.venda||0)});let keys=Array.from(names.keys());let sample=keys.length>500?keys.sort((a,b)=>names.get(b).venda-names.get(a).venda).slice(0,500):keys;let res=[];for(let i=0;i<sample.length;i++){for(let j=i+1;j<sample.length;j++){if(Math.abs(sample[i].length-sample[j].length)>8)continue;let sim=similarity(sample[i],sample[j]);if(sim>=threshold&&sim<1){let d1=names.get(sample[i]),d2=names.get(sample[j]);res.push({produto1:Array.from(d1.originals)[0],produto2:Array.from(d2.originals)[0],norm1:sample[i],norm2:sample[j],sim,d1,d2})}}}return res.sort((a,b)=>b.sim-a.sim).slice(0,100)}
-function analyzeInconsistentMercadologicos(){let map={};(db.produtos||[]).forEach(p=>{let n=(p.descricao_produto||'').trim().toUpperCase();let dept=(p.descricao_departamento||'').trim().toUpperCase();let loja=p.loja||'';if(!n||!dept)return;if(!map[n])map[n]={depts:{},lojas:new Set(),venda:0};map[n].depts[dept]=(map[n].depts[dept]||0)+(+p.venda||0);map[n].lojas.add(loja);map[n].venda+=(+p.venda||0)});let res=[];Object.entries(map).forEach(([nome,data])=>{let depts=Object.keys(data.depts);if(depts.length>1){let sorted=depts.sort((a,b)=>data.depts[b]-data.depts[a]);res.push({nome,depts:sorted,deptVendas:data.depts,principal:sorted[0],lojas:data.lojas.size,venda:data.venda})}});return res.sort((a,b)=>b.venda-a.venda)}
-function buildCatalogo(){let prods=new Map();let md=readMD();(db.produtos||[]).forEach(p=>{let n=(p.descricao_produto||'').trim().toUpperCase();if(!n)return;let key=md.catalogo[n]?md.catalogo[n]:mdNormalize(n);if(!key)return;if(!prods.has(key))prods.set(key,{nome:key,originals:new Set(),lojas:new Set(),mercs:new Map(),venda:0,count:0});let e=prods.get(key);e.originals.add(n);e.lojas.add(p.loja);let dept=(p.descricao_departamento||'').trim();let mk=p.loja+'|'+dept;e.mercs.set(mk,{loja:p.loja,dept,venda:(e.mercs.get(mk)?.venda||0)+(+p.venda||0)});e.venda+=(+p.venda||0);e.count++});let res=[];prods.forEach((v,k)=>{let origs=Array.from(v.originals);let best=origs.reduce((a,b)=>a.length<=b.length?a:b,origs[0]);let mercByLoja={};v.mercs.forEach((val,key)=>{let[loja,dept]=key.split('|');if(!mercByLoja[loja])mercByLoja[loja]=[];mercByLoja[loja].push({dept,venda:val.venda})});let deptSet=new Set();v.mercs.forEach(val=>deptSet.add(val.dept));res.push({original:best,canonical:best,normKey:k,originals:origs,lojas:v.lojas.size,lojasList:Array.from(v.lojas),count:v.count,venda:v.venda,depts:Array.from(deptSet),mercByLoja,inconsistent:deptSet.size>1})});return res.sort((a,b)=>b.venda-a.venda)}
-function mdSetCanonical(original,canonical){let md=readMD();md.catalogo[original]=canonical.trim().toUpperCase();mdAuditLog('RENOMEAR','Produto "'+original+'" → "'+canonical+'"',md);saveMD(md);showToast('Nome canonico atualizado');render()}
-function mdSetMerc(produto,loja,dept){let md=readMD();let key=produto+'|'+loja;md.mercMap[key]=dept;mdAuditLog('MERCADOLOGICO','Produto "'+produto+'" loja '+loja+' → '+dept,md);saveMD(md);showToast('Mercadologico atualizado');render()}
-function mdIgnore(tipo,key){let md=readMD();if(!md.ignored.includes(key)){md.ignored.push(key);mdAuditLog('IGNORAR',tipo+': '+key,md);saveMD(md);showToast('Sugestao ignorada');render()}}
-function mdUndoIgnore(key){let md=readMD();md.ignored=md.ignored.filter(k=>k!==key);saveMD(md);showToast('Restaurado');render()}
-function mdClearAll(){if(!confirm('Limpar TODAS as correcoes do Master Data?'))return;try{localStorage.removeItem(MD_KEY)}catch(e){}saveMD(_mdDefault());showToast('Master Data limpo');render()}
-function mdApplySimilar(keep,remove){let md=readMD();md.catalogo[remove]=keep;mdAuditLog('UNIFICAR','Manter "'+keep+'" — unificar "'+remove+'"',md);saveMD(md);showToast('Produtos unificados');render()}
-const _JUNK_DEPTS=new Set(['OUTROS','A ACERTAR','SEM DEPARTAMENTO','NAO DEFINIDO','INDEFINIDO','SEM CLASSIFICACAO','CADASTRO A REVISAR']);
-const _CAT_PADRAO=['MERCEARIA','CARNES','FRIOS E LATICINIOS','HORTIFRUTI','BEBIDAS','LIMPEZA','HIGIENE E PERFUMARIA','BISCOITOS','BOMBONIERE','CAFE','CONGELADOS','PADARIA','PET SHOP','TABACARIA','DESCARTAVEIS','UTILIDADES','BAZAR'];
-function mdCatOptions(){let set=new Set(_CAT_PADRAO);(db.produtos||[]).forEach(r=>{let d=(r.descricao_departamento||'').trim().toUpperCase();if(d&&!_JUNK_DEPTS.has(d))set.add(d)});return Array.from(set).sort()}
-function mdPendentes(){
-  let pend={};
-  (db.produtos||[]).forEach(r=>{
-    let cat=String(classifyCategory(r)||'').trim().toUpperCase();
-    if(!_JUNK_DEPTS.has(cat))return;
-    let n=(r.descricao_produto||'').trim().toUpperCase()||'(SEM DESCRICAO)';
-    if(!pend[n])pend[n]={nome:n,venda:0,count:0,lojasSet:new Set()};
-    pend[n].venda+=+r.venda||0;pend[n].count++;pend[n].lojasSet.add(r.loja);
-  });
-  return Object.values(pend).map(p=>({nome:p.nome,venda:p.venda,count:p.count,lojas:p.lojasSet.size,lojasList:Array.from(p.lojasSet)})).sort((a,b)=>b.venda-a.venda);
-}
-function mdVoteMap(){
-  let votes={};
-  (db.produtos||[]).forEach(r=>{
-    let dept=(r.descricao_departamento||'').trim().toUpperCase();
-    if(!dept||_JUNK_DEPTS.has(dept))return;
-    let v=(+r.venda||0)+1;
-    mdNormalize(r.descricao_produto||'').split(' ').forEach(w=>{
-      if(w.length<3)return;
-      if(!votes[w])votes[w]={};votes[w][dept]=(votes[w][dept]||0)+v;
-    });
-  });
-  return votes;
-}
-function mdSuggestCat(nome,votes){
-  let byRule=productCategory(nome);
-  if(byRule&&byRule!=='CADASTRO A REVISAR')return{cat:byRule,conf:1,fonte:'regra'};
-  let score={};
-  mdNormalize(nome).split(' ').forEach(w=>{if(w.length<3)return;let vv=votes[w];if(!vv)return;Object.entries(vv).forEach(([c,s])=>score[c]=(score[c]||0)+s)});
-  let entries=Object.entries(score).sort((a,b)=>b[1]-a[1]);
-  if(!entries.length)return null;
-  let total=entries.reduce((s,e)=>s+e[1],0),conf=total?entries[0][1]/total:0;
-  return conf>=0.5?{cat:entries[0][0],conf,fonte:'similaridade'}:null;
-}
-let _mdPendCache=[];
-function mdClassificarIdx(i,selId){
-  let p=_mdPendCache[i];if(!p)return;
-  let dept=(document.getElementById(selId)||{}).value;if(!dept)return;
-  let md=readMD();
-  p.lojasList.forEach(l=>{md.mercMap[p.nome+'|'+l]=dept});md.mercMap[p.nome+'|*']=dept;
-  mdAuditLog('MERCADOLOGICO','"'+p.nome+'" → '+dept,md);saveMD(md);showToast('Classificado em '+dept);render();
-}
-function mdAplicarSugestoes(){
-  let votes=mdVoteMap(),pend=mdPendentes(),plan=[];
-  pend.forEach(p=>{let s=mdSuggestCat(p.nome,votes);if(s)plan.push({p,cat:s.cat})});
-  if(!plan.length){alert('Nenhuma sugestao com confianca suficiente. Classifique manualmente pelos seletores.');return}
-  if(!confirm(plan.length+' de '+pend.length+' produto(s) sem mercadologico serao classificados automaticamente (regras + similaridade com itens ja classificados da rede). Tudo fica registrado na Auditoria do Master Data e pode ser ajustado item a item depois. Continuar?'))return;
-  let md=readMD();
-  plan.forEach(({p,cat})=>{p.lojasList.forEach(l=>{md.mercMap[p.nome+'|'+l]=cat});md.mercMap[p.nome+'|*']=cat});
-  mdAuditLog('CLASSIFICAR_LOTE',plan.length+' produtos sem mercadologico classificados automaticamente',md);
-  saveMD(md);showToast(plan.length+' produtos classificados');render();
-}
-function mdApplyMercAll(produto,dept){let md=readMD();let cat=mdAnalysis().catalogo.find(c=>c.original===produto||(c.originals||[]).includes(produto));let lojas=cat?cat.lojasList:[];if(!lojas.length)lojas=Array.from(new Set((db.produtos||[]).filter(p=>(p.descricao_produto||'').trim().toUpperCase()===produto).map(p=>p.loja)));lojas.forEach(l=>{md.mercMap[produto+'|'+l]=dept});mdAuditLog('PADRONIZAR_MERC','Produto "'+produto+'" → '+dept+' em todas as lojas',md);saveMD(md);showToast('Mercadologico padronizado');render()}
-let _mdAnalysisRes=null,_mdAnalysisKey='';
-function mdAnalysis(){let md=readMD();let key=(db.produtos||[]).length+'|'+Object.keys(md.catalogo||{}).length+'|'+Object.keys(md.mercMap||{}).length+'|'+(md.audit||[]).length;if(_mdAnalysisRes&&_mdAnalysisKey===key)return _mdAnalysisRes;_mdAnalysisKey=key;_mdAnalysisRes={duplicatas:findDuplicateProdutos(),similares:findSimilarProdutos(),inconsistentes:analyzeInconsistentMercadologicos(),catalogo:buildCatalogo()};return _mdAnalysisRes}
-let _mdSearchT=null;
-function mdSearchDebounce(v){clearTimeout(_mdSearchT);_mdSearchT=setTimeout(()=>{mdSearch=v;mdPage=0;render();let el=document.getElementById('mdSearchBox');if(el){el.focus();try{el.setSelectionRange(el.value.length,el.value.length)}catch(e){}}},250)}
-function masterdata(){
-let md=readMD(),{duplicatas,similares,inconsistentes,catalogo}=mdAnalysis();
-let totalProds=new Set((db.produtos||[]).map(p=>(p.descricao_produto||'').trim().toUpperCase()).filter(Boolean)).size;
-let totalVariantes=duplicatas.filter(d=>d.hasVariants).length;
-let totalInconsist=inconsistentes.length,totalSimilar=similares.length,totalCorrecoes=md.audit.length;
-let pendentes=mdPendentes();
-let tabs=[['pendentes','Sem mercadologico',pendentes.length],['analise','Analise',totalInconsist+totalSimilar],['catalogo','Cadastro Unico',totalProds],['reconciliacao','Reconciliacao',inconsistentes.filter(i=>!md.ignored.includes('inc:'+i.nome)).length+similares.filter(s=>!md.ignored.includes('sim:'+s.produto1+'|'+s.produto2)).length],['auditoria','Auditoria',totalCorrecoes]];
-let html='<div class="md-kpis"><div class="kpi kpi-accent"><div class="lb">PRODUTOS UNICOS</div><div class="vl">'+num(totalProds)+'</div></div><div class="kpi"><div class="lb">VARIACOES DE NOME</div><div class="vl" style="color:var(--purple)">'+totalVariantes+'</div><div class="delta" style="font-size:10px;color:var(--muted)">mesmo produto, nomes diferentes</div></div><div class="kpi"><div class="lb">INCONSIST. MERC.</div><div class="vl" style="color:var(--bad)">'+totalInconsist+'</div></div><div class="kpi"><div class="lb">SIMILARES FUZZY</div><div class="vl" style="color:var(--warn)">'+totalSimilar+'</div></div><div class="kpi"><div class="lb">CORRECOES</div><div class="vl" style="color:var(--ok)">'+totalCorrecoes+'</div></div></div>';
-html+='<div class="md-tabs">'+tabs.map(([id,label,badge])=>'<button class="'+(mdTab===id?'active':'')+'" onclick="mdTab=\''+id+'\';render()">'+label+(badge?'<span class="tab-badge">'+badge+'</span>':'')+'</button>').join('')+'</div>';
-if(mdTab==='pendentes')html+=mdTabPendentes(pendentes);
-else if(mdTab==='analise')html+=mdTabAnalise(duplicatas,similares,inconsistentes,md);
-else if(mdTab==='catalogo')html+=mdTabCatalogo(catalogo,md);
-else if(mdTab==='reconciliacao')html+=mdTabReconciliacao(similares,inconsistentes,md);
-else if(mdTab==='auditoria')html+=mdTabAuditoria(md);
-return html}
-function mdTabAnalise(duplicatas,similares,inconsistentes,md){
-let html='<div class="grid g2"><div class="panel"><div class="panel-header"><div><div class="panel-title">Duplicatas de Produtos</div><div class="panel-sub">Agrupados por nome normalizado (sem prefixos/unidades)</div></div></div>';
-html+=sortableTable('tDupl',['Produto normalizado','Variantes','Lojas','Registros','Venda'],duplicatas.slice(0,30).map(d=>[esc(d.nome.substring(0,30)),d.hasVariants?'<span class="pill p-warn" title="'+esc(d.nomes.join(', '))+'">'+d.nomes.length+' nomes</span>':'<span class="pill p-muted">1</span>',d.lojas,d.count,brl(d.vendaTotal)]),['text','num','num','num','num']);
-html+='</div><div class="panel"><div class="panel-header"><div><div class="panel-title">Produtos Similares</div><div class="panel-sub">Fuzzy matching ≥80%</div></div></div>';
-html+=sortableTable('tSim',['Produto 1','Produto 2','Similaridade'],similares.slice(0,30).map(s=>[esc(s.produto1.substring(0,25)),esc(s.produto2.substring(0,25)),'<span class="pill '+(s.sim>=0.95?'p-bad':s.sim>=0.9?'p-warn':'p-info')+'">'+Math.round(s.sim*100)+'%</span>']),['text','text','num']);
-html+='</div></div>';
-let variants=duplicatas.filter(d=>d.hasVariants);
-html+='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Variacoes de Nome ('+variants.length+')</div><div class="panel-sub">Mesmo produto com nomes diferentes — ex: CARNE COXAO MOLE KG, COXAO MOLE, COXAO MOLE 1KG</div></div></div>';
-if(!variants.length)html+='<div style="padding:20px;text-align:center;color:var(--muted)">Nenhuma variacao detectada</div>';
-variants.slice(0,25).forEach(v=>{
-html+='<div class="md-card" style="border-left:3px solid var(--purple)"><div class="md-card-header"><div><h4>'+esc(v.nome)+'</h4><div class="md-detail">'+v.nomes.length+' nomes diferentes · '+v.lojas+' lojas · '+v.count+' registros · '+brl(v.vendaTotal)+'</div></div></div><div style="margin:6px 0;display:flex;flex-wrap:wrap;gap:4px">';
-v.nomes.forEach(n=>{html+='<span class="pill p-info" style="font-size:10px">'+esc(n)+'</span>'});
-html+='</div><div class="md-actions"><button class="btn btn-approve" onclick="'+v.nomes.map(n=>"mdSetCanonical('"+esc(n).replace(/'/g,"\\'")+"','"+esc(v.nome).replace(/'/g,"\\'")+"');").join('')+'">✓ Unificar como '+esc(v.nome.substring(0,20))+'</button></div></div>'});
-html+='</div><div class="panel mt"><div class="panel-header"><div><div class="panel-title">Inconsistencias de Mercadologicos</div><div class="panel-sub">Produtos que o VR classifica em departamentos diferentes entre lojas. A classificacao unica resolve automaticamente pelo departamento de maior venda (coluna Principal); para escolher outro, use a aba Reconciliacao</div></div></div>';
-html+=sortableTable('tIncon',['Produto','Depts','Lojas','Principal','Outros','Venda'],inconsistentes.slice(0,40).map(i=>[esc(i.nome.substring(0,30)),i.depts.length,i.lojas,'<span class="pill p-ok">'+esc(i.principal)+'</span>',i.depts.slice(1).map(d=>'<span class="pill p-warn">'+esc(d)+'</span>').join(' '),brl(i.venda)]),['text','num','num','text','text','num']);
-html+='</div>';return html}
-function mdTabPendentes(pendentes){
-  _mdPendCache=pendentes;
-  if(!pendentes.length)return'<div class="panel"><div class="panel-title">Sem mercadologico</div><div class="alert a-ok mt">Todos os itens estao classificados. Nenhum produto caindo em OUTROS ou CADASTRO A REVISAR.</div></div>';
-  let votes=mdVoteMap(),cats=mdCatOptions();
-  let comSugestao=0;
-  let rows=pendentes.slice(0,150).map((p,i)=>{
-    let s=mdSuggestCat(p.nome,votes);if(s)comSugestao++;
-    let selId='mdSelP'+i;
-    let opts='<option value="">selecione...</option>'+cats.map(c=>'<option'+(s&&s.cat===c?' selected':'')+'>'+esc(c)+'</option>').join('');
-    let sug=s?'<span class="pill '+(s.fonte==='regra'?'p-ok':'p-info')+'" title="'+(s.fonte==='regra'?'Regra de palavra-chave':'Similaridade com itens ja classificados: '+Math.round(s.conf*100)+'%')+'">'+esc(s.cat)+(s.fonte==='regra'?'':' ~'+Math.round(s.conf*100)+'%')+'</span>':'<span class="pill p-muted">sem sugestao</span>';
-    return'<tr><td title="'+esc(p.nome)+'">'+esc(p.nome.substring(0,42))+'</td><td>'+brl(p.venda)+'</td><td>'+p.lojas+'</td><td>'+sug+'</td><td><select id="'+selId+'" style="max-width:180px">'+opts+'</select></td><td><button class="btn btn-approve" onclick="mdClassificarIdx('+i+',\''+selId+'\')">✓ Aplicar</button></td></tr>';
-  }).join('');
-  let totalSug=pendentes.filter(p=>mdSuggestCat(p.nome,votes)).length;
-  let h='<div class="panel"><div class="panel-header"><div><div class="panel-title">Produtos sem mercadologico ('+num(pendentes.length)+')</div><div class="panel-sub">Itens caindo em OUTROS / CADASTRO A REVISAR. A sugestao vem das regras de palavra-chave e da similaridade com produtos ja classificados da propria rede. A classificacao vale para todas as lojas e para importacoes futuras, e fica registrada na Auditoria.</div></div><button class="btn primary" onclick="mdAplicarSugestoes()">Aplicar '+num(totalSug)+' sugestoes automaticas</button></div>';
-  if(pendentes.length>150)h+='<div class="alert a-info">Mostrando os 150 itens de maior venda de '+num(pendentes.length)+'. Classifique-os e os proximos aparecem aqui.</div>';
-  h+='<div class="table-wrap mt" style="max-height:620px;overflow:auto"><table><thead><tr><th>Produto</th><th>Venda</th><th>Lojas</th><th>Sugestao</th><th>Categoria</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
-  return h;
-}
-function mdTabCatalogo(catalogo,md){
-let filtered=catalogo;
-if(mdSearch){let q=mdSearch.toUpperCase();filtered=catalogo.filter(c=>c.original.includes(q)||c.canonical.includes(q)||(c.originals&&c.originals.some(o=>o.includes(q))))}
-let pageSize=30,totalPages=Math.ceil(filtered.length/pageSize),paged=filtered.slice(mdPage*pageSize,(mdPage+1)*pageSize);
-let html='<div class="md-search"><input id="mdSearchBox" type="text" placeholder="Buscar produto..." value="'+esc(mdSearch)+'" oninput="mdSearchDebounce(this.value)"><span class="md-stat">'+num(filtered.length)+' produtos</span>';
-html+='<button class="btn" onclick="exportCSV(\'cadastro_unico.csv\',[\'Produto Original\',\'Nome Canonico\',\'Lojas\',\'Departamentos\',\'Venda Total\'],'+JSON.stringify(filtered.slice(0,500).map(c=>[c.original,c.canonical,c.lojas,c.depts.join('; '),c.venda])).replace(/'/g,"\\'")+')">'+ICONS.exp+' Exportar</button></div>';
-html+='<div class="panel">';
-paged.forEach(c=>{
-let nVariants=c.originals?c.originals.length:1;
-let hasMercOverride=Object.keys(md.mercMap).some(k=>c.originals?c.originals.some(o=>k.startsWith(o+'|')):k.startsWith(c.original+'|'));
-html+='<div class="md-card'+(c.inconsistent?' style="border-left:3px solid var(--warn)"':'')+'"><div class="md-card-header"><div><h4>'+esc(c.canonical.substring(0,50))+(nVariants>1?' <span style="font-size:11px;color:var(--muted);font-weight:400">('+nVariants+' variantes)</span>':'')+'</h4><div class="md-detail">'+c.lojas+' loja'+(c.lojas>1?'s':'')+' · '+c.count+' registros · '+brl(c.venda)+(c.inconsistent?' · <span style="color:var(--warn);font-weight:700">⚠ '+c.depts.length+' departamentos</span>':'')+(hasMercOverride?' · <span style="color:var(--ok)">✓ Corrigido</span>':'')+'</div></div><div class="md-actions"><button class="btn btn-edit" onclick="let n=prompt(\'Nome canonico:\',\''+esc(c.canonical).replace(/'/g,"\\'")+'\');if(n){'+((c.originals||[c.original]).map(o=>"mdSetCanonical('"+esc(o).replace(/'/g,"\\'")+"',n);").join(''))+'}">Renomear</button>';
-if(c.inconsistent)html+='<button class="btn btn-approve" onclick="'+(c.originals||[c.original]).map(o=>"mdApplyMercAll('"+esc(o).replace(/'/g,"\\'")+"','"+esc(c.depts[0]).replace(/'/g,"\\'")+"');").join('')+'">Padronizar → '+esc(c.depts[0].substring(0,15))+'</button>';
-html+='</div></div>';
-if(c.inconsistent){html+='<div style="margin-top:6px;padding:6px 10px;background:#fffbeb;border-radius:6px;font-size:10px">';
-c.depts.forEach(d=>{let vendaDept=0;Object.values(c.mercByLoja).forEach(arr=>arr.forEach(x=>{if(x.dept===d)vendaDept+=x.venda}));html+='<span class="pill '+(d===c.depts[0]?'p-ok':'p-warn')+'" style="margin:2px">'+esc(d)+' '+brl(vendaDept)+'</span>'});
-html+='</div>'}
-html+='</div>'});
-if(totalPages>1){html+='<div style="display:flex;justify-content:center;gap:6px;margin-top:12px">';
-for(let i=0;i<Math.min(totalPages,10);i++)html+='<button class="btn'+(i===mdPage?' primary':'')+'" onclick="mdPage='+i+';render()" style="min-width:32px">'+(i+1)+'</button>';
-if(totalPages>10)html+='<span style="padding:5px;font-size:11px;color:var(--muted)">... '+totalPages+' pags</span>';
-html+='</div>'}
-html+='</div>';return html}
-function mdTabReconciliacao(similares,inconsistentes,md){
-let html='<div class="alert a-info" style="margin-bottom:14px"><b>Reconciliacao inteligente</b> — Revise as sugestoes abaixo. Ao aprovar, o sistema aplica a correcao no cadastro unico.</div>';
-let pendIncon=inconsistentes.filter(i=>!md.ignored.includes('inc:'+i.nome));
-let pendSim=similares.filter(s=>!md.ignored.includes('sim:'+s.produto1+'|'+s.produto2));
-html+='<div class="panel"><div class="panel-header"><div><div class="panel-title">Mercadologicos inconsistentes ('+pendIncon.length+')</div><div class="panel-sub">Produtos com departamentos diferentes entre lojas</div></div></div>';
-if(!pendIncon.length)html+='<div style="padding:20px;text-align:center;color:var(--muted)">Nenhuma inconsistencia pendente ✓</div>';
-pendIncon.slice(0,20).forEach(i=>{
-html+='<div class="md-card" style="border-left:3px solid var(--warn)"><div class="md-card-header"><div><h4>'+esc(i.nome.substring(0,45))+'</h4><div class="md-detail">'+i.lojas+' lojas · '+brl(i.venda)+' · Principal: <b>'+esc(i.principal)+'</b></div></div></div><div style="margin:6px 0;font-size:11px">';
-i.depts.forEach(d=>{let v=i.deptVendas[d]||0;html+='<span class="pill '+(d===i.principal?'p-ok':'p-warn')+'" style="margin:2px">'+esc(d)+' '+brl(v)+'</span>'});
-html+='</div><div class="md-actions"><button class="btn btn-approve" onclick="mdApplyMercAll(\''+esc(i.nome).replace(/'/g,"\\'")+'\',\''+esc(i.principal).replace(/'/g,"\\'")+'\')">✓ Padronizar → '+esc(i.principal.substring(0,15))+'</button>';
-i.depts.slice(1).forEach(d=>{html+='<button class="btn btn-edit" onclick="mdApplyMercAll(\''+esc(i.nome).replace(/'/g,"\\'")+'\',\''+esc(d).replace(/'/g,"\\'")+'\')">Usar '+esc(d.substring(0,12))+'</button>'});
-html+='<button class="btn btn-reject" onclick="mdIgnore(\'Inconsistencia\',\'inc:'+esc(i.nome).replace(/'/g,"\\'")+'\')">✕ Ignorar</button></div></div>'});
-html+='</div>';
-html+='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Produtos similares para unificar ('+pendSim.length+')</div><div class="panel-sub">Nomes parecidos que podem ser o mesmo produto</div></div></div>';
-if(!pendSim.length)html+='<div style="padding:20px;text-align:center;color:var(--muted)">Nenhum similar pendente ✓</div>';
-pendSim.slice(0,20).forEach(s=>{
-let simPct=Math.round(s.sim*100);
-html+='<div class="md-card"><div class="md-card-header"><div><h4><span class="pill '+(simPct>=95?'p-bad':simPct>=90?'p-warn':'p-info')+'">'+simPct+'%</span> Similaridade</h4><div class="md-detail"><b>A:</b> '+esc(s.produto1.substring(0,40))+' ('+s.d1.count+' reg, '+s.d1.lojas.size+' lojas, '+brl(s.d1.venda)+')<br><b>B:</b> '+esc(s.produto2.substring(0,40))+' ('+s.d2.count+' reg, '+s.d2.lojas.size+' lojas, '+brl(s.d2.venda)+')</div></div></div><div class="md-actions"><button class="btn btn-approve" onclick="mdApplySimilar(\''+esc(s.produto1).replace(/'/g,"\\'")+'\',\''+esc(s.produto2).replace(/'/g,"\\'")+'\')">Manter A</button><button class="btn btn-approve" onclick="mdApplySimilar(\''+esc(s.produto2).replace(/'/g,"\\'")+'\',\''+esc(s.produto1).replace(/'/g,"\\'")+'\')">Manter B</button><button class="btn btn-reject" onclick="mdIgnore(\'Similar\',\'sim:'+esc(s.produto1+'|'+s.produto2).replace(/'/g,"\\'")+'\')">✕ Ignorar</button></div></div>'});
-html+='</div>';
-let ignoredCount=md.ignored.length;
-if(ignoredCount>0){html+='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Ignorados ('+ignoredCount+')</div><div class="panel-sub">Sugestoes descartadas</div></div></div>';
-md.ignored.slice(0,10).forEach(k=>{html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:11px"><span>'+esc(k.substring(0,60))+'</span><button class="btn" style="font-size:10px" onclick="mdUndoIgnore(\''+esc(k).replace(/'/g,"\\'")+'\')">Restaurar</button></div>'});
-html+='</div>'}
-return html}
-function mdTabAuditoria(md){
-let html='<div class="panel"><div class="panel-header"><div><div class="panel-title">Historico de Alteracoes</div><div class="panel-sub">Todas as correcoes aplicadas no Master Data</div></div><button class="btn" onclick="exportJSON(\'masterdata_audit.json\',readMD().audit)">'+ICONS.exp+' Exportar</button></div>';
-if(!md.audit.length)html+='<div style="padding:30px;text-align:center;color:var(--muted)">Nenhuma alteracao registrada ainda</div>';
-md.audit.slice(0,50).forEach(log=>{
-let dt=new Date(log.ts);let timeStr=dt.toLocaleDateString('pt-BR')+' '+dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-let actionColor=log.action==='RENOMEAR'?'var(--blue)':log.action==='UNIFICAR'?'var(--purple)':log.action==='PADRONIZAR_MERC'?'var(--ok)':log.action==='IGNORAR'?'var(--muted)':'var(--ink)';
-html+='<div class="md-log"><span class="md-log-time">'+timeStr+'</span><span class="md-log-action" style="color:'+actionColor+'">'+esc(log.action)+'</span><span style="margin-left:8px;font-size:11px">'+esc(log.detail)+'</span></div>'});
-html+='</div>';
-let mdData=md;
-html+='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Estatisticas do Cadastro</div></div></div><div class="grid g3" style="gap:10px">';
-html+='<div class="kpi"><div class="lb">NOMES CANONICOS</div><div class="vl">'+Object.keys(mdData.catalogo).length+'</div></div>';
-html+='<div class="kpi"><div class="lb">MAPEAMENTOS MERC.</div><div class="vl">'+Object.keys(mdData.mercMap).length+'</div></div>';
-html+='<div class="kpi"><div class="lb">SUGESTOES IGNORADAS</div><div class="vl">'+mdData.ignored.length+'</div></div>';
-html+='</div></div>';
-if(Object.keys(mdData.catalogo).length>0||Object.keys(mdData.mercMap).length>0){
-html+='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Dados Persistidos</div><div class="panel-sub">Cadastro unico e mapeamentos sincronizados na nuvem</div></div><div class="md-actions"><button class="btn btn-reject" onclick="mdClearAll()">Limpar tudo</button></div></div>';
-if(Object.keys(mdData.catalogo).length>0){html+='<div style="font-size:11px;font-weight:700;margin-bottom:6px">Nomes canonicos:</div>';
-html+=sortableTable('tCat',['Original','Canonico'],Object.entries(mdData.catalogo).slice(0,20).map(([o,c])=>[esc(o.substring(0,35)),esc(c.substring(0,35))]),['text','text'])}
-if(Object.keys(mdData.mercMap).length>0){html+='<div style="font-size:11px;font-weight:700;margin:12px 0 6px">Mapeamentos de mercadologico:</div>';
-html+=sortableTable('tMerc',['Produto|Loja','Departamento'],Object.entries(mdData.mercMap).slice(0,20).map(([k,v])=>[esc(k.substring(0,40)),esc(v)]),['text','text'])}
-html+='</div>'}
-return html}
 function emptyChart(id,title,hint){let el=document.getElementById(id);if(el)el.parentNode.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;flex-direction:column;gap:8px"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-5"/></svg><span style="font-size:13px;font-weight:500">'+title+'</span><span style="font-size:11px">'+hint+'</span></div>'}
 function mkChart(id,type,labels,datasets,opts={}){
   setTimeout(()=>{
     let el=document.getElementById(id);if(!el)return;
     if(activeCharts[id])try{activeCharts[id].destroy()}catch(e){}
     let base={responsive:true,maintainAspectRatio:false,animation:{duration:600,easing:'easeOutQuart'},interaction:{mode:'index',intersect:false},plugins:{legend:{display:labels.length<=8,position:'bottom',labels:{boxWidth:10,padding:14,font:{size:11,weight:'500'},usePointStyle:true}},tooltip:{backgroundColor:'#111827',titleFont:{size:12,weight:'600'},bodyFont:{size:11},padding:12,cornerRadius:8,displayColors:true,boxWidth:8,callbacks:{}},datalabels:{display:false}},scales:{}};
-    if(type==='doughnut'||type==='pie'||type==='radar'||type==='polarArea'){delete base.scales;if(type==='doughnut'||type==='pie'){base.cutout=type==='doughnut'?'65%':0;base.plugins.datalabels={display:ctx=>{let d=ctx.chart.data.datasets[0].data,sum=d.reduce((a,b)=>a+b,0);return sum?d[ctx.dataIndex]/sum>=0.03:false},color:'#fff',font:{weight:'700',size:12},formatter:(v,ctx)=>{let sum=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return sum?Math.round(v/sum*100)+'%':''}}}if(type==='radar'){base.scales={r:{beginAtZero:true,max:100,ticks:{display:false,stepSize:25},grid:{color:'#e5e7eb'},pointLabels:{font:{size:11,weight:'600'}}}}}}
+    if(type==='doughnut'||type==='pie'||type==='radar'||type==='polarArea'){delete base.scales;if(type==='doughnut'||type==='pie'){base.cutout=type==='doughnut'?'65%':0;base.plugins.datalabels={display:true,color:'#fff',font:{weight:'700',size:12},formatter:(v,ctx)=>{let sum=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return sum?Math.round(v/sum*100)+'%':''}}}if(type==='radar'){base.scales={r:{beginAtZero:true,max:100,ticks:{display:false,stepSize:25},grid:{color:'#e5e7eb'},pointLabels:{font:{size:11,weight:'600'}}}}}}
     else{base.scales={x:{grid:{display:false},ticks:{font:{size:10},maxRotation:45}},y:{grid:{color:'#f3f4f6'},ticks:{font:{size:10}},beginAtZero:true}}}
     let cfg={type,data:{labels,datasets},options:{...base,...opts}};
     if(opts.scales)cfg.options.scales={...base.scales,...opts.scales};
@@ -614,15 +322,15 @@ function sortableTable(tid,headers,rows,types){let s=sortState[tid]||{col:-1,asc
 function doSort(tid,col){let s=sortState[tid]||{col:-1,asc:true};if(s.col===col)s.asc=!s.asc;else{s.col=col;s.asc=true}sortState[tid]=s;render()}
 
 /* ===== DATA TYPES ===== */
-const TYPES={resumo_geral_loja:{label:'Resumo geral',file:'resumo_geral_loja.txt',bucket:'resumos',cols:['loja','mes','venda_total','custo_total','lucro_total','margem_total','cupons_totais','unidades_totais','produtos_distintos']},campanhas_ofertas:{label:'Campanhas/ofertas',file:'campanhas_ofertas.txt',bucket:'campanhas',cols:['loja','mes','id_tipooferta','descricao','venda','custo','lucro','margem','quantidade','itens','produtos_distintos','cupons','ticket_medio','preco_medio']},produtos_campanha:{label:'Produtos',file:'produtos_campanha.txt',bucket:'produtos',cols:['loja','mes','id_tipooferta','campanha','mercadologico1','descricao_departamento','id_produto','descricao_produto','quantidade','venda','lucro','margem']},departamentos_campanha:{label:'Departamentos',file:'departamentos_campanha.txt',bucket:'departamentos',cols:['loja','mes','id_tipooferta','campanha','mercadologico1','descricao_departamento','produtos','quantidade','venda','lucro','margem']},cupons_totais:{label:'Cupons',file:'cupons_campanha.txt',bucket:'cupons',cols:['loja','mes','cupons_totais','campanha','cupons_campanha']},venda_departamento_total:{label:'Venda total por departamento',file:'venda_departamento_total.txt',bucket:'deptTotais',cols:['loja','mes','mercadologico1','descricao_departamento','venda_total','lucro_total']},ofertas_dia_campanha:{label:'Ofertas dia/campanha',file:'venda_dia_campanha.txt',bucket:'ofertasDia',cols:['loja','data','id_tipooferta','campanha','venda_oferta','custo_oferta','lucro_oferta','margem_oferta','quantidade_oferta','cupons_oferta','produtos_oferta'],diario:true},venda_diaria_loja:{label:'Venda diaria',file:'venda_diario.txt',bucket:'vendasDiarias',cols:['loja','data','venda_total','custo_total','lucro_total','margem_total','cupons_totais','unidades_totais'],diario:true}};
+const TYPES={resumo_geral_loja:{label:'Resumo geral',file:'resumo_geral_loja.txt',bucket:'resumos',cols:['loja','mes','venda_total','custo_total','lucro_total','margem_total','cupons_totais','unidades_totais','produtos_distintos']},campanhas_ofertas:{label:'Campanhas/ofertas',file:'campanhas_ofertas.txt',bucket:'campanhas',cols:['loja','mes','id_tipooferta','descricao','venda','custo','lucro','margem','quantidade','itens','produtos_distintos','cupons','ticket_medio','preco_medio']},produtos_campanha:{label:'Produtos',file:'produtos_campanha.txt',bucket:'produtos',cols:['loja','mes','id_tipooferta','campanha','mercadologico1','descricao_departamento','id_produto','descricao_produto','quantidade','venda','lucro','margem']},departamentos_campanha:{label:'Departamentos',file:'departamentos_campanha.txt',bucket:'departamentos',cols:['loja','mes','id_tipooferta','campanha','mercadologico1','descricao_departamento','produtos','quantidade','venda','lucro','margem']},cupons_totais:{label:'Cupons',file:'cupons_campanha.txt',bucket:'cupons',cols:['loja','mes','cupons_totais','campanha','cupons_campanha']},ofertas_dia_campanha:{label:'Ofertas dia/campanha',file:'venda_dia_campanha.txt',bucket:'ofertasDia',cols:['loja','data','id_tipooferta','campanha','venda_oferta','custo_oferta','lucro_oferta','margem_oferta','quantidade_oferta','cupons_oferta','produtos_oferta'],diario:true},venda_diaria_loja:{label:'Venda diaria',file:'venda_diario.txt',bucket:'vendasDiarias',cols:['loja','data','venda_total','custo_total','lucro_total','margem_total','cupons_totais','unidades_totais'],diario:true}};
 const ORDER=['resumo_geral_loja','campanhas_ofertas','produtos_campanha','departamentos_campanha','cupons_totais'];
 const DAILY_ORDER=['ofertas_dia_campanha','venda_diaria_loja'];
 const SQL_MODELS={...TYPES,ofertas_dia_campanha:{...TYPES.ofertas_dia_campanha,label:'Ofertas por dia/campanha',file:'ofertas_dia_campanha.sql'},venda_diaria_loja:{...TYPES.venda_diaria_loja,label:'Venda diaria da loja',file:'venda_diaria_loja.sql'}};
-const SQL_ORDER=[...ORDER,'venda_departamento_total',...DAILY_ORDER];
+const SQL_ORDER=[...ORDER,...DAILY_ORDER];
 
 /* ===== PAGES ===== */
 const SHARE_MODE=new URLSearchParams(location.search).get('share')=='executivo';
-const allPages=[['decisao','Centro de Decisao'],['dashboard','Dashboard'],['encarte','Encarte Big Nordeste'],['benchmark','Benchmark Encartes'],['periodo','Periodo de Campanha'],['importacoes','Importacoes'],['auditoria','Auditoria'],['plano','Plano de Coleta'],['modelos','Modelos SQL'],['empresas','Empresas'],['masterdata','Master Data'],['consolidacao','Consolidacao'],['relatorio','Relatorio'],['backups','Seguranca e Backups']];
+const allPages=[['decisao','Centro de Decisao'],['dashboard','Dashboard'],['encarte','Encarte Big Nordeste'],['benchmark','Benchmark Encartes'],['periodo','Periodo de Campanha'],['importacoes','Importacoes'],['auditoria','Auditoria'],['plano','Plano de Coleta'],['modelos','Modelos SQL'],['empresas','Empresas'],['consolidacao','Consolidacao'],['relatorio','Relatorio'],['backups','Seguranca e Backups']];
 const pages=SHARE_MODE?allPages.slice(0,4):allPages;
 
 /* ===== PERIOD ===== */
@@ -674,9 +382,6 @@ function readLocal(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'nul
 function cacheLocal(){try{let lite={...db,produtos:[]};localStorage.setItem(STORE_KEY,JSON.stringify(lite));return true}catch(e){console.warn('Nao foi possivel atualizar cache local:',e.message);try{localStorage.removeItem(STORE_KEY)}catch(_){};return false}}
 let db=readLocal()||seed();
 let page=SHARE_MODE?'decisao':'dashboard',cloudOnline=false,cloudError='',cloudLoading=false,cloudLoaded=false,apiProtected=null,monthChartExpanded=false,agruparVariantes=true,agruparCampanhas=true;
-let sidebarCollapsed=localStorage.getItem('bignordeste.sidebar_collapsed')==='true';
-function applySidebarState(){let app=document.querySelector('.app'),btn=document.querySelector('.sidebar-toggle');if(app)app.classList.toggle('sidebar-collapsed',sidebarCollapsed);if(btn){let label=sidebarCollapsed?'Expandir menu':'Recolher menu';btn.title=label;btn.setAttribute('aria-label',label);btn.setAttribute('aria-expanded',String(!sidebarCollapsed))}}
-function toggleSidebar(){sidebarCollapsed=!sidebarCollapsed;localStorage.setItem('bignordeste.sidebar_collapsed',String(sidebarCollapsed));applySidebarState()}
 function ofertaKey(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim()}
 function ofertaNome(s){let k=ofertaKey(s);return k||String(s||'').trim()}
 function normalizeOfferRow(r){if(r&&'descricao'in r)r.descricao=ofertaNome(r.descricao);if(r&&'campanha'in r)r.campanha=ofertaNome(r.campanha);return r}
@@ -684,18 +389,15 @@ const _PBK_VARS=['CAPIM LIMAO','ERVA DOCE','FLOR DE LIS','AGUA FRESCA','BRISA SU
 const _PBK_ABREV=[['DETERGENTE','DETERG'],['DESODORANTE','DESOD'],['AMACIANTE','AMAC'],['SABONETE','SABON'],['REFRIGERANTE','REFRIG'],['BISCOITO','BISC'],['MARGARINA','MARG'],['SANITARIA','SANIT'],['SANITARIO','SANIT'],['LIQUIDO','LIQ'],['CONCENTRADO','CONC'],['AEROSOL','AER'],['AERO','AER'],['EM PO','PO'],['EM BARRA','BARRA']].sort((a,b)=>b[0].length-a[0].length);
 const _PBK_RE_VARS=_PBK_VARS.map(v=>new RegExp('\\b'+v.replace(/ /g,'\\s+')+'\\b','gi'));
 const _PBK_RE_ABREV=_PBK_ABREV.map(([l])=>new RegExp('\\b'+l+'\\b','gi'));
-const _pbkCache=new Map();
-function productBaseKey(desc){let key=String(desc||'');let hit=_pbkCache.get(key);if(hit!==undefined)return hit;let s=key.toUpperCase().trim().replace(/\.(?=[A-Z])/g,' ').replace(/\.$/,'').replace(/\s+/g,' ');let med='';let mm=s.match(/(\d+(?:[.,]\d+)?)\s*(ML|LT?|KG?|GR?|UND?|UN)\b/i);if(mm)med=mm[0].trim().toUpperCase();s=s.replace(/\d+\s*X\s*\d+\s*(ML|LT?|KG?|GR?)\b/gi,'');_PBK_RE_ABREV.forEach((re,i)=>{s=s.replace(re,_PBK_ABREV[i][1])});_PBK_RE_VARS.forEach(re=>{s=s.replace(re,' ')});s=s.replace(/\d+(?:[.,]\d+)?\s*(ML|LT?|KG?|GR?|UND?|UN)\b/gi,'').replace(/[/+.,]/g,' ').replace(/\s+/g,' ').trim();if(med)s=s+' '+med;if(_pbkCache.size>30000)_pbkCache.clear();_pbkCache.set(key,s);return s}
+function productBaseKey(desc){let s=String(desc||'').toUpperCase().trim().replace(/\.(?=[A-Z])/g,' ').replace(/\.$/,'').replace(/\s+/g,' ');let med='';let mm=s.match(/(\d+(?:[.,]\d+)?)\s*(ML|LT?|KG?|GR?|UND?|UN)\b/i);if(mm)med=mm[0].trim().toUpperCase();s=s.replace(/\d+\s*X\s*\d+\s*(ML|LT?|KG?|GR?)\b/gi,'');_PBK_RE_ABREV.forEach((re,i)=>{s=s.replace(re,_PBK_ABREV[i][1])});_PBK_RE_VARS.forEach(re=>{s=s.replace(re,' ')});s=s.replace(/\d+(?:[.,]\d+)?\s*(ML|LT?|KG?|GR?|UND?|UN)\b/gi,'').replace(/[/+.,]/g,' ').replace(/\s+/g,' ').trim();if(med)s=s+' '+med;return s}
 function toggleAgrupar(){agruparVariantes=!agruparVariantes;render()}
 function toggleAgruparCamp(){agruparCampanhas=!agruparCampanhas;render()}
-function campGroup(name){if(!agruparCampanhas)return ofertaKey(name);let u=ofertaKey(name);if(u.includes('DIA BIG'))return'DIA BIG';if(u.includes('ENCARTE BIG NORDESTE'))return'ENCARTE BIG NORDESTE';let rules=[[/\bFDS\b|FIM\s*DE\s*SEMANA|FINAL\s*DE\s*SEMANA|OFERTA\s*F\s*DE\s*SEMANA/,'FIM DE SEMANA'],[/\bFECHA\b.*\bMES\b|\bMES\b.*\bFECHA\b|\bFECHA\s*MES/,'FECHA MES'],[/\bREBAIXA\b|VALIDADE\s*(VENCIMENTO|DATA\s*CRITIC|PROXIMA)|REBAIXA\s*(POR\s*)?VALIDADE|PRODUTOS\s*DE\s*REBAIXA/,'REBAIXA / VALIDADE'],[/\bOFERTA[S]?\s*(DA|DO)\s*(SEMANA|LOJA|DIA)\b/,'OFERTAS DA SEMANA'],[/\bPROMO\s*(DO|DA|DE)?\s*DIA\b|DIA\s*DE?\s*PROMO/,'PROMO DO DIA'],[/\bANIVERSARIO\b|ANIVER\b/,'ANIVERSARIO'],[/\bLIQUIDA\b/,'LIQUIDACAO'],[/\bQUEIMA\b/,'QUEIMA'],[/\bNATAL\b/,'NATAL'],[/\bPASCOA\b/,'PASCOA'],[/\bDIA\s*DAS?\s*MAES?\b/,'DIA DAS MAES'],[/\bDIA\s*DOS?\s*PAIS?\b/,'DIA DOS PAIS'],[/\bSAO\s*JOAO\b|S\.?\s*JOAO\b/,'SAO JOAO'],[/\bBLACK\s*FRIDAY\b|BLACK\b/,'BLACK FRIDAY']];for(let[re,g]of rules)if(re.test(u))return g;return u}
+function campGroup(name){if(!agruparCampanhas)return ofertaKey(name);let u=ofertaKey(name);if(u==='DIA BIG'||u.includes('ENCARTE BIG NORDESTE'))return u;let rules=[[/\bFDS\b|FIM\s*DE\s*SEMANA|FINAL\s*DE\s*SEMANA|OFERTA\s*F\s*DE\s*SEMANA/,'FIM DE SEMANA'],[/\bFECHA\b.*\bMES\b|\bMES\b.*\bFECHA\b|\bFECHA\s*MES/,'FECHA MES'],[/\bREBAIXA\b|VALIDADE\s*(VENCIMENTO|DATA\s*CRITIC|PROXIMA)|REBAIXA\s*(POR\s*)?VALIDADE|PRODUTOS\s*DE\s*REBAIXA/,'REBAIXA / VALIDADE'],[/\bOFERTA[S]?\s*(DA|DO)\s*(SEMANA|LOJA|DIA)\b/,'OFERTAS DA SEMANA'],[/\bPROMO\s*(DO|DA|DE)?\s*DIA\b|DIA\s*DE?\s*PROMO/,'PROMO DO DIA'],[/\bANIVERSARIO\b|ANIVER\b/,'ANIVERSARIO'],[/\bLIQUIDA\b/,'LIQUIDACAO'],[/\bQUEIMA\b/,'QUEIMA'],[/\bNATAL\b/,'NATAL'],[/\bPASCOA\b/,'PASCOA'],[/\bDIA\s*DAS?\s*MAES?\b/,'DIA DAS MAES'],[/\bDIA\s*DOS?\s*PAIS?\b/,'DIA DOS PAIS'],[/\bSAO\s*JOAO\b|S\.?\s*JOAO\b/,'SAO JOAO'],[/\bBLACK\s*FRIDAY\b|BLACK\b/,'BLACK FRIDAY']];for(let[re,g]of rules)if(re.test(u))return g;return u}
 function campGroupName(name){let g=campGroup(name);if(!agruparCampanhas)return ofertaNome(name);return g.charAt(0)+g.slice(1).toLowerCase()}
-function normalizeDb(){['resumos','campanhas','departamentos','produtos','cupons','importacoes','ofertasDia','vendasDiarias','deptTotais'].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});let bs=benchmarkSeed();if(!Array.isArray(db.encartes)||!Array.isArray(db.encarteItens)){db.encartes=bs.encartes;db.encarteItens=bs.itens}else{bs.encartes.forEach(e=>{if(!db.encartes.some(x=>x.id==e.id))db.encartes.push(e)});let official=new Map(bs.itens.map(i=>[i.id,i]));db.encarteItens=db.encarteItens.filter(i=>!official.has(i.id)||i.revisado);let known=new Set(db.encarteItens.map(i=>i.id));bs.itens.forEach(i=>{if(!known.has(i.id))db.encarteItens.push(i)})}['campanhas','departamentos','produtos','cupons','ofertasDia'].forEach(k=>db[k].forEach(normalizeOfferRow));db.encarteItens.forEach(i=>{i.preco_normalizado=benchmarkNormalized(i.preco_por,i.quantidade_embalagem,i.unidade_comparacao)});if(!db.aprovacoes)db.aprovacoes={};if(!Array.isArray(db.empresas))db.empresas=[];if(!Array.isArray(db.regioes))db.regioes=[];
-if(!db.masterdata||typeof db.masterdata!=='object'||Array.isArray(db.masterdata)){let ls=null;try{ls=JSON.parse(localStorage.getItem(MD_KEY)||'null')}catch(e){}db.masterdata=(ls&&ls.catalogo)?ls:_mdDefault()}
-if(!db.masterdata.catalogo)db.masterdata.catalogo={};if(!db.masterdata.mercMap)db.masterdata.mercMap={};if(!Array.isArray(db.masterdata.audit))db.masterdata.audit=[];if(!Array.isArray(db.masterdata.ignored))db.masterdata.ignored=[]}
+function normalizeDb(){['resumos','campanhas','departamentos','produtos','cupons','importacoes','ofertasDia','vendasDiarias'].forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]});let bs=benchmarkSeed();if(!Array.isArray(db.encartes)||!Array.isArray(db.encarteItens)){db.encartes=bs.encartes;db.encarteItens=bs.itens}else{bs.encartes.forEach(e=>{if(!db.encartes.some(x=>x.id==e.id))db.encartes.push(e)});let official=new Map(bs.itens.map(i=>[i.id,i]));db.encarteItens=db.encarteItens.filter(i=>!official.has(i.id)||i.revisado);let known=new Set(db.encarteItens.map(i=>i.id));bs.itens.forEach(i=>{if(!known.has(i.id))db.encarteItens.push(i)})}['campanhas','departamentos','produtos','cupons','ofertasDia'].forEach(k=>db[k].forEach(normalizeOfferRow));db.encarteItens.forEach(i=>{i.preco_normalizado=benchmarkNormalized(i.preco_por,i.quantidade_embalagem,i.unidade_comparacao)});if(!db.aprovacoes)db.aprovacoes={};if(!Array.isArray(db.empresas))db.empresas=[];if(!Array.isArray(db.regioes))db.regioes=[]}
 normalizeDb();
 function lojaFromVr(raw,fb){let v=String(raw??'').trim();if(!v)return fb;let n=Number(v),pad=Number.isFinite(n)?String(n).padStart(2,'0'):v.padStart(2,'0');let e=db.empresas.find(x=>String(x.id_vr)==v||String(x.id_vr)==String(n)||String(x.codigo)==v||String(x.codigo)==pad||x.nome==v);return e?e.nome:fb}
-function hasBusinessData(){return ['resumos','campanhas','departamentos','produtos','cupons','ofertasDia','vendasDiarias','deptTotais'].some(k=>(db[k]||[]).length)}
+function hasBusinessData(){return ['resumos','campanhas','departamentos','produtos','cupons','ofertasDia','vendasDiarias'].some(k=>(db[k]||[]).length)}
 function cloudWarning(){if(cloudLoading&&!hasBusinessData())return`<div class="alert a-info mt" style="display:flex;align-items:center;gap:8px"><span class="spin" style="display:inline-block;width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite"></span><b>Carregando dados da nuvem...</b> Aguarde alguns segundos.</div>`;return cloudError&&!hasBusinessData()?`<div class="alert a-bad mt"><b>Dados da nuvem nao carregaram.</b> ${esc(cloudError)} Atualize a pagina em alguns segundos. Os dados nao foram apagados; a tela esta sem base porque a API nao respondeu.</div>`:''}
 async function loadCloud(){if(location.protocol=='file:')return;cloudLoading=true;render();try{let r=await fetch('/api/state',{headers:authHeaders()});if(r.status===401){cloudLoading=false;let t=prompt('Token de acesso da API:');if(t)setApiToken(t);else render();return}if(!r.ok)throw new Error('API /api/state retornou HTTP '+r.status);let d=await r.json();cloudLoading=false;if(d&&d.empresas){db=d;normalizeDb();cloudOnline=true;cloudLoaded=true;cloudError='';cacheLocal();setupFilters();render()}else{cloudOnline=true;cloudLoaded=true;cloudError='';render()}updateCloud()}catch(e){cloudLoading=false;cloudOnline=false;cloudLoaded=false;cloudError=e.message||'Falha ao conectar na API.';updateCloud();render()}}
 function updateCloud(){let d=document.getElementById('cloudDot'),l=document.getElementById('cloudLabel');if(d)d.className='cloud-dot'+(cloudOnline?' online':'');if(l)l.textContent=cloudOnline?'Nuvem':(cloudError?'Nuvem indisponivel':'Local')}
@@ -729,25 +431,11 @@ function sumBy(rows,keyFn,seedFn,addFn){let out={};rows.forEach(r=>{let k=keyFn(
 
 /* ===== CAMPAIGN CALCS ===== */
 function campRows(){let cs=campanhas(),t=total(fLoja.value,false),rows=sumBy(cs,r=>campGroup(r.descricao),(r,k)=>({descricao:campGroupName(r.descricao),venda:0,lucro:0,cupons:0,quantidade:0,produtos:0}),(a,r)=>{a.venda+=r.venda;a.lucro+=r.lucro;a.cupons+=+r.cupons||0;a.quantidade+=+r.quantidade||0;a.produtos+=+r.produtos_distintos||0});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.participacao=t.vt?r.venda/t.vt*100:0;r.penetracao=t.ct?r.cupons/t.ct*100:0});let mx={v:Math.max(1,...rows.map(r=>r.venda)),l:Math.max(1,...rows.map(r=>r.lucro)),p:Math.max(1,...rows.map(r=>r.penetracao)),m:Math.max(1,...rows.map(r=>Math.max(0,r.margem)))};rows.forEach(r=>{r.score=Math.round((r.venda/mx.v*30)+(Math.max(0,r.lucro)/mx.l*25)+(r.penetracao/mx.p*25)+(Math.max(0,r.margem)/mx.m*20));r.classe=r.score>=80?'Forte':r.score>=65?'Manter':'Revisar';r.statusM=r.margem<5?'CRITICA':r.margem<10?'ATENCAO':'SAUDAVEL'});return rows.sort((a,b)=>b.venda-a.venda)}
-function reclassifyDept(d){let dept=(d||'').trim().toUpperCase();if(!dept||dept==='OUTROS'||dept==='A ACERTAR'||dept==='SEM DEPARTAMENTO'||dept==='NAO DEFINIDO'||dept==='INDEFINIDO'||dept==='SEM CLASSIFICACAO')return null;return d}
-function deptRows(camp){
-  let prows=scopeRows('produtos').filter(r=>!camp||blocoCampanha(r.campanha)==camp);
-  if(prows.length){
-    let tv=prows.reduce((s,r)=>s+(+r.venda||0),0);
-    let out=sumBy(prows,r=>classifyCategory(r),(r,k)=>({departamento:k,venda:0,lucro:0,_prods:new Set()}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a._prods.add(String(r.id_produto||r.descricao_produto||''))});
-    out.forEach(r=>{r.produtos=r._prods.size;delete r._prods;r.part=tv?r.venda/tv*100:0;r.margem=r.venda?r.lucro/r.venda*100:0});
-    return out.sort((a,b)=>b.venda-a.venda);
-  }
-  let rows=scopeRows('departamentos').filter(r=>!camp||blocoCampanha(r.campanha)==camp);
-  let tv=rows.reduce((s,r)=>s+(+r.venda||0),0);
-  let out=sumBy(rows,r=>reclassifyDept(r.descricao_departamento)||r.descricao_departamento||'OUTROS',(r,k)=>({departamento:k,venda:0,lucro:0,produtos:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.produtos+=+r.produtos||0});
-  out.forEach(r=>{r.part=tv?r.venda/tv*100:0;r.margem=r.venda?r.lucro/r.venda*100:0});
-  return out.sort((a,b)=>b.venda-a.venda)
-}
-function prodRows(camp){let rows=scopeRows('produtos').filter(r=>!camp||blocoCampanha(r.campanha)==camp);let keyFn=agruparVariantes?r=>productBaseKey(mdCanon(r.descricao_produto)):r=>r.id_produto+'|'+mdCanon(r.descricao_produto);let out=sumBy(rows,keyFn,(r,k)=>({produto:agruparVariantes?productBaseKey(mdCanon(r.descricao_produto)):mdCanon(r.descricao_produto),campanha:blocoCampanha(r.campanha),venda:0,lucro:0,quantidade:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.quantidade+=+r.quantidade||0});out.forEach(r=>r.margem=r.venda?r.lucro/r.venda*100:0);return out.sort((a,b)=>b.venda-a.venda)}
-function produtosMes(m,cs){let ps=scopeRows('produtos').filter(r=>monthKey(r.mes)==m&&passaBloco(r.campanha));if(agruparVariantes){let s=new Set();ps.forEach(r=>{let d=r.descricao_produto||'';if(d)s.add(productBaseKey(mdCanon(d)))});if(fLoja.value=='Todas'){let lojas={};ps.forEach(r=>{let lj=r.loja||'',d=r.descricao_produto||'';if(d)(lojas[lj]=lojas[lj]||new Set()).add(productBaseKey(mdCanon(d)))});let vals=Object.values(lojas).map(x=>x.size);if(vals.length)return Math.max(...vals)}return s.size}if(fLoja.value=='Todas'){let lojas={};ps.forEach(r=>{let lj=r.loja||'',id=String(r.id_produto||r.descricao_produto||'').trim();if(!id)return;(lojas[lj]=lojas[lj]||new Set()).add(id)});let vals=Object.values(lojas).map(s=>s.size);if(vals.length)return Math.max(...vals)}let prodSet=new Set(ps.map(r=>String(r.id_produto||'')).filter(Boolean));return prodSet.size||cs.reduce((s,r)=>s+(+r.produtos_distintos||0),0)}
+function deptRows(camp){let rows=scopeRows('departamentos').filter(r=>!camp||blocoCampanha(r.campanha)==camp),tv=rows.reduce((s,r)=>s+(+r.venda||0),0);let out=sumBy(rows,r=>r.descricao_departamento,(r,k)=>({departamento:k,venda:0,lucro:0,produtos:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.produtos+=+r.produtos||0});out.forEach(r=>{r.part=tv?r.venda/tv*100:0;r.margem=r.venda?r.lucro/r.venda*100:0});return out.sort((a,b)=>b.venda-a.venda)}
+function prodRows(camp){let rows=scopeRows('produtos').filter(r=>!camp||blocoCampanha(r.campanha)==camp);let keyFn=agruparVariantes?r=>productBaseKey(r.descricao_produto):r=>r.id_produto+'|'+r.descricao_produto;let out=sumBy(rows,keyFn,(r,k)=>({produto:agruparVariantes?productBaseKey(r.descricao_produto):r.descricao_produto,campanha:blocoCampanha(r.campanha),venda:0,lucro:0,quantidade:0}),(a,r)=>{a.venda+=+r.venda||0;a.lucro+=+r.lucro||0;a.quantidade+=+r.quantidade||0});out.forEach(r=>r.margem=r.venda?r.lucro/r.venda*100:0);return out.sort((a,b)=>b.venda-a.venda)}
+function produtosMes(m,cs){let ps=scopeRows('produtos').filter(r=>monthKey(r.mes)==m&&passaBloco(r.campanha));if(agruparVariantes){let s=new Set();ps.forEach(r=>{let d=r.descricao_produto||'';if(d)s.add(productBaseKey(d))});if(fLoja.value=='Todas'){let lojas={};ps.forEach(r=>{let lj=r.loja||'',d=r.descricao_produto||'';if(d)(lojas[lj]=lojas[lj]||new Set()).add(productBaseKey(d))});let vals=Object.values(lojas).map(x=>x.size);if(vals.length)return Math.max(...vals)}return s.size}if(fLoja.value=='Todas'){let lojas={};ps.forEach(r=>{let lj=r.loja||'',id=String(r.id_produto||r.descricao_produto||'').trim();if(!id)return;(lojas[lj]=lojas[lj]||new Set()).add(id)});let vals=Object.values(lojas).map(s=>s.size);if(vals.length)return Math.max(...vals)}let prodSet=new Set(ps.map(r=>String(r.id_produto||'')).filter(Boolean));return prodSet.size||cs.reduce((s,r)=>s+(+r.produtos_distintos||0),0)}
 function baseKeysForRows(rows,totals,block=fCamp.value){let lojaDias={};rows.forEach(r=>lojaDias[r.loja+'|'+r.data]=1);return Object.keys(lojaDias)}
-function monthRows(){let selected=fCamp.value!='Todos os blocos'&&fCamp.value!='Todas',dr=selected?dailyOffers():[];if(dr.length){let totals=dailyStoreMap();return monthsBetween(fInicio.value,fFim.value).map(m=>{let rows=dr.filter(r=>monthKey(r.data)==m),cs=campanhas().filter(r=>monthKey(r.mes)==m),baseKeys=baseKeysForRows(rows,totals,fCamp.value),v=0,l=0,cup=0,vt=0,ct=0;rows.forEach(r=>{v+=r.venda;l+=r.lucro;cup+=r.cupons});baseKeys.forEach(k=>{let t=totals[k]||{};vt+=+t.venda_total||0;ct+=+t.cupons_totais||0});let prod=produtosMes(m,cs);return{mes:m,venda:v,lucro:l,vt,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0,produtos:prod,inc:!rows.length}})}let dAgg=dailyBlocoAgg();return monthsBetween(fInicio.value,fFim.value).map(m=>{let cs=campanhas().filter(r=>monthKey(r.mes)==m),rs=resumos().filter(r=>monthKey(r.mes)==m),byB={};cs.forEach(r=>{let b=blocoCampanha(r.descricao);if(!byB[b])byB[b]={venda:0,lucro:0};byB[b].venda+=r.venda;byB[b].lucro+=r.lucro});let v=0,l=0;Object.entries(byB).forEach(([b,o])=>{let d=dAgg[m+'|'+b];if(d&&d.venda){v+=d.venda;l+=d.lucro}else{v+=o.venda;l+=o.lucro}});Object.keys(dAgg).forEach(k=>{let i=k.indexOf('|');if(i<0||k.slice(0,i)!=m)return;let b=k.slice(i+1);if(byB[b])return;v+=dAgg[k].venda;l+=dAgg[k].lucro});let vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0),ct=rs.reduce((s,r)=>s+(+r.cupons_totais||0),0),cup=cs.reduce((s,r)=>s+(+r.cupons||0),0),prod=produtosMes(m,cs);return{mes:m,venda:v,lucro:l,vt,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0,produtos:prod,inc:!rs.length||!cs.length}})}
+function monthRows(){let selected=fCamp.value!='Todos os blocos'&&fCamp.value!='Todas',dr=selected?dailyOffers():[];if(dr.length){let totals=dailyStoreMap();return monthsBetween(fInicio.value,fFim.value).map(m=>{let rows=dr.filter(r=>monthKey(r.data)==m),cs=campanhas().filter(r=>monthKey(r.mes)==m),baseKeys=baseKeysForRows(rows,totals,fCamp.value),v=0,l=0,cup=0,vt=0,ct=0;rows.forEach(r=>{v+=r.venda;l+=r.lucro;cup+=r.cupons});baseKeys.forEach(k=>{let t=totals[k]||{};vt+=+t.venda_total||0;ct+=+t.cupons_totais||0});let prod=produtosMes(m,cs);return{mes:m,venda:v,lucro:l,vt,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0,produtos:prod,inc:!rows.length}})}return monthsBetween(fInicio.value,fFim.value).map(m=>{let cs=campanhas().filter(r=>monthKey(r.mes)==m),rs=resumos().filter(r=>monthKey(r.mes)==m),v=cs.reduce((s,r)=>s+r.venda,0),l=cs.reduce((s,r)=>s+r.lucro,0),vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0),ct=rs.reduce((s,r)=>s+(+r.cupons_totais||0),0),cup=cs.reduce((s,r)=>s+(+r.cupons||0),0),prod=produtosMes(m,cs);return{mes:m,venda:v,lucro:l,vt,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0,produtos:prod,inc:!rs.length||!cs.length}})}
 function renderMonthChart(id,rows){let mf=rows.filter(m=>!m.inc),defs=[
 ['vt',{label:'Venda total',data:mf.map(m=>m.vt),backgroundColor:PAL.blueLight,borderColor:PAL.blue,borderWidth:1.5,borderRadius:5,yAxisID:'y'}],
 ['venda',{label:'Venda prom.',data:mf.map(m=>m.venda),backgroundColor:PAL.green,borderColor:PAL.green,borderWidth:1,borderRadius:5,yAxisID:'y'}],
@@ -756,24 +444,14 @@ function renderMonthChart(id,rows){let mf=rows.filter(m=>!m.inc),defs=[
 ['pen',{label:'Penetracao %',type:'line',data:mf.map(m=>m.pen),borderColor:PAL.purple,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yPct'}],
 ['produtos',{label:'Prod. distintos',type:'line',data:mf.map(m=>m.produtos),borderColor:PAL.teal,backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:.3,yAxisID:'yItens'}]
 ];mkChart(id,'bar',mf.map(m=>m.mes),defs.filter(([k])=>monthMetrics.includes(k)).map(([,d])=>d),{plugins:{tooltip:{callbacks:{label:ctx=>ctx.dataset.yAxisID=='y'?ctx.dataset.label+': '+brl(ctx.raw):ctx.dataset.yAxisID=='yPct'?ctx.dataset.label+': '+pct(ctx.raw):ctx.dataset.label+': '+num(ctx.raw)}},datalabels:{display:ctx=>['Venda prom.','Margem %','Penetracao %','Prod. distintos'].includes(ctx.dataset.label),align:'top',anchor:'end',color:PAL.dark,font:{size:9,weight:'600'},formatter:(v,ctx)=>ctx.dataset.yAxisID=='y'?brlShort(v):ctx.dataset.yAxisID=='yPct'?pct(v):num(v)}},scales:{y:{position:'left',ticks:{callback:v=>brlShort(v)}},yPct:{position:'right',grid:{drawOnChartArea:false},ticks:{callback:v=>v+'%'}},yItens:{display:false,beginAtZero:true}}})}
-function storeRank(block=''){
-  let lojas=fRegiao.value=='Todas'?db.empresas:db.empresas.filter(e=>e.regiao==fRegiao.value);
-  return lojas.map(e=>{
-    let rs=resumos(e.nome),base=total(e.nome,false),cs=block?scopeRows('campanhas',e.nome).filter(r=>blocoCampanha(r.descricao)==block).map(calc):campanhas(e.nome,false);
-    let v=cs.reduce((s,r)=>s+(+r.venda||0),0),l=cs.reduce((s,r)=>s+(+r.lucro||0),0),cup=cs.reduce((s,r)=>s+(+r.cupons||0),0);
-    let t={...base,v,l,cup,part:base.vt?v/base.vt*100:0,margem:v?l/v*100:0,pen:base.ct?cup/base.ct*100:0};
-    let lt=rs.reduce((s,r)=>s+(+r.lucro_total||0),0),vso=t.vt-t.v,lso=lt-t.l,mso=vso?lso/vso*100:0;
-    return{loja:e.nome,regiao:e.regiao,...t,lucroTotal:lt,vendaSemOferta:vso,lucroSemOferta:lso,margemSemOferta:mso,margemTotal:t.vt?lt/t.vt*100:0}
-  }).filter(r=>r.v||r.vt).sort((a,b)=>b.v-a.v)
-}
+function storeRank(){let lojas=(fRegiao.value=='Todas'?db.empresas:db.empresas.filter(e=>e.regiao==fRegiao.value));return lojas.map(e=>{let t=total(e.nome,false),rs=resumos(e.nome),lt=rs.reduce((s,r)=>s+(+r.lucro_total||0),0),vso=t.vt-t.v,lso=lt-t.l,mso=vso?lso/vso*100:0;return{loja:e.nome,regiao:e.regiao,...t,lucroTotal:lt,vendaSemOferta:vso,lucroSemOferta:lso,margemSemOferta:mso,margemTotal:t.vt?lt/t.vt*100:0}}).filter(r=>r.v||r.vt).sort((a,b)=>b.v-a.v)}
 function storeDailyCompare(loja){let rows=dailyOffers(loja,true),totals=dailyStoreMap(loja),baseKeys=baseKeysForRows(rows,totals,fCamp.value),v=0,l=0,cup=0,vt=0,ct=0;rows.forEach(r=>{v+=r.venda;l+=r.lucro;cup+=r.cupons});baseKeys.forEach(k=>{let t=totals[k]||{};vt+=+t.venda_total||0;ct+=+t.cupons_totais||0});return{v,l,vt,ct,cup,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0,lojaDias:baseKeys.length}}
 function storeCompareRows(){let lojas=fLoja.value=='Todas'?(fRegiao.value=='Todas'?db.empresas:db.empresas.filter(e=>e.regiao==fRegiao.value)):db.empresas.filter(e=>e.nome==fLoja.value),useDaily=fCamp.value!='Todos os blocos'&&fCamp.value!='Todas'&&dailyOffers().length;return lojas.map(e=>{let t=useDaily?storeDailyCompare(e.nome):total(e.nome,true);return{loja:e.nome,regiao:e.regiao,...t}}).filter(r=>r.v||r.vt)}
 function rangeCard(label,rows,key,fmt){let vals=rows.filter(r=>Number.isFinite(+r[key]));if(!vals.length)return'';let min=[...vals].sort((a,b)=>(+a[key])-(+b[key]))[0],max=[...vals].sort((a,b)=>(+b[key])-(+a[key]))[0];return`<div class="range-card"><div class="lb">${label}</div><div class="range-row"><span>Min.</span><b>${min.loja}<br>${fmt(min[key])}</b></div><div class="range-row"><span>Max.</span><b>${max.loja}<br>${fmt(max[key])}</b></div></div>`}
 function extremesPanel(){let rows=storeCompareRows();if(rows.length<2)return'';let cards=[rangeCard('Venda total',rows,'vt',brlShort),rangeCard('Venda promocional',rows,'v',brlShort),rangeCard('Participacao',rows,'part',pct),rangeCard('Margem',rows,'margem',pct),rangeCard('Penetracao',rows,'pen',pct)].join('');return`<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Minimo e maximo por loja</div><div class="panel-sub">Comparacao respeitando loja, regiao, periodo e bloco selecionado</div></div></div><div class="range-grid">${cards}</div></div>`}
 function scenarioPanel(){let lojas=fLoja.value=='Todas'?(fRegiao.value=='Todas'?db.empresas:db.empresas.filter(e=>e.regiao==fRegiao.value)):db.empresas.filter(e=>e.nome==fLoja.value);let rows=lojas.filter(e=>storeAllowed(e.nome,fLoja.value)).map(e=>{let rs=resumos(e.nome),cs=scopeRows('campanhas',e.nome).filter(r=>blocoCampanha(r.descricao)=='Encarte Big Nordeste').map(calc),v=cs.reduce((s,r)=>s+(+r.venda||0),0),l=cs.reduce((s,r)=>s+(+r.lucro||0),0),vt=rs.reduce((s,r)=>s+(+r.venda_total||0),0),ct=rs.reduce((s,r)=>s+(+r.cupons_totais||0),0),cup=cs.reduce((s,r)=>s+(+r.cupons||0),0);return{loja:e.nome,regiao:e.regiao,v,l,vt,ct,cup,part:vt?v/vt*100:0,margem:v?l/v*100:0,pen:ct?cup/ct*100:0}}).filter(r=>r.v&&r.vt);if(rows.length<3)return'';let mxV=Math.max(1,...rows.map(r=>r.v)),mxM=Math.max(1,...rows.map(r=>Math.max(0,r.margem))),mxP=Math.max(1,...rows.map(r=>r.part));rows.forEach(r=>r.eq=(r.v/mxV*40)+(Math.max(0,r.margem)/mxM*35)+(r.part/mxP*25));let ordered=[...rows].sort((a,b)=>b.eq-a.eq),best=ordered[0],mid=ordered[Math.floor(ordered.length/2)],bad=ordered[ordered.length-1];let card=(tipo,r,cls,txt)=>`<div class="dcard"><div class="topline"><div><h4>${tipo}: ${r.loja}</h4><div class="desc">${txt}</div></div><span class="pill ${cls}">${Math.round(r.eq)}</span></div><div class="metrics5"><div class="mbox"><div class="lb">Venda</div><b>${brlShort(r.v)}</b></div><div class="mbox"><div class="lb">Part.</div><b>${pct(r.part)}</b></div><div class="mbox"><div class="lb">Lucro</div><b>${brlShort(r.l)}</b></div><div class="mbox"><div class="lb">Margem</div><b>${pct(r.margem)}</b></div><div class="mbox"><div class="lb">Pen.</div><b>${pct(r.pen)}</b></div></div></div>`;return`<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Tres cenarios por loja - Encarte Big Nordeste</div><div class="panel-sub">Referencia, intermediario e ponto critico considerando somente o Encarte Big Nordeste</div></div></div><div class="grid g3">${card('Ideal',best,'p-ok','Melhor equilibrio do encarte entre venda, margem e participacao')}${card('Intermediario',mid,'p-warn','Desempenho mediano do encarte, com oportunidade de evolucao')}${card('Muito ruim',bad,'p-bad','Pior equilibrio do encarte no periodo')}</div></div>`}
 function regionRank(){return sumBy(storeRank(),r=>r.regiao,(r,k)=>({regiao:k,v:0,l:0,vt:0,ct:0,cup:0}),(a,r)=>{a.v+=r.v;a.l+=r.l;a.vt+=r.vt;a.ct+=r.ct;a.cup+=r.cup}).map(r=>({...r,part:r.vt?r.v/r.vt*100:0,margem:r.v?r.l/r.v*100:0,pen:r.ct?r.cup/r.ct*100:0})).sort((a,b)=>b.v-a.v)}
-function dailyBlocoAgg(){let m={};dailyOffers(fLoja.value,false).forEach(r=>{if(!blockDateAllowed(r.data,r.bloco))return;let mes=monthKey(r.data);[r.bloco,mes+'|'+r.bloco].forEach(k=>{if(!m[k])m[k]={venda:0,lucro:0};m[k].venda+=r.venda;m[k].lucro+=r.lucro})});return m}
-function blocoRows(){let camps=campRows(),t=total(),order=['Encarte Big Nordeste','Dia Big','Demais Encartes'];let rows=order.map(b=>({bloco:b,venda:0,lucro:0,cupons:0,fonte:'mensal',vendaMensal:0,lucroMensal:0}));camps.forEach(c=>{let r=rows.find(x=>x.bloco==blocoCampanha(c.descricao));r.venda+=c.venda;r.lucro+=c.lucro;r.cupons+=c.cupons});rows.forEach(r=>{r.vendaMensal=r.venda;r.lucroMensal=r.lucro});let dAgg=dailyBlocoAgg();rows.forEach(r=>{let d=dAgg[r.bloco];if(d&&d.venda){r.venda=d.venda;r.lucro=d.lucro;r.fonte='diaria'}});let sumV=rows.reduce((s,r)=>s+r.venda,0);rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.part=t.vt?r.venda/t.vt*100:0;r.share=sumV?r.venda/sumV*100:0;r.pen=t.ct?r.cupons/t.ct*100:0});return rows}
+function blocoRows(){let camps=campRows(),t=total(),order=['Encarte Big Nordeste','Dia Big','Demais Encartes'];let rows=order.map(b=>({bloco:b,venda:0,lucro:0,cupons:0}));camps.forEach(c=>{let r=rows.find(x=>x.bloco==blocoCampanha(c.descricao));r.venda+=c.venda;r.lucro+=c.lucro;r.cupons+=c.cupons});rows.forEach(r=>{r.margem=r.venda?r.lucro/r.venda*100:0;r.part=t.vt?r.venda/t.vt*100:0;r.share=t.v?r.venda/t.v*100:0;r.pen=t.ct?r.cupons/t.ct*100:0});return rows}
 
 /* ===== DAILY CAMPAIGN ANALYSIS ===== */
 function dailyStoreMap(loja=fLoja.value){let rows=db.vendasDiarias.filter(r=>storeAllowed(r.loja,loja)&&inDatePeriod(r.data,fInicio.value,fFim.value)&&(fRegiao.value=='Todas'||empresa(r.loja).regiao==fRegiao.value));let m={};rows.forEach(r=>{let k=r.loja+'|'+dateKey(r.data);m[k]={...r,data:dateKey(r.data),venda_total:+r.venda_total||0,lucro_total:+r.lucro_total||0,cupons_totais:+r.cupons_totais||0}});return m}
@@ -803,133 +481,108 @@ function dailyOverlapInfo(){let days={},ld={};dailyOffers(fLoja.value,false).for
 
 /* ===== CLASSIFICADOR DE CATEGORIA ===== */
 const _CAT_RULES=[
-[/\bCAFE\b|CAPPUCCINO|NESCAFE|MELITTA|PILAO|TRES\s*CORACOES|SAO\s*BRAZ|KIMIMO|MARATA.*CAF|FORT.*CAF|SANTA\s*CLARA/,'CAFE'],
+[/\bCAFE\b|CAPPUCCINO|NESCAFE|MELITTA|PILAO|TRES\s*CORACOES|SAO\s*BRAZ|KIMIMO|MARATA.*CAF|FORT.*CAF|SANTA\s*CLARA|CAFE\s*(SOLVEL|MOIDO|PO)|EXPRESSO|COADO/,'CAFE'],
 [/\bARROZ\b/,'MERCEARIA'],[/\bFEIJAO\b|FEIJAO/,'MERCEARIA'],[/\bACUCAR\b|ACUCAR/,'MERCEARIA'],
 [/\bOLEO\b.*SOJ|\bOLEO\s*(DE\s*)?SOJ|SOJA.*OLEO|\bOLEO\b.*\d+\s*ML/,'MERCEARIA'],[/\bSAL\b.*\d|SAL\s+REFIN|SAL\s+LIGHT/,'MERCEARIA'],
-[/\bMACARRAO\b|\bMAC(?:AR)?\b.*ESPAG|\bMAC(?:AR)?\b.*PARAF|ESPAGUET|PARAFUSO|PENNE|FUSILLI|LASANHA\s*MASSA|\bMAC(?:AR)?\b.*VITAMASSA|\bMAC(?:AR)?\b.*\d+\s*G/,'MERCEARIA'],
+[/\bMACARRAO\b|MACAR|MAC.*ESPAG|MAC.*PARAF|ESPAGUET|PARAFUSO|PENNE|FUSILLI|LASANHA\s*MASSA|MAC.*VITAMASSA|MAC.*\d+|INSTANT|MIOJO|VITAMASSA/,'MERCEARIA'],
 [/\bFARINHA\b|FLOCAO|FLOCOS\s*(DE\s*)?MILHO|FUBA|CUSCUZ|XEREM|TAPIOCA|AMIDO|POLVILHO|FECULA/,'MERCEARIA'],
-[/\bLEITE\s*(EM\s*)?PO\b|COMPOSTO\s*LACT|LEITE\s*COND|CREME\s*DE\s*LEITE|\bACHOC\b|ACHOCOLAT|NESCAU|TODDY|OVOMALT/,'MERCEARIA'],
-[/\bATUM\b|SARDINHA|EXTRAT.*TOMAT|MOLHO\s*(DE\s*)?TOMAT|CATCHUP|KETCHUP|MOSTARDA|MAIONESE|VINAGRE|AZEIT/,'MERCEARIA'],
-[/\bTEMPERO\b|SAZON|CALDO\b.*\b(GALINHA|CARNE|KNORR|MAGGI)\b|COLORAU|COLORIFIC|COMINHO|PIMENT[AO]/,'MERCEARIA'],
+[/\bLEITE\s*(EM\s*)?PO\b|LEITE\s*COND|CREME\s*DE\s*LEITE|ACHOCOLAT|NESCAU|TODDY|OVOMALT/,'MERCEARIA'],
+[/\bATUM\b|SARDINHA|EXTRAT.*TOMAT|MOLHO\s*(DE\s*)?TOMAT|CATCHUP|KETCHUP|MOSTARDA|MAIONESE|VINAGRE|AZEIT|MOLHO.*SOJ|SOY\s*SAUCE|PIMENTA|MOLHO.*PIMENTA|BARBECUE|CHIMICHURRI/,'MERCEARIA'],
+[/\bTEMPERO\b|SAZON|CALDO\s*(DE\s*)?(GALINHA|CARNE|LEGUME|PEIXE|VEGETAR)|COLORAU|COLORIFIC|COMINHO|PIMENT[AO]|PIMENTA|SOPA|SOPA.*LEGUME|SOPA.*CREME|CUBOS.*TEMPERO|REALÇADOR.*SABOR/,'MERCEARIA'],
 [/\bCEREAL\b|GRANOLA|AVEIA|CEREAL\s*BARRA/,'MERCEARIA'],
-[/\bMILHO\s*(DE\s*)?PIP|PIPOCA|MILHO\s*VERDE\s*LAT|ERVILHA|SELETA|AZEITON|PALMITO/,'MERCEARIA'],
-[/\bDUETO\b|MILHO.*ERVILHA|ERVILHA.*MILHO/,'MERCEARIA'],
-[/\bLEITE\s*DE\s*COCO|COCO\s*RALAD|DOCE\s*DE\s*LEITE|GOIABADA|GELATIN|MISTURA.*BOLO|FERMENTO|TRIGO/,'MERCEARIA'],
-[/\bBISCOIT\b|BOLACH[AO]|CREAM\s*CRACK|WAFER|ROSC|COOKIE|\bBISC\b/,'BISCOITOS'],
+[/\bMILHO\s*(DE\s*)?PIP|PIPOCA|MILHO\s*VERDE\s*LAT|ERVILHA|SELETA|AZEITON|PALMITO|MILHO|CONSERVA|ENLATADO/,'MERCEARIA'],
+[/\bLEITE\s*DE\s*COCO|COCO\s*RALAD|DOCE\s*DE\s*LEITE|GOIABADA|GELATIN|MISTURA.*BOLO|FERMENTO|TRIGO|COMPOTA|GELEIA|CONSERVA|PASTA.*AMENDOIM|PASTAS|XAROPE/,'MERCEARIA'],
+[/\bBISCOIT\b|BOLACH[AO]|CREAM\s*CRACK|WAFER|ROSC|COOKIE|\bBISC\b|AGUA\s*E\s*SAL|INTEGRAL|CREAM|DOCE|POLVILHO|SNACK|SALGADINHO|PIPPOS|DUETO|BONARE|SALGADINHO\s*PIPPOS|PIPPOS\s*CHURRASCO|PIPPOS\s*CACHORRO|PIPPOS\s*MILHO/,'BISCOITOS'],
 [/\bCHOCOLAT\b|BOMBOM|TRUFAS?|CACAU|BARRA\s*DE\s*CHOC|KINDER|FERRERO|LACTA|GAROTO|NESTLE.*CHOC/,'BOMBONIERE'],
 [/\bBALA\b|CHICLET|DROPS|PIRULITO|JUJUBA|PASTILHA|MENTA.*BALA|HALLS/,'BOMBONIERE'],
 [/\bPACOCA\b|AMENDOIM|PE\s*DE\s*MOLEQUE|COCADA|RAPADURA/,'BOMBONIERE'],
-[/\bREFRIG\b|COCA\s*COLA|PEPSI|FANTA|GUARANA|SPRITE|SCHWEP|SODA/,'BEBIDAS'],
-[/\bSUCO\b|NECTAR|TANG|CLIGHT|REFRESCO|POLPA|\bFRISCO\b/,'BEBIDAS'],
-[/\bCERV(?:EJ)?\b|SKOL|BRAHMA|ANTARCTICA|HEINEKEN|BUDWEISER|ITAIPAVA|CRYSTAL|PILSEN/,'BEBIDAS'],
-[/\bAGUA\s*(MIN|NAT|COM|SEM|FRIS|GASE)|\bAGUA\b.*\d+\s*(ML|LT)/,'BEBIDAS'],
-[/\bENERG[EI]T\b|RED\s*BULL|MONSTER|BURN|TNT/,'BEBIDAS'],
-[/\bCHA\b.*\d|CHA\s*(MATE|VERDE|PRET)|LEAO|MATTE/,'BEBIDAS'],
-[/\bVINHO\b|ESPUMANT|CHAMPAGN|PROSECCO/,'BEBIDAS'],
+[/\bREFRIG\b|COCA\s*COLA|PEPSI|FANTA|GUARANA|SPRITE|SCHWEP|SODA|REFRIGERANTE|REFRIGERACAO|GASEIF|ISOTON/,'BEBIDAS'],
+[/\bSUCO\b|NECTAR|TANG|CLIGHT|REFRESCO|POLPA|SUCO\s*NATURAL|LIMONADA|MATE\s*NATURAL/,'BEBIDAS'],
+[/\bCERVEJ\b|CERVEJA|SKOL|BRAHMA|ANTARCTICA|HEINEKEN|BUDWEISER|ITAIPAVA|CRYSTAL|LOKAL|PILSEN|CHOPP/,'BEBIDAS'],
+[/\bAGUA\s*(MIN|NAT|COM|SEM|FRIS|GASE|GAS|COM\s*GAS|MINERAL)|\bAGUA\b.*\d+\s*(ML|LT)|\bAGUA\b\s*(\d+|L|LT|ML)/,'BEBIDAS'],
+[/\bENERG[EI]T\b|RED\s*BULL|MONSTER|BURN|TNT|ISOTON|HIPERTONIC|GATORADE|POWERADE|BEBIDA\s*ESPORTIVA/,'BEBIDAS'],
+[/\bCHA\b|CHA\s*(MATE|VERDE|PRET|DE|DENTRO)|LEAO|MATTE/,'BEBIDAS'],
+[/\bVINHO\b|ESPUMANT|CHAMPAGN|PROSECCO|VINHO.*TINTO|VINHO.*BRANCO|VINHO.*ROSE/,'BEBIDAS'],
 [/\bVODKA\b|WHISKY|WHISKEY|CACHACA|RUM\b|LICOR|TEQUILA|GIN\b|CONHAQ/,'BEBIDAS'],
 [/\bDETERG\b|DETERGENTE/,'LIMPEZA'],[/\bSABAO\b|SABAO/,'LIMPEZA'],
-[/\bAMAC\b|AMACIANTE|COMFORT|DOWNY/,'LIMPEZA'],[/\bAGUA\s*SANIT|SANITARIA|DESINFET|PINHO\s*SOL|\bVEJA\s+(MULTI|LIMP|DESIN|ORIG|PERFUM|GOLD|VIDR|COZIN|BANHEI)|LYSOFORM/,'LIMPEZA'],
+[/\bAMAC\b|AMACIANTE|COMFORT|DOWNY/,'LIMPEZA'],[/\bAGUA\s*SANIT|SANITARIA|DESINFET|PINHO\s*SOL|VEJA|LYSOFORM/,'LIMPEZA'],
 [/\bLIMPADOR\b|MULTIUSO|ALVEJANTE|CLORO|TIRA\s*MANCH/,'LIMPEZA'],
-[/\bESPONJA\b|PANO\s*DE\s*(CHAO|PRATO)|VASSOURA|RODO|BALDE/,'LIMPEZA'],
+[/\bESPONJA\b|PANO\s*DE\s*(CHAO|PRATO)|VASSOURA|RODO|BALDE|MOPA|PRENDEDOR|GRAMPO|FITA.*CREPE|FITA.*DUPLA|ELAST[IC]/,'LIMPEZA'],
 [/\bINSETIC\b|REPELENT|SBP|RAID|BAYGON/,'LIMPEZA'],
 [/\bLAVA\s*ROUP|AMACIANTE|TIRA\s*MANCHAS|ALVEJ/,'LIMPEZA'],
-[/\bSABONET\b|SABON/,'HIGIENE E PERFUMARIA'],[/\bSHAMPOO\b|CONDICION|CREME.*PENTEAR|CREME.*CABELL/,'HIGIENE E PERFUMARIA'],
-[/\bDESOD\b|DESODORANTE|ANTITRANSP/,'HIGIENE E PERFUMARIA'],[/\bCREME\s*DENT|PASTA\s*DENT|COLGATE|ORAL\s*B|SORRISO|CLOSE\s*UP/,'HIGIENE E PERFUMARIA'],
+[/\bSABONET\b|SABON/,'HIGIENE E PERFUMARIA'],[/\bSHAMPOO\b|CONDICION|CREME.*PENTEAR|CREME.*CABELL|MASCARA.*CABELO|OLEO.*CABELO|SHAMPOO|CONDICIONER|TINTA.*CABELO|TINTURA/,'HIGIENE E PERFUMARIA'],
+[/\bDESOD\b|DESODORANTE|ANTITRANSP|ANTITRANSPIRANTE|DESODORIZANTE|DEBORADOR|DEPILADOR|CERA.*DEPILAR|LAMINA.*BARBEAR|GEL.*BARBEAR|ESPUMA.*BARBEAR/,'HIGIENE E PERFUMARIA'],[/\bCREME\s*DENT|PASTA\s*DENT|COLGATE|ORAL\s*B|SORRISO|CLOSE\s*UP|ENXAGUANTE|FLOSS|FIO.*DENTAL|MAQUIAGEM|BLUSH|BATOM|RÍMEL|SOMBRA|EYELINER|PRIMER|BASE|PINCEIS.*MAQUIAGEM|ESPONJA.*MAQUIAGEM/,'HIGIENE E PERFUMARIA'],
 [/\bESCOVA\s*DENT|FIO\s*DENT|ENXAGUAT/,'HIGIENE E PERFUMARIA'],
-[/\bPAP(?:EL)?\s*HIG|PAPEL\s*TOALH|GUARDANAPO|LENCO\s*DE\s*PAPEL/,'HIGIENE E PERFUMARIA'],
-[/\bABSORVENT|\bFRD\b|FRALDA|COTONETE|ALGODAO|PROTETOR\s*SOLAR|HASTES\s*FLEX/,'HIGIENE E PERFUMARIA'],
-[/\bQUEIJO\b|MUSSAREL|PARMESAO|QUEIJO\s*PRATO|\bPRATO\b(?=.*(FAT|KG|\d+\s*G))|COALHO|RICOTA|CREAM\s*CHEESE|REQUEIJAO/,'FRIOS E LATICINIOS'],
-[/\bPRESUNT\b|MORTADEL|SALAME|PEITO\s*DE\s*PERU|APRESUNT|BLANQUET|COPA\b/,'FRIOS E LATICINIOS'],
-[/\bLEITE\b(?!\s*(EM\s*)?PO)(?!\s*COND)(?!\s*DE\s*COCO)|\bIOG(?:URT)?\b|BEB(?:IDA)?\s*LACT|DANONE|ACTIVIA|YAKULT/,'FRIOS E LATICINIOS'],
+[/\bPAPEL\s*HIG|PAPEL\s*TOALH|GUARDANAPO|LENCO\s*DE\s*PAPEL|CREME.*FACIAL|LOÇÃO.*CORPORAL|CREME.*CORPO|SERUM|OLEO.*FACIAL|TONER|ESSENCIA|HIDRATANTE|ANTI\s*RUGAS|PELE.*OLEOSA|ACNE/,'HIGIENE E PERFUMARIA'],
+[/\bABSORVENT|FRALDA|COTONETE|ALGODAO|PROTETOR\s*SOLAR|HASTES\s*FLEX|ESPELHO|TESOURA|PENTE|ESCOVA|PINCEL|LAMINA|APARELHO\s*BARBA|BARBEADOR/,'HIGIENE E PERFUMARIA'],
+[/\bQUEIJO\b|MUSSAREL|PARMESAO|PRATO|COALHO|RICOTA|CREAM\s*CHEESE|REQUEIJAO/,'FRIOS E LATICINIOS'],
+[/\bPRESUNT\b|PRESUNTO|MORTADEL|SALAME|PEITO\s*DE\s*PERU|APRESUNT|BLANQUET|COPA\b|PRESUNT.*SADIA|PRESUNT.*PERDIG/,'FRIOS E LATICINIOS'],
+[/\bLEITE\b(?!\s*(EM\s*)?PO)(?!\s*COND)(?!\s*DE\s*COCO)|IOGURT|BEBIDA\s*LACT|BEB\s*LACT|BEBIDA.*LACTEA|LACTEA|ISIS|DANONE|ACTIVIA|YAKULT/,'FRIOS E LATICINIOS'],
 [/\bMANTEIG\b|MARGARIN\b|\bMARG\b.*\d+\s*G|CREAM\b/,'FRIOS E LATICINIOS'],[/\bOVO\b|OVOS\b/,'FRIOS E LATICINIOS'],
-[/\bCARNE\b|BOVIN[AO]|CHAMBIRIL|PICANHA|ALCATRA|PATINHO|ACEM|COSTELA|MAMINHA|FILE\s*(MIGNON)?|CONTRA\s*FILE|CUPIM/,'CARNES'],
-[/\bFRANGO\b|COXA|COXINHA\s*DA\s*ASA|SOBRECOXA|PEITO\s*DE\s*FRANGO|ASA\s*DE\s*FRANGO|CHESTER/,'CARNES'],
-[/\b(?:FGO|FRNG)\b|GALINHA\s*MATRIZ|PEITO\s*DE\s*FGO|FRNG\s*PASSAR/,'CARNES'],
-[/\bLINGUIC\b|\bLING\b.*\b(KG|AUROR|SADIA|PERDIG|SEARA|FRIMESA|MISTA|FRG|TOSCANA|CALABR)/,'CARNES'],
-[/\bLING(?:UICA)?\b.*(?:CHURR|MISTA|TOSC|CALAB|AVIVAR)|\bKG\s*LINGUIC/,'CARNES'],
-[/\bCHA\s*DE\s*DENTRO\b/,'CARNES'],
-[/\bSALSICH\b|\bSALS\b.*\bKG\b|HAMBUR|BACON|CALABRES/,'CARNES'],
-[/\bBOM\s*TODO\b.*\bPEITO\b|\bBDJ\b.*\bPEITO\b/,'CARNES'],
+[/\bCARNE\b|BOVINA|PICANHA|ALCATRA|PATINHO|ACEM|COSTELA|MAMINHA|FILE\s*(MIGNON)?|CONTRA\s*FILE|CUPIM/,'CARNES'],
+[/\bFRANGO\b|FRNG|FOG|COXA|SOBRECOXA|PEITO\s*DE\s*FRANGO|PEITO\s*FRANGO|ASA\s*DE\s*FRANGO|CHESTER|GALINHA|GALINHA\s*MATRIZ|MAMYPOKO/,'CARNES'],
+[/\bLINGUIC\b|LINGO|MARO|CALABR|CALABRESA|LIN.*KG|LIN.*AVIVAR|LIN.*AURORA|LIN.*CHURRASCO|LIN.*COOPAVEL|LIN.*CALABR|LIN.*SADIA|LIN.*PERDIG|TOSCANA/,'CARNES'],
+[/\bSALSICH\b|SALSISCHA|SAL.*KG|SAL.*MISTA|SAL.*PERDIGAO|SAL.*SADIA|SAL.*AVIVAR|SAL.*RARA|HAMBUR|BACON|CALABRES|F[ÍI]GADO|CHAMBARIL|MOCOTO|PEITO.*BOVINO|PEITO.*FRANGO/,'CARNES'],
 [/\bSUINO\b|BISTECA|PERNIL|PALETA|LOMBO|CARRE\b|GUISADO|CHARQUE|CARNE\s*SECA|CARNE\s*SOL|JABÁ/,'CARNES'],
 [/\bASA\b.*\b(KG|RESF|CONG)|ASA\s*RESF/,'CARNES'],
 [/\bPEIXE\b|CAMARAO|BACALHAU|TILAPIA|MERLUZA/,'CARNES'],
-[/\bCEBOLA\b|TOMATE\b|BATATA\s*(INGLES|DOCE)?A?\s*KG|BATATINHA\s*KG|CENOURA|ALFACE|COUVE\b|REPOLHO|PIMENTAO|PEPINO|BETERRABA/,'HORTIFRUTI'],
+[/\bCEBOLA\b|TOMATE\b|BATATA|BATATINHA|BATATA\s*(INGLES|DOCE)?A?\s*KG|CENOURA|ALFACE|COUVE\b|REPOLHO|PIMENTAO|PEPINO|BETERRABA/,'HORTIFRUTI'],
 [/\bBANANA\b|PACOVAN|NACIONAL\s*(PEQUEN|GRAND|KG)|PRATA\s*(KG|GRAND)/,'HORTIFRUTI'],
 [/\bMACA\b.*KG|\bPERA\b.*KG|\bLARANJA\b.*KG|\bLIMAO\b.*KG|\bMANGA\b.*KG|\bMELAO\b|MELANCIA|MAMAO|GOIABA\b.*KG|ABACAXI/,'HORTIFRUTI'],
-[/\bCOENTRO\b|CEBOLINHA|CHEIRO\s*VERDE|SALSA\b|COUVE\b|ALHO\b.*KG|JERIMUM|MACAXEIRA|AIPIM|MANDIOCA|INHAME|ABOBORA/,'HORTIFRUTI'],
-[/\bPIZZA\b|NUGGET|EMPANADO|SORVETE|PICOLE|ACAI.*\d/,'CONGELADOS'],
-[/BATATA\s*(?:PRE|PR)?\s*FRITA|BATATA\s*PALITO.*(?:\d|KG)|BATATA.*UAI.*(?:\d|KG)/,'CONGELADOS'],
-[/\bCONG\b.*KG|\bCONG\b.*\d+\s*G|LASANHA.*CONG|BATATA\s*(CONG|FRIT.*CONG)|MASTERBOI/,'CONGELADOS'],
+[/\bCOENTRO\b|CEBOLINHA|CHEIRO\s*VERDE|SALSA\b|COUVE\b|ALHO\b.*KG|JERIMUM|MACAXEIRA|AIPIM|MANDIOCA|INHAME|ABOBORA|ESPINAFRE|RUCULA|ACELGA|REPOLHO.*ROXO|BROCOLIS|COUVE.*FLOR|MELANCIA|MELAO|AMORA|MORANGO|UVAIA/,'HORTIFRUTI'],
+[/\bPIZZA\b|NUGGET|EMPANADO|SORVETE|PICOLE|ACAI.*\d|COXINHA|PASTEL|BOLINHA|FRITO.*CONGELADO|PRATO.*PRONTO|REFEICAO/,'CONGELADOS'],
+[/\bCONG\b.*KG|\bCONG\b.*\d+\s*G|LASANHA.*CONG|BATATA\s*(CONG|FRIT|PALITO|PRE\s*FRITA)|MASTERBOI/,'CONGELADOS'],
 [/\bPAO\b|PAES\b|BISNAG|BOLO\b.*PRONT|MINI\s*BOLO/,'PADARIA'],
-[/\bPET\b|RACAO|WHISKAS|PEDIGREE|DOG\b|GATO.*RACAO|CAT\s*CHOW/,'PET SHOP'],
+[/\bPET\b|RACAO|WHISKAS|PEDIGREE|DOG\b|GATO.*RACAO|CAT\s*CHOW|RAÇÃO.*CACHORRO|RAÇÃO.*GATO|PETISCO|BISCOITO.*CACHORRO|BRINQUEDO.*PET|COLEIRA|GUIA.*CACHORRO|CAMA.*PET|CAIXA.*AREIA|SHAMPOO.*PET/,'PET SHOP'],
 [/\bCIGARR|FUMO\b|TABAC/,'TABACARIA'],
 [/\bDESCART|COPO\s*DESC|PRATO\s*DESC|TALHER|GUARDANAPO|TOALHA\s*MESA|ALUMINIO\s*ROLO|FILME\s*PVC/,'DESCARTAVEIS'],
-[/\bCOXAO\b|ACEM\b|PALETA\b|MUSCULO\b|PATINHO\b|CUPIM\b|CONTRA\s*FILE|MAMINHA|FRALDINHA|LAGARTO|ACHOU.*KG|MOCOTO|RABADA|RABO\b|FIGADO|MIUDO|BUCHO|TRIPA|MOELA|CORACAO\s*(DE\s*)?FRANG|PE\s*DE\s*FRANG|PESCOCO/,'CARNES'],
-[/\bCOSTELA\b|BISTECA|LOMBO\b|PERNIL\b|GUISADO|T.?BONE|BABY\s*BEEF|OSSOBUCO|CHULETA|PALETA\b|TRASEIRO|DIANTEIRO|CAPA\s*DE\s*FILE/,'CARNES'],
-[/\bSALSICHA\b|MORTADEL|PRESUNT|APRESUNT|BLANQUET|PEITO.*PERU|COPA\b.*DEFUM|SALAME/,'FRIOS E LATICINIOS'],
-[/\bNATA\b|COALHADA|BEBIDA\s*LACT|PETIT\s*SUISSE|DANONINHO/,'FRIOS E LATICINIOS'],
-[/\bVELA\b|FOSFORO|ISQUEIRO|PILHA|LAMPADA|FITA\s*(ADESIV|ISOL)/,'UTILIDADES'],
-[/\bBALDE\b|BACIA\b|GARRAFA\s*TERMIC|POTE\b|VASILHA|LIXEIRA|CESTA\b/,'UTILIDADES'],
-[/\bCHINEL|HAVAIANAS|SANDALIA|IPANEMA/,'BAZAR'],
-[/\bPRATO\b(?!\s*DESC)|CANECA|COPO\b(?!\s*DESC)|XICARA|TALHER\b(?!.*DESC)|GARFO|COLHER|FACA\b/,'UTILIDADES'],
-[/\bESSENC|PERFUME|COLONIA|HIDRAT.*CORP|PROTETOR.*SOLAR|BRONZEAD|TINTA.*CABEL|ESMALTE/,'HIGIENE E PERFUMARIA'],
-[/\bPREGADOR|VARAL|ESCOVA\b(?!\s*DENT)|PANO\b|FLANELA|ESTOPA/,'LIMPEZA'],
-[/\bMEL\b.*\d|GELEIA|COMPOTA|CONSERVA|MILHO\s*VERDE|ERVILHA|CHAMPIGNON|COGUMELO/,'MERCEARIA'],
-[/\bLEITE\s*FERMENT|KEFIR|WHEY|PROTEIN|SUPLEMENTO|VITAMINA\s*(C|D|E)/,'MERCEARIA'],
-[/\bDESINF|ALCOOL\s*(GEL|LIQ|\d)|LUVA\s*DESC|MASCARA\s*DESC/,'LIMPEZA'],
-[/\bPIPETA|COLEIRA|ANTIPULGA|VERMIFUG|AREIA\s*(DE\s*)?GAT/,'PET SHOP'],
-[/\bTORRADA|TORRAD|ROSQUINHA|SEQUILHO|PALITO\s*SALG|SALGADINH|\bSALG\b|SNACK|PIPPOS|DORITOS|CHEETOS|RUFFLES|ELMA\s*CHIPS|FANDANGO|BATATA\s*PALHA/,'BISCOITOS'],
-[/\bCERVEJ|AMSTEL|BOHEMIA|DEVASSA|\bORIGINAL\b(?=.*(ML|LATA|LT\b|600|473|350|GARRAFA))|STELLA|CORONA|BUD\b/,'BEBIDAS'],
-[/\bMARG\b.*\d+\s*G|MANTEIG.*\d+\s*G/,'FRIOS E LATICINIOS'],
-[/\bSOJA\b.*\d|PROTEINA\s*DE\s*SOJA|HAMBUR.*SOJA/,'MERCEARIA']
+[/\bPILA\b|BATERIA|CARREGADOR|CONTROLE\s*REMOTO|LAMPADA\s*LED|LAMPADA|LED|EXTENSAO|CABO/,'ELETRONICO'],
+[/\bCORDA\b|BARBANTE|LINHA|AGULHA|BOTAO|ZIPER|VELCRO|LINHA\s*DE\s*COSTURA/,'AVIAMENTOS'],
+[/\bPALITO\b|FACA|GARFO|COLHER|PRATO|TIGELA|CANECA|COPO|TALHERES|JOGO\s*DE\s*TALHERES/,'LOUÇA E UTILIDADES'],
+[/\bFLOR\b.*ARTIFICIAL|VASO\s*FLORES|FLORES\s*SECAS|PLANTA\s*ARTIFICIAL|ENFEITE|DECORACAO/,'DECORACAO'],
+[/\bBEBE\b|FRALDA|FRALDA.*INFANTIL|ALIMENTO.*BEBE|PAPINHA|LEITE.*INFANTIL|FORMULA\s*INFANTIL|MAMADEIRA|CHUPETA|FRALDA.*BABY|PAMPERS|MAMYPOKO|HUGGIES/,'INFANTIL'],
+[/\bVITAMINA\b|SUPLEMENTO|COLCHAO.*ESPUMA|TRAVESSEIRO|COBERTOR|LENCO|TOALHA.*ROSTO|TOALHA.*BANHO/,'SAUDE E CONFORTO'],
+[/\bCAMISETA\b|TENIS\b|BERMUDA|CALCA|MEIA|CALCADO|SAPATO|BOTA|CHINELO|ROUPAS|SHORTS|BLUSA|JAQUETA/,'VESTUARIO'],
+[/\bTOY|BRINQUEDO|BONECA|CARRINHO|QUEBRA\s*CABECA|BONECO|ACTION\s*FIGURE|LEGO|JOGO|PLAYSTATION/,'BRINQUEDOS'],
+[/\bLIVRO\b|REVISTA|JORNAL|LIVRO.*INFANTIL|MANGA|HQ\b/,'MIDIA'],
+[/\bBOLSA\b|MOCHILA|MALA|BOLSA.*PRAIA|BOLSA.*VIAGEM|BOLSA.*COURO|CARTEIRA|PORTA.*MOEDA|BOLSA.*FEMININA/,'BOLSAS E MALAS'],
+[/\bBONE\b|CHAPEU|VISEIRA|TOUCA|LENCO.*CABELO|TIARA|FITA.*CABELO|PRESILHA|CLIPS.*CABELO/,'ACESSORIOS'],
+[/\bTRILHA\b|TENDA|SACO\s*DE\s*DORMIR|LANTERNA|MOCHILA.*TREKKING|CANTIL|BOTA.*TRILHA|ACAMPAMENTO|BARRACA/,'CAMPING E OUTDOOR'],
+[/\bNADADEIRA|PISCINA|NADADEIRA|BOIAS|MANGUITO|AVENTAL.*PRAIA|CHINELO.*PRAIA|TOALHA.*PRAIA|BERMUDA.*PRAIA|SUNGA|MAIÔ/,'PRAIA E PISCINA'],
+[/\bSALÃO\b|CABELEIREIRA|MANICURE|PEDICURE|GEL.*UNHAS|ESMALTE|REMOVEDOR|LIXA.*UNHAS|CORTA.*UNHAS/,'SALAO E UNHAS'],
+[/\bFERRAMENT|MARTELO|ALICATE|PINCA|CHAVE\s*DE\s*FENDA|CHAVE.*INGLESA|PARAFUSO|PREGO|FURADEIRA|SERRA|LIXA|COLA|FITA.*ADESIVA/,'FERRAGENS E FERRAMENTAS'],
+[/\bDIETETIC|LIGHT\s|ZERO\s|SEM\s*ACUCAR|SEM\s*SAL|SEM\s*GORDURA|INTEGRAL.*ALIMENTO|ORGANICO|NATUREBA|SAUDAVEL/,'ALIMENTOS DIETETICOS'],
+[/\bREMEDIO\b|MEDICAMENTO|FARMACO|ANTIBIOTICO|ANALGESICO|ANTIFEBRIL|DIPIRONA|IBUPROFEN|PARACETAMOL|XAROPE|POMADA.*MEDICINAL/,'FARMACIA E MEDICAMENTOS'],
+[/\bCOLCHAO\b|TRAVESSEIRO|EDREDOM|JOGO.*CAMA|LENCOL|ALMOFADA|FRONHA|COLCHA|MANTA|COBERTOR|PLUMIFERO/,'CAMA E BANHO'],
+[/\bTOALHA\b|HIDROMASSAGEM|CAPACHO|TAPETE.*BANHEIRO|CORTINA.*BANHEIRO|SABONETEIRA/,'CAMA E BANHO'],
+[/\bJARDIM\b|PLANTA\b|FLOR\b|SEMENTE|ADUBO|TERRA.*PRETA|VASO.*PLANTA|POTE.*PLANTIO|TERRA.*FÉRTIL|FLORES.*NATURAIS|ERVAS.*AROMATICAS/,'JARDIN E PLANTAS'],
+[/\bFITNESS\b|WHEY\s*PROTEIN|PROTEINA|CREATINA|BCAA|TERMOGENICO|SUPLEMENTO.*MUSCULO|GEL.*ENERGETICO/,'FITNESS E SUPLEMENTOS'],
+[/\bESTUDO\b|LÁPIS|CANETA|NOTEBOOK|MONITOR|TECLADO|MOUSE|CADERNO|AGENDA|POST.*IT|COLA|TESOURA|GRAMPEADOR|FURADOR/,'HOME OFFICE E ESTUDOS'],
+[/\bHOBBY\b|PINTURA|TINTA.*ACRÍLICA|TINTA.*ÓLEO|PINCEL.*ARTE|QUADRO|MOLDURA|CANVAS|SKETCH|DESENHO|ACRÍLICO|PASTEL|LÁPIS.*COR|MARCADOR.*ARTE/,'HOBBY E ARTESANATO'],
+[/\bESPORTE\b|BOLA\b|RAQUETE|TÊNIS.*ESPORTE|FUTEBOL|BASQUETE|VOLEI|PATINS|SKATE|CAPACETE|JOELHEIRA|COTOVELEIRA|MOCHILA.*ESPORTE|CORDA.*PULAR/,'ESPORTES E RECREACAO'],
+[/\bFOTOGRAF\b|CAMERA|LENTE|TRIPÉ|FLASH|BOLSA.*CAMERA|MEMORIA.*CARTAO|CARTAO.*SD|CABO.*USB|FOTOMETRO|REFLETOR/,'FOTOGRAFIA E VIDEO'],
+[/\bMUSICA\b|INSTRUMENTO|VIOLÃO|TECLADO.*MUSICAL|BATERIA|AMPLIFICADOR|MICROFONE|FONE.*OUVIDO|CAIXA.*SOM|ALTO.*FALANTE|CAVACO|UKELELE/,'MUSICA E AUDIO'],
+[/\bAQUARIO\b|PEIXE.*ORNAMENTAL|AQUA.*PLANTA|FILTRO.*AQUARIO|BOMBA.*AGUA|TERMOSTATO.*AQUARIO|DECORACAO.*AQUARIO|ALIMENTADOR.*PEIXE|REDE.*AQUARIO/,'AQUARIO E TERRARIO'],
+[/\bYOGA\b|TAPETE.*YOGA|COLCHONETE.*YOGA|ALMOFADA.*MEDITACAO|VELA.*AROMA|INCENSO|DIFUSOR.*AROMATICO|MAT.*YOGA|BLOCOS.*YOGA|CORREIA.*YOGA/,'YOGA E MEDITACAO'],
+[/\bSEGURANCA\b|CAMERA.*SEGURANCA|ALARME|CADEADO|COFRE|CERCA.*ELETRICA|INTERFONE|SENSOR.*MOVIMENTO|PULSEIRA.*SEGURANCA|RASTREADOR/,'SEGURANCA E PROTECAO'],
+[/\bVIAGEM\b|MALA.*VIAGEM|MOCHILA.*VIAGEM|POCHETE|PROTETOR.*BAGAGEM|ADAPTADOR.*VIAGEM|ALMOFADA.*PESCOÇO|MEIA.*COMPRESSAO|NECESSAIRE/,'VIAGEM E TURISMO'],
+[/\bPISCINA\b|CLORO.*PISCINA|TESTE.*AGUA|PENEIRA.*PISCINA|BOMBA.*PISCINA|ESCADA.*PISCINA|TERMOMETRO.*PISCINA|FLUTUADOR|BOIA.*PISCINA/,'PISCINA E SPA'],
+[/\bILUMINACAO\b|LAMPADA.*DECORATIVA|LUSTRE|ABAJUR|SPOT.*LUMINARIA|LEDS.*DECORATIVOS|FITA.*LED|LUMINARIA.*DE.*PAREDE|PENDENTE.*ILUMINACAO/,'ILUMINACAO E DECORACAO'],
+[/\bCOSMETIC|PERFUME\b|COLONIA|DESODORANTE.*SPRAY|AGUA.*CORPORAL|ÓLEO.*CORPORAL|BUTTER.*CORPORAL|SERUM.*FACIAL|MASCARA.*FACIAL|TONER.*FACIAL/,'COSMETICOS E PERFUMES']
 ];
 function productCategory(desc){
-  if(!desc)return'CADASTRO A REVISAR';
-  let u=String(desc).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+  if(!desc)return'OUTROS';
+  let u=String(desc).toUpperCase();
   for(let[re,cat]of _CAT_RULES)if(re.test(u))return cat;
-  return'CADASTRO A REVISAR';
+  return'OUTROS';
 }
 
 /* ===== ARVORE MARGEM ITEM ===== */
 let _treeOpen={};
 function toggleTree(key){_treeOpen[key]=!_treeOpen[key];render()}
-function mdCanon(desc){let u=String(desc||'').trim().toUpperCase();if(!u)return u;let md=readMD();return md.catalogo[u]||u}
-/* Classificacao canonica UNICA: cada produto tem exatamente 1 categoria em todo o sistema.
-   Prioridade: correcao do usuario (Master Data) > departamento majoritario por venda na rede > regra de palavra-chave. */
-let _mdClassRes=null,_mdClassKey='';
-function mdClassMap(){
-  let md=readMD();
-  let key=(db.produtos||[]).length+'|'+Object.keys(md.mercMap||{}).length+'|'+Object.keys(md.catalogo||{}).length+'|'+(md.audit||[]).length;
-  if(_mdClassRes&&_mdClassKey===key)return _mdClassRes;
-  _mdClassKey=key;
-  let votes={};
-  (db.produtos||[]).forEach(r=>{
-    let n=(r.descricao_produto||'').trim().toUpperCase();if(!n)return;
-    let dept=(r.descricao_departamento||'').trim().toUpperCase();
-    if(!dept||_JUNK_DEPTS.has(dept))return;
-    let k=mdCanon(n);
-    if(!votes[k])votes[k]={};votes[k][dept]=(votes[k][dept]||0)+(+r.venda||0)+1;
-  });
-  let map={};
-  Object.entries(votes).forEach(([n,vv])=>{map[n]=Object.entries(vv).sort((a,b)=>b[1]-a[1])[0][0]});
-  (db.produtos||[]).forEach(r=>{
-    let n=(r.descricao_produto||'').trim().toUpperCase();if(!n)return;
-    let k=mdCanon(n);if(map[k])return;
-    let cat=productCategory(n);if(cat&&cat!=='CADASTRO A REVISAR')map[k]=cat;
-  });
-  let porLoja=[],globais=[];
-  Object.entries(md.mercMap||{}).forEach(([k,v])=>{let i=k.lastIndexOf('|');if(i<0)return;(k.slice(i+1)==='*'?globais:porLoja).push([k.slice(0,i),v])});
-  porLoja.forEach(([n,v])=>{map[mdCanon(n)]=v});
-  globais.forEach(([n,v])=>{map[mdCanon(n)]=v});
-  return _mdClassRes=map;
-}
 function classifyCategory(r){
-  let u=String(r.descricao_produto||'').trim().toUpperCase();
-  if(u){let cat=mdClassMap()[mdCanon(u)];if(cat)return cat}
-  let dept=(r.descricao_departamento||'').trim().toUpperCase();
-  if(dept&&!_JUNK_DEPTS.has(dept))return r.descricao_departamento;
-  let rule=productCategory(r.descricao_produto);
-  return rule&&rule!=='CADASTRO A REVISAR'?rule:'CADASTRO A REVISAR';
+  if(r.descricao_departamento)return r.descricao_departamento;
+  return productCategory(r.descricao_produto);
 }
 function margemItemTree(){
   let rows=scopeRows('produtos').filter(r=>passaBloco(r.campanha));
@@ -942,21 +595,12 @@ function margemItemTree(){
     let k=cat+'||'+loja;
     if(!pivot[k])pivot[k]={v:0,l:0,prods:{}};
     pivot[k].v+=+r.venda||0;pivot[k].l+=+r.lucro||0;
-    let prod=agruparVariantes?productBaseKey(mdCanon(r.descricao_produto)):mdCanon(r.descricao_produto)||'?';
+    let prod=agruparVariantes?productBaseKey(r.descricao_produto):r.descricao_produto||'?';
     if(!pivot[k].prods[prod])pivot[k].prods[prod]={v:0,l:0};
     pivot[k].prods[prod].v+=+r.venda||0;pivot[k].prods[prod].l+=+r.lucro||0;
     if(!lojaTotals[loja])lojaTotals[loja]={v:0,l:0};
     lojaTotals[loja].v+=+r.venda||0;lojaTotals[loja].l+=+r.lucro||0;
   });
-  let lojaVendaTotal={};
-  resumos().forEach(r=>{let lj=r.loja||'Sem loja';lojaVendaTotal[lj]=(lojaVendaTotal[lj]||0)+(+r.venda_total||0)});
-  let grandVendaTotal=Object.values(lojaVendaTotal).reduce((s,v)=>s+v,0);
-  let lojaOficial={},lojaMensal={};
-  let dR=dailyOffers(),dLB=new Set(dR.map(r=>r.loja+'|'+r.bloco));
-  dR.forEach(r=>{let lj=r.loja||'Sem loja';lojaOficial[lj]=(lojaOficial[lj]||0)+r.venda});
-  scopeRows('campanhas').forEach(r=>{if(!passaBloco(r.descricao))return;let lj=r.loja||'Sem loja',v=+r.venda||0;lojaMensal[lj]=(lojaMensal[lj]||0)+v;if(!dLB.has(lj+'|'+blocoCampanha(r.descricao)))lojaOficial[lj]=(lojaOficial[lj]||0)+v});
-  let catLojaTotalReal={},temDeptTotais=(db.deptTotais||[]).length>0;
-  scopeRows('deptTotais').forEach(r=>{let loja=r.loja||'Sem loja',cat=String(r.descricao_departamento||'').trim().toUpperCase(),k=cat+'||'+loja;catLojaTotalReal[k]=(catLojaTotalReal[k]||0)+(+r.venda_total||0)});
   let lojas=Array.from(lojaSet).sort((a,b)=>(lojaTotals[b]?.v||0)-(lojaTotals[a]?.v||0));
   if(fLoja.value!='Todas')lojas=lojas.filter(l=>l==fLoja.value);
   let catTotals={};
@@ -965,18 +609,17 @@ function margemItemTree(){
   let shortN=l=>l.replace(/^.*-\s*/,'');
   let h='<div class="table-wrap" style="max-height:700px;overflow:auto"><table class="pivot-cat"><thead><tr><th class="pivot-cat-th" style="min-width:130px;position:sticky;left:0;z-index:2;background:#fff">Categoria</th>';
   lojas.forEach(lj=>{
-    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0,lvt=lojaVendaTotal[lj]||0,lofc=lojaOficial[lj]||0,lpart=lvt?lofc/lvt*100:0;
-    h+='<th class="pivot-loja-th" title="'+esc(lj)+' — Venda total da loja no periodo: '+brl(lvt)+' | Venda promocional adotada (base diaria quando importada): '+brl(lofc)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div><div style="font-size:9px;color:var(--muted)" title="Venda promocional (base diaria quando importada; mensal onde nao ha diarios) dividida pela venda total da loja no periodo">'+pct(lpart)+' oferta/venda da loja</div></th>';
+    let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0;
+    h+='<th class="pivot-loja-th" title="'+esc(lj)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div></th>';
   });
   h+='</tr></thead><tbody>';
   cats.forEach(cat=>{
     let ct=catTotals[cat],cm=ct.v?ct.l/ct.v*100:0,ck='CAT|'+cat,cOpen=!!_treeOpen[ck];
-    let catPart=grandVendaTotal?ct.v/grandVendaTotal*100:0;
-    h+='<tr class="pivot-cat-row" onclick="toggleTree(\''+ck+'\')"><td class="pivot-cat-name" style="position:sticky;left:0;z-index:1;background:#fff"><span class="tree-toggle">'+(cOpen?'▼':'▶')+'</span>'+esc(cat)+'<div class="pivot-cat-total">'+brlShort(ct.v)+' <span class="'+mc(cm)+'">'+pct(cm)+'</span></div><div style="font-size:9px;color:var(--muted)" title="Venda em oferta da categoria dividida pela venda total da rede no periodo">'+pct(catPart)+' da venda da rede</div></td>';
+    h+='<tr class="pivot-cat-row" onclick="toggleTree(\''+ck+'\')"><td class="pivot-cat-name" style="position:sticky;left:0;z-index:1;background:#fff"><span class="tree-toggle">'+(cOpen?'▼':'▶')+'</span>'+esc(cat)+'<div class="pivot-cat-total">'+brlShort(ct.v)+' <span class="'+mc(cm)+'">'+pct(cm)+'</span></div></td>';
     lojas.forEach(lj=>{
       let d=pivot[cat+'||'+lj];
       if(!d)h+='<td class="pivot-cell pivot-empty">-</td>';
-      else{let m=d.v?d.l/d.v*100:0,clt=catLojaTotalReal[String(cat).trim().toUpperCase()+'||'+lj]||0,cpTxt,cpTitle;if(clt){cpTxt=pct(d.v/clt*100);cpTitle=cpTxt+' da venda total de '+esc(cat)+' nesta loja ('+brl(clt)+', com e sem oferta)'}else{cpTxt='-';cpTitle='o % (oferta de '+esc(cat)+' sobre a venda total de '+esc(cat)+' na loja) precisa do arquivo venda_departamento_total.txt — a venda fora de oferta nao vem nos arquivos atuais'}h+='<td class="pivot-cell" title="'+esc(cat)+' em '+esc(lj)+': '+brl(d.v)+' em oferta — '+cpTitle+'"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div><div style="font-size:9px;color:var(--muted)">'+cpTxt+'</div></td>'}
+      else{let m=d.v?d.l/d.v*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div></td>'}
     });
     h+='</tr>';
     if(cOpen){
@@ -995,16 +638,13 @@ function margemItemTree(){
     }
   });
   h+='</tbody></table></div>';
-  let sumProd=lojas.reduce((s,lj)=>s+(lojaTotals[lj]?.v||0),0),sumOfic=lojas.reduce((s,lj)=>s+(lojaMensal[lj]||0),0),divg=sumOfic?(sumProd-sumOfic)/sumOfic*100:0;
-  let aviso=Math.abs(divg)>5?'<div class="alert a-warn" style="margin-bottom:10px"><b>Confiabilidade:</b> no escopo atual (bloco: <b>'+esc(fCamp.value)+'</b> | loja: <b>'+esc(fLoja.value)+'</b>), os itens desta tabela somam <b>'+brlShort(sumProd)+'</b>, mas o total mensal (campanhas_ofertas) do MESMO escopo e <b>'+brlShort(sumOfic)+'</b> ('+(divg>0?'+':'')+divg.toFixed(1)+'%). Nao compare com cards de um unico bloco (ex.: Encarte Big NE). O excesso vem do arquivo produtos_campanha.txt (duplicidade ou criterio diferente). Os % de loja usam a base diaria quando importada. Detalhes em <b>Auditoria &gt; Reconciliacao de fontes</b>.</div>':'';
-  let avisoDept=temDeptTotais?'':'<div class="alert a-info" style="margin-bottom:10px">O % das celulas e <b>oferta da categoria ÷ venda total da categoria na loja</b>. Esse denominador nao vem nos arquivos atuais (eles so trazem o que estava em oferta): e preciso importar <b>venda_departamento_total.txt</b> — consulta pronta em <b>Modelos SQL &gt; Venda total por departamento</b>, e pode ser gerada por quem ja roda as outras consultas do VR. Ate la as celulas mostram "-".</div>';
-  return'<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos. % cinza: loja = venda promocional/venda total da loja | categoria = oferta/venda da rede | celula = oferta da categoria/venda total da categoria na loja</div></div>'+csvBtn('CSV','exportMargemTree()')+'</div>'+avisoDept+aviso+h+'</div>';
+  return'<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos</div></div>'+csvBtn('CSV','exportMargemTree()')+'</div>'+h+'</div>';
 }
 function exportMargemTree(){
   let rows=scopeRows('produtos').filter(r=>passaBloco(r.campanha)),out=[];
   let groups={};
   rows.forEach(r=>{
-    let dept=classifyCategory(r),prod=agruparVariantes?productBaseKey(mdCanon(r.descricao_produto)):mdCanon(r.descricao_produto);
+    let dept=classifyCategory(r),prod=agruparVariantes?productBaseKey(r.descricao_produto):r.descricao_produto;
     let k=r.loja+'|'+dept+'|'+prod;
     if(!groups[k])groups[k]={loja:r.loja,dept,prod,v:0,l:0,q:0};
     groups[k].v+=+r.venda||0;groups[k].l+=+r.lucro||0;groups[k].q+=+r.quantidade||0;
@@ -1022,9 +662,8 @@ function storeExtremes(rows,key,fmt){if(rows.length<2)return null;let vals=rows.
 /* ===== DASHBOARD ===== */
 function dashboard(){
   let t=total(),camps=campRows(),ms=monthRows(),top=camps[0]||{},bad=[...camps].sort((a,b)=>a.margem-b.margem)[0]||{},selectedBlock=fCamp.value!='Todos os blocos'&&fCamp.value!='Todas'?fCamp.value:'',topBlock=selectedBlock||(top.descricao?blocoCampanha(top.descricao):''),depts=deptRows(topBlock),bl=blocoRows(),enc=bl.find(b=>b.bloco=='Encarte Big Nordeste')||{},fair=dailyFairSummary(),encFair=fair.find(r=>r.bloco=='Encarte Big Nordeste')||enc,fd=selectedBlock?(fair.find(x=>x.bloco==selectedBlock)||{}):(fair[0]||{}),bestDia=[...fair].sort((a,b)=>b.vendaDia-a.vendaDia)[0]||{},bestPart=[...fair].sort((a,b)=>b.partPeriodo-a.partPeriodo)[0]||{},bestPen=[...fair].sort((a,b)=>b.penPeriodo-a.penPeriodo)[0]||{},hasDaily=fair.length>0,hasSelectedDaily=!!(selectedBlock&&fd.bloco),ov=dailyOverlapInfo();
-  let sr=fLoja.value=='Todas'?storeRank():[],srCard=fLoja.value=='Todas'?storeRank(selectedBlock||'Encarte Big Nordeste'):[],xVt=storeExtremes(sr,'vt',brlShort),xVCard=storeExtremes(srCard,'v',brlShort),xPartCard=storeExtremes(srCard,'part',pct),xMargCard=storeExtremes(srCard,'margem',pct),xPenCard=storeExtremes(srCard,'pen',pct),xMso=storeExtremes(sr,'margemSemOferta',pct);
-  let dailyCov=t.v?fd.venda/t.v*100:0,covAlert=hasSelectedDaily&&t.v&&Math.abs((fd.venda-t.v)/t.v*100)>5?`<div class="alert a-warn mt"><b>Referencia mensal:</b> o valor do bloco e definido pela base diaria: ${brlShort(fd.venda)} em ${fd.diasCalendario} dia(s). O arquivo mensal (campanhas_ofertas) registra ${brlShort(t.v)} (${pct(dailyCov)} de cobertura diaria). Se faltarem dias ou lojas em venda_dia_campanha.txt, o valor do bloco fica subestimado — confira em <b>Auditoria &gt; Reconciliacao de fontes</b>.</div>`:'';
-  let html=hasSelectedDaily?`<div class="grid kpis">${kpi('Venda promocional do bloco',brlShort(fd.venda),'base diaria | '+fd.diasCalendario+' dia(s) com oferta',true,xVCard)}${kpi('Venda total da loja nesses dias',brlShort(fd.vendaTotalPeriodo),'base do periodo real',false,xVt)}${kpi('Participacao real',pct(fd.partPeriodo),'oferta / venda dos dias',false,xPartCard)}${kpi('Lucro do bloco',brlShort(fd.lucro),pct(fd.margem)+' margem | base diaria',false,xMargCard)}${kpi('Penetracao real',pct(fd.penPeriodo),num(fd.cupons||0)+' cupons',false,xPenCard)}</div>${covAlert}${ov.sobrepostos?`<div class="alert a-warn mt">Existem ${ov.sobrepostos} dia(s) com mais de um bloco ativo. A venda total dos dias e base de calculo e nao deve ser somada entre blocos.</div>`:''}`:hasDaily?`<div class="grid kpis">${kpi('Venda total',brlShort(t.vt),'Periodo',true,xVt)}${kpi('Venda Encarte Big NE',brlShort(enc.venda||0),(enc.fonte=='diaria'?'base diaria':'mensal (sem diarios)')+' | '+pct(encFair.partPeriodo||encFair.part||0)+' part. real',false,xVCard)}${kpi('Maior part. real',pct(bestPart.partPeriodo),bestPart.bloco,false,xPartCard)}${kpi('Maior venda/dia',brlShort(bestDia.vendaDia),bestDia.bloco+' | dia calendario')}${kpi('Maior penetracao real',pct(bestPen.penPeriodo),bestPen.bloco,false,xPenCard)}</div>`:selectedBlock?`<div class="grid kpis">${kpi('Venda promocional do bloco',brlShort(t.v),pct(t.part)+' da venda mensal',true,xVCard)}${kpi('Venda total da loja nesses dias','-','importe diarios',false,xVt)}${kpi('Part. periodo real','-','sem venda_diario.txt')}${kpi('Penetracao real','-','sem venda_dia_campanha.txt')}</div><div class="alert a-warn mt">Nao da para medir o periodo real de ${selectedBlock} ainda. Importe venda_diario.txt e venda_dia_campanha.txt para cruzar os dias do encarte com a venda total desses mesmos dias.</div>`:`<div class="grid kpis">${kpi('Venda total',brlShort(t.vt),'Periodo',true,xVt)}${kpi('Venda Encarte Big NE',brlShort(enc.venda||0),pct(enc.part||0)+' da venda mensal',false,xVCard)}${kpi('Lucro promocional',brlShort(t.l),pct(t.margem)+' margem',false,xMargCard)}${kpi('Penetracao mensal'+(fCamp.value=='Todos os blocos'||fCamp.value=='Todas'?' *':''),pct(t.pen),num(t.cup)+' cupons',false,xPenCard)}</div><div class="alert a-warn mt">Analise diaria ainda sem dados salvos. Importe venda_diario.txt e venda_dia_campanha.txt para ativar participacao no periodo real.</div>`;
+  let sr=fLoja.value=='Todas'?storeRank():[], xVt=storeExtremes(sr,'vt',brlShort), xV=storeExtremes(sr,'v',brlShort), xPart=storeExtremes(sr,'part',pct), xMarg=storeExtremes(sr,'margem',pct), xPen=storeExtremes(sr,'pen',pct), xMso=storeExtremes(sr,'margemSemOferta',pct);
+  let html=hasSelectedDaily?`<div class="grid kpis">${kpi('Venda promocional do bloco',brlShort(fd.venda),fd.diasCalendario+' dia(s) calendario',true,xV)}${kpi('Venda total da loja nesses dias',brlShort(fd.vendaTotalPeriodo),'base do periodo real',false,xVt)}${kpi('Participacao real',pct(fd.partPeriodo),'oferta / venda dos dias',false,xPart)}${kpi('Lucro do bloco',brlShort(fd.lucro),pct(fd.margem)+' margem',false,xMarg)}${kpi('Penetracao real',pct(fd.penPeriodo),num(fd.cupons||0)+' cupons',false,xPen)}</div>${ov.sobrepostos?`<div class="alert a-warn mt">Existem ${ov.sobrepostos} dia(s) com mais de um bloco ativo. A venda total dos dias e base de calculo e nao deve ser somada entre blocos.</div>`:''}`:hasDaily?`<div class="grid kpis">${kpi('Venda total',brlShort(t.vt),'Periodo',true,xVt)}${kpi('Venda Encarte Big NE',brlShort(encFair.venda||0),pct(encFair.partPeriodo||encFair.part||0)+' part. real',false,xV)}${kpi('Maior part. real',pct(bestPart.partPeriodo),bestPart.bloco,false,xPart)}${kpi('Maior venda/dia',brlShort(bestDia.vendaDia),bestDia.bloco+' | dia calendario')}${kpi('Maior penetracao real',pct(bestPen.penPeriodo),bestPen.bloco,false,xPen)}</div>`:selectedBlock?`<div class="grid kpis">${kpi('Venda promocional do bloco',brlShort(t.v),pct(t.part)+' da venda mensal',true,xV)}${kpi('Venda total da loja nesses dias','-','importe diarios',false,xVt)}${kpi('Part. periodo real','-','sem venda_diario.txt')}${kpi('Penetracao real','-','sem venda_dia_campanha.txt')}</div><div class="alert a-warn mt">Nao da para medir o periodo real de ${selectedBlock} ainda. Importe venda_diario.txt e venda_dia_campanha.txt para cruzar os dias do encarte com a venda total desses mesmos dias.</div>`:`<div class="grid kpis">${kpi('Venda total',brlShort(t.vt),'Periodo',true,xVt)}${kpi('Venda Encarte Big NE',brlShort(enc.venda||0),pct(enc.part||0)+' da venda mensal',false,xV)}${kpi('Lucro promocional',brlShort(t.l),pct(t.margem)+' margem',false,xMarg)}${kpi('Penetracao mensal'+(fCamp.value=='Todos os blocos'||fCamp.value=='Todas'?' *':''),pct(t.pen),num(t.cup)+' cupons',false,xPen)}</div><div class="alert a-warn mt">Analise diaria ainda sem dados salvos. Importe venda_diario.txt e venda_dia_campanha.txt para ativar participacao no periodo real.</div>`;
   // Charts row 1: Monthly evolution + Campaign mix
   html+=`<div class="panel mt2"><div class="panel-header"><div><div class="panel-title">Evolucao mensal</div><div class="panel-sub">Escolha a combinacao de indicadores para comparar mes a mes</div></div><div class="metric-controls">${monthMetricControls()}<button class="btn" onclick="monthChartExpanded=true;render()">Ampliar</button>${csvBtn('CSV',"exportMonths()")}</div></div><div class="chart-xl"><canvas id="cMonth"></canvas></div></div>`;
   if(monthChartExpanded)html+=`<div class="modal"><div class="modal-card"><div class="modal-head"><div><h3>Evolucao mensal</h3><div class="sub">Analise ampliada dos indicadores selecionados</div></div><div class="metric-controls">${monthMetricControls()}<button class="btn" onclick="monthChartExpanded=false;render()">Fechar</button>${csvBtn('CSV',"exportMonths()")}</div></div><div class="chart-full"><canvas id="cMonthFull"></canvas></div></div></div>`;
@@ -1049,7 +688,7 @@ function dashboard(){
     renderMonthChart('cMonth',ms);
     if(monthChartExpanded)renderMonthChart('cMonthFull',ms);
     // Pie
-    if(camps.length){let topC=camps.slice(0,8),restC=camps.slice(8),pieLabels=topC.map(c=>c.descricao),pieData=topC.map(c=>c.venda);if(restC.length){pieLabels.push('Outras ('+restC.length+')');pieData.push(restC.reduce((s,c)=>s+c.venda,0))}mkChart('cPie','doughnut',pieLabels,[{data:pieData,backgroundColor:SOLID_COLORS.slice(0,pieLabels.length),borderWidth:2,borderColor:'#fff'}],{plugins:{tooltip:{callbacks:{label:ctx=>ctx.label+': '+brl(ctx.raw)}}}})}
+    if(camps.length)mkChart('cPie','doughnut',camps.map(c=>c.descricao),[{data:camps.map(c=>c.venda),backgroundColor:SOLID_COLORS.slice(0,camps.length),borderWidth:2,borderColor:'#fff'}],{plugins:{tooltip:{callbacks:{label:ctx=>ctx.label+': '+brl(ctx.raw)}}}});
     else emptyChart('cPie','Sem campanhas','Importe campanhas_ofertas.txt');
     // Campaign bar — daily coverage or monthly margin fallback
     let diasRows=encartedDaysRows();if(diasRows.length)mkChart('cCampBar','bar',diasRows.map(r=>r.loja),[{label:'Cobertura',data:diasRows.map(r=>r.cobertura),backgroundColor:diasRows.map(r=>r.margemTotal<5?PAL.red:r.margemTotal<10?PAL.gold:PAL.green),borderRadius:4,barThickness:18,maxBarThickness:18}],{indexAxis:'y',layout:{padding:{right:180}},plugins:{tooltip:{callbacks:{label:ctx=>{let r=diasRows[ctx.dataIndex],u=r.unidade||'dias';return [pct(r.cobertura)+' de cobertura',r.periodosOferta+'/'+r.baseVenda+' '+u,'Margem total da loja: '+pct(r.margemTotal),'Margem promocional: '+pct(r.margemPromocional),'Venda total: '+brl(r.vendaTotal),'Venda oferta: '+brl(r.venda)]}}},datalabels:{display:true,anchor:'end',align:'right',color:PAL.dark,font:{size:9,weight:'700'},formatter:(v,ctx)=>{let r=diasRows[ctx.dataIndex],u=r.unidade||'dias';return r.periodosOferta+'/'+r.baseVenda+' '+u+' ('+pct(v)+') | Margem '+pct(r.margemTotal)}}},scales:{x:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}},y:{ticks:{autoSkip:false}}}});
@@ -1115,7 +754,7 @@ function decisao(){
   },120);
   return html;
 }
-function exportBlocos(){let r=blocoRows();exportCSV('blocos.csv',['Bloco','Venda','Lucro','Margem','Part','Share','Fonte','Venda mensal'],r.map(x=>[x.bloco,x.venda.toFixed(2),x.lucro.toFixed(2),x.margem.toFixed(2),x.part.toFixed(2),x.share.toFixed(2),x.fonte,x.vendaMensal.toFixed(2)]))}
+function exportBlocos(){let r=blocoRows();exportCSV('blocos.csv',['Bloco','Venda','Lucro','Margem','Part','Share'],r.map(x=>[x.bloco,x.venda.toFixed(2),x.lucro.toFixed(2),x.margem.toFixed(2),x.part.toFixed(2),x.share.toFixed(2)]))}
 function exportDepts(){let d=deptRows(fCamp.value!='Todos os blocos'?fCamp.value:'');exportCSV('departamentos.csv',['Departamento','Venda','Part','Lucro','Margem'],d.map(r=>[r.departamento,r.venda.toFixed(2),r.part.toFixed(2),r.lucro.toFixed(2),r.margem.toFixed(2)]))}
 function exportProds(){let p=prodRows(fCamp.value!='Todos os blocos'?fCamp.value:'');exportCSV('produtos.csv',['Produto','Bloco','Venda','Lucro','Margem'],p.map(r=>[r.produto,r.campanha,r.venda.toFixed(2),r.lucro.toFixed(2),r.margem.toFixed(2)]))}
 function exportStores(){let s=storeRank();exportCSV('lojas.csv',['Loja','Venda','Part','Lucro','Pen'],s.map(r=>[r.loja,r.v.toFixed(2),r.part.toFixed(2),r.l.toFixed(2),r.pen.toFixed(2)]))}
@@ -1126,7 +765,7 @@ html+=`<div class="panel mt"><div class="panel-title">Campanhas ativas por dia</
 html+=`<div class="panel mt"><div class="panel-title">Ciclos de campanha</div><div class="panel-sub">Dias consecutivos da mesma campanha por loja</div>${sortableTable('tCycles',['Loja','Bloco','Campanha','Inicio','Fim','Dias','Venda','Venda total periodo','Part. periodo','Lucro','Margem','Venda/dia','Lucro/dia'],cycles.map(r=>[esc(r.loja||''),esc(r.bloco),esc(r.campanha),r.inicio,r.fim,r.dias,brl(r.venda),brl(r.vendaTotal),pct(r.partPeriodo),brl(r.lucro),pct(r.margem),brl(r.vendaDia),brl(r.lucroDia)]),['text','text','text','text','text','num','num','num','num','num','num','num','num'])}</div>`;return html}
 
 /* ===== IMPORTACOES ===== */
-function importacoes(){return`<div class="panel"><div class="toolbar"><div class="panel-title">Importar arquivos</div><button class="btn" onclick="template()">Baixar cabecalho</button></div><div class="drop mt"><div class="row"><select id="il">${db.empresas.map(e=>`<option ${e.nome==fLoja.value?'selected':''}>${e.nome}</option>`).join('')}</select><input id="ii" type="date" value="${fInicio.value}"><input id="ifim" type="date" value="${fFim.value}"></div><p class="muted" style="font-size:12px">Selecione a loja e importe os 5 arquivos mensais obrigatorios. Opcionalmente, importe tambem venda_diario.txt e venda_dia_campanha.txt para analise diaria, e venda_departamento_total.txt para o % de oferta sobre a venda total de cada categoria. A coluna loja do TXT fica como referencia - o destino e sempre a loja acima.</p><select id="it" style="display:none">${ORDER.map(k=>`<option value="${k}">${TYPES[k].label}</option>`).join('')}</select><textarea id="io" placeholder="Observacao opcional" rows="2"></textarea><div class="grid g2"><div><div class="lb" style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px">Arquivos .txt</div><input id="files" type="file" accept=".txt" multiple></div><div><div class="lb" style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px">Ou pasta</div><input id="folderFiles" type="file" accept=".txt" webkitdirectory multiple></div></div><div id="req" class="muted" style="font-size:11px"></div><pre id="prev" class="preview" style="display:none"></pre><div id="ir"></div><button class="btn primary" id="importBtn" onclick="processImport()" style="width:100%;justify-content:center;padding:10px">Importar arquivos da loja</button></div></div><div class="panel mt"><div class="panel-header"><div class="panel-title">Historico</div>${csvBtn('CSV',"exportHistory()")}</div>${history()}</div>`}
+function importacoes(){return`<div class="panel"><div class="toolbar"><div class="panel-title">Importar arquivos</div><button class="btn" onclick="template()">Baixar cabecalho</button></div><div class="drop mt"><div class="row"><select id="il">${db.empresas.map(e=>`<option ${e.nome==fLoja.value?'selected':''}>${e.nome}</option>`).join('')}</select><input id="ii" type="date" value="${fInicio.value}"><input id="ifim" type="date" value="${fFim.value}"></div><p class="muted" style="font-size:12px">Selecione a loja e importe os 5 arquivos mensais obrigatorios. Opcionalmente, importe tambem venda_diario.txt e venda_dia_campanha.txt para analise diaria. A coluna loja do TXT fica como referencia - o destino e sempre a loja acima.</p><select id="it" style="display:none">${ORDER.map(k=>`<option value="${k}">${TYPES[k].label}</option>`).join('')}</select><textarea id="io" placeholder="Observacao opcional" rows="2"></textarea><div class="grid g2"><div><div class="lb" style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px">Arquivos .txt</div><input id="files" type="file" accept=".txt" multiple></div><div><div class="lb" style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px">Ou pasta</div><input id="folderFiles" type="file" accept=".txt" webkitdirectory multiple></div></div><div id="req" class="muted" style="font-size:11px"></div><pre id="prev" class="preview" style="display:none"></pre><div id="ir"></div><button class="btn primary" id="importBtn" onclick="processImport()" style="width:100%;justify-content:center;padding:10px">Importar arquivos da loja</button></div></div><div class="panel mt"><div class="panel-header"><div class="panel-title">Historico</div>${csvBtn('CSV',"exportHistory()")}</div>${history()}</div>`}
 function exportHistory(){exportCSV('historico.csv',['Data','Arquivo','Loja','Tipo','Linhas','Ignoradas'],db.importacoes.map(i=>[i.data,i.arquivo,i.loja,TYPES[i.tipo]?.label||i.tipo,i.linhas||0,i.ignoradas||0]))}
 function history(){return db.importacoes.length?`<div class="table-wrap"><table><thead><tr><th>Data</th><th>Arquivo</th><th>Loja</th><th>Tipo</th><th>Linhas</th><th>Ign.</th><th>Obs.</th></tr></thead><tbody>${db.importacoes.map(i=>`<tr><td>${esc(i.data)}</td><td>${esc(i.arquivo)}</td><td>${esc(i.loja)}</td><td>${esc(TYPES[i.tipo]?.label||i.tipo)}</td><td>${i.linhas||0}</td><td>${i.ignoradas||0}</td><td>${esc(i.observacao||'-')}</td></tr>`).join('')}</tbody></table></div>`:`<p class="muted" style="text-align:center;padding:24px">Nenhuma importacao registrada.</p>`}
 function showReq(){if(window.req)req.innerHTML='Colunas: '+TYPES[it.value].cols.join(', ')}
@@ -1162,19 +801,10 @@ async function processImport(){
     let miss=cfg.cols.filter(c=>!p.head.includes(c));
     if(miss.length){errors.push(f.name+' ('+cfg.label+'): colunas faltantes '+miss.join(', '));continue}
     let rows=p.rows.filter(r=>cfg.diario?inDatePeriod(r.data,ini,fim):allowed.includes(monthKey(r.mes))).map(r=>cfg.diario?({...r,data:dateKey(r.data),loja,__loja_vr:r.loja||'',__tipo:rt}):({...r,mes:monthKey(r.mes),loja,__loja_vr:r.loja||'',__tipo:rt}));
-    if(cfg.bucket=='produtos'||cfg.bucket=='departamentos'){let seen=new Set(),antes=rows.length;rows=rows.filter(r=>{let k=_dupKey(cfg.bucket,r);if(seen.has(k))return false;seen.add(k);return true});if(antes>rows.length)warnings.push(f.name+': '+num(antes-rows.length)+' linha(s) exatamente identicas removidas automaticamente (mesmo produto, oferta e valores repetidos no arquivo).')}
-    if(!rows.length)warnings.push(f.name+': nenhuma linha no periodo. Dados antigos desse arquivo/periodo serao limpos.');
+    if(!rows.length){warnings.push(f.name+': nenhuma linha no periodo. Nao sera importado (para evitar deletar dados sem adicionar).');continue}
     let key=rt+'|'+loja;(grouped[key]=grouped[key]||{tipo:rt,loja,rows:[]}).rows.push(...rows);
     totalR+=rows.length;
     hist.push({data:new Date().toLocaleString('pt-BR'),arquivo:f.name,loja,periodo:ini+' a '+fim,tipo:rt,linhas:rows.length,ignoradas:p.rows.length-rows.length,colunas_faltantes:[],observacao:obs})
-  }
-  if(!errors.length){
-    let sum=g=>g?g.rows.reduce((s,r)=>s+(+r.venda||0),0):null,vc=sum(grouped['campanhas_ofertas|'+loja]);
-    if(vc!=null&&vc>0)[['produtos_campanha','produtos'],['departamentos_campanha','departamentos']].forEach(([t,nm])=>{
-      let v=sum(grouped[t+'|'+loja]);if(v==null)return;
-      let d=(v-vc)/vc*100;
-      if(Math.abs(d)>5)warnings.push('<b>Validacao cruzada:</b> a soma de '+nm+' ('+brl(v)+') difere '+(d>0?'+':'')+d.toFixed(1)+'% do total oficial das campanhas ('+brl(vc)+') neste lote. Confira a consulta no VR antes de aprovar. Detalhes em Auditoria > Reconciliacao de fontes.')
-    })
   }
 
   let nb=document.getElementById('ir'),pv=document.getElementById('prev');
@@ -1200,66 +830,9 @@ async function processImport(){
 }
 function template(){let t=(window.it&&it.value)||'resumo_geral_loja',b=new Blob([TYPES[t].cols.join(';')+'\n']),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=TYPES[t].file;a.click()}
 
-/* ===== RECONCILIACAO DE FONTES ===== */
-function reconcileRows(loja=fLoja.value){
-  let map={},ensure=r=>{let k=r.loja+'|'+monthKey(r.mes)+'|'+String(r.id_tipooferta??'');return map[k]||(map[k]={loja:r.loja,mes:monthKey(r.mes),nome:'',vCamp:0,vProd:0,vDept:0,temCamp:false,temProd:false,temDept:false})};
-  scopeRows('campanhas',loja).forEach(r=>{let o=ensure(r);o.vCamp+=+r.venda||0;o.temCamp=true;o.nome=o.nome||r.descricao||''});
-  scopeRows('produtos',loja).forEach(r=>{let o=ensure(r);o.vProd+=+r.venda||0;o.temProd=true;o.nome=o.nome||r.campanha||''});
-  scopeRows('departamentos',loja).forEach(r=>{let o=ensure(r);o.vDept+=+r.venda||0;o.temDept=true;o.nome=o.nome||r.campanha||''});
-  return Object.values(map).map(r=>{
-    let dP=r.temProd?(r.vCamp?(r.vProd-r.vCamp)/r.vCamp*100:999):null;
-    let dD=r.temDept?(r.vCamp?(r.vDept-r.vCamp)/r.vCamp*100:999):null;
-    let worst=Math.max(dP==null?0:Math.abs(dP),dD==null?0:Math.abs(dD),r.temCamp?0:999);
-    return{...r,dProd:dP,dDept:dD,worst}
-  }).sort((a,b)=>b.worst-a.worst)
-}
-function reconcileBlocoDaily(loja=fLoja.value){
-  let ofc={},dia={};
-  scopeRows('campanhas',loja).forEach(r=>{let k=monthKey(r.mes)+'|'+blocoCampanha(r.descricao);ofc[k]=(ofc[k]||0)+(+r.venda||0)});
-  (db.ofertasDia||[]).forEach(r=>{if(!storeAllowed(r.loja,loja))return;let m=monthKey(dateKey(r.data));if(!inPeriod(m))return;let k=m+'|'+blocoOfertaDia(r);dia[k]=(dia[k]||0)+(+r.venda_oferta||0)});
-  let keys=[...new Set([...Object.keys(ofc),...Object.keys(dia)])].sort();
-  return keys.map(k=>{let i=k.indexOf('|'),mes=k.slice(0,i),bloco=k.slice(i+1),a=ofc[k]||0,b=dia[k]||0;return{mes,bloco,oficial:a,diario:b,temDiario:k in dia,diff:a?(b-a)/a*100:(b?999:0)}}).filter(r=>r.temDiario)
-}
-function reconcileDailyRows(loja=fLoja.value){
-  let rs={},vd={};
-  resumos(loja).forEach(r=>{let m=monthKey(r.mes);rs[m]=(rs[m]||0)+(+r.venda_total||0)});
-  (db.vendasDiarias||[]).forEach(r=>{if(!storeAllowed(r.loja,loja))return;let m=monthKey(dateKey(r.data));if(!inPeriod(m))return;vd[m]=(vd[m]||0)+(+r.venda_total||0)});
-  return Object.keys(rs).sort().map(m=>{let a=rs[m]||0,b=vd[m]||0,d=a?(b-a)/a*100:(b?999:0);return{mes:m,resumo:a,diario:b,temDiario:m in vd,diff:d}}).filter(r=>r.temDiario)
-}
-function _dupKey(b,r){return[b,r.loja,monthKey(r.mes),String(r.id_tipooferta??''),r.id_produto??'',r.descricao_produto??'',r.mercadologico1??'',r.descricao_departamento??'',+r.quantidade||0,+r.venda||0,+r.lucro||0].join('|')}
-function exactDupCount(){let n=0;['produtos','departamentos'].forEach(b=>{let seen=new Set();(db[b]||[]).forEach(r=>{let k=_dupKey(b,r);if(seen.has(k))n++;else seen.add(k)})});return n}
-function removeExactDupes(){
-  let n=exactDupCount();
-  if(!n){alert('Nenhuma linha duplicada exata encontrada em produtos/departamentos.');return}
-  if(!confirm(n+' linha(s) exatamente identicas (mesma loja, mes, oferta, produto e valores) serao removidas da base inteira de produtos/departamentos. Um backup automatico e criado no servidor antes da gravacao. Continuar?'))return;
-  ['produtos','departamentos'].forEach(b=>{let seen=new Set();db[b]=(db[b]||[]).filter(r=>{let k=_dupKey(b,r);if(seen.has(k))return false;seen.add(k);return true})});
-  save(true,ok=>{showToast(ok?num(n)+' duplicado(s) removido(s) e salvos na nuvem':'Removido localmente, mas a nuvem NAO confirmou a gravacao');render()})
-}
-function reconPanel(loja){
-  let rows=reconcileRows(loja);
-  if(!rows.length)return'';
-  let vC=rows.reduce((s,r)=>s+r.vCamp,0),vP=rows.reduce((s,r)=>s+r.vProd,0),vD=rows.reduce((s,r)=>s+r.vDept,0);
-  let temP=rows.some(r=>r.temProd),temD=rows.some(r=>r.temDept);
-  let dT=x=>vC?(x-vC)/vC*100:0,dP=temP?dT(vP):null,dD=temD?dT(vD):null;
-  let pill=w=>w>5?'<span class="pill p-bad">Divergente</span>':w>1?'<span class="pill p-warn">Atencao</span>':'<span class="pill p-ok">OK</span>';
-  let fd=d=>d==null?'-':`<span class="${Math.abs(d)>5?'m-bad':Math.abs(d)>1?'m-warn':'m-good'}">${(d>0?'+':'')+(d>500?'&gt;500':d.toFixed(1))}%</span>`;
-  let fh=(v,d,tem)=>tem?`<b>${brl(v)}</b> (${(d>0?'+':'')+d.toFixed(1)}%)`:'<b>nao importado</b>';
-  let ok=(dP==null||Math.abs(dP)<=5)&&(dD==null||Math.abs(dD)<=5);
-  let head=`<div class="alert ${ok?'a-ok':'a-warn'}">Total oficial (campanhas): <b>${brl(vC)}</b> | Σ Produtos: ${fh(vP,dP,temP)} | Σ Departamentos: ${fh(vD,dD,temD)}. ${ok?'Fontes presentes consistentes.':'O detalhamento deveria somar o total oficial de cada campanha — diferenca acima de 5% indica duplicidade ou erro na extracao do VR.'}</div>`;
-  let dup=exactDupCount();
-  let dupHtml=dup?`<div class="alert a-warn mt">${num(dup)} linha(s) exatamente identicas na base inteira de produtos/departamentos (provavel duplicidade de importacao). <button class="btn" onclick="removeExactDupes()">Remover duplicados exatos</button></div>`:'';
-  let multi=loja=='Todas';
-  let t=`<div class="table-wrap mt" style="max-height:340px;overflow:auto"><table><thead><tr>${multi?'<th>Loja</th>':''}<th>Mes</th><th>Campanha</th><th>Oficial</th><th>Σ Produtos</th><th>Dif.</th><th>Σ Deptos</th><th>Dif.</th><th>Status</th></tr></thead><tbody>${rows.map(r=>`<tr>${multi?'<td>'+esc(r.loja)+'</td>':''}<td>${r.mes}</td><td title="${esc(r.nome)}">${esc(String(r.nome).length>40?String(r.nome).slice(0,40)+'...':r.nome)}${r.temCamp?'':' <span class="pill p-bad">sem campanha oficial</span>'}</td><td><b>${r.temCamp?brlShort(r.vCamp):'-'}</b></td><td>${r.temProd?brlShort(r.vProd):'-'}</td><td>${fd(r.dProd)}</td><td>${r.temDept?brlShort(r.vDept):'-'}</td><td>${fd(r.dDept)}</td><td>${pill(r.worst)}</td></tr>`).join('')}</tbody></table></div>`;
-  let dl=reconcileDailyRows(loja);
-  let t2=dl.length?`<div class="mt"><div class="panel-title" style="font-size:13px">Venda total: resumo mensal vs base diaria</div><div class="table-wrap mt" style="max-height:200px;overflow:auto"><table><thead><tr><th>Mes</th><th>Resumo mensal</th><th>Σ Venda diaria</th><th>Dif.</th></tr></thead><tbody>${dl.map(r=>`<tr><td>${r.mes}</td><td>${brlShort(r.resumo)}</td><td>${brlShort(r.diario)}</td><td>${fd(r.diff)}</td></tr>`).join('')}</tbody></table></div></div>`:'';
-  let bd=reconcileBlocoDaily(loja);
-  let t3=bd.length?`<div class="mt"><div class="panel-title" style="font-size:13px">Venda promocional por bloco: base diaria (valor adotado) vs mensal</div><div class="panel-sub">A base diaria define o valor do bloco nos paineis. Diferenca negativa indica dias ou lojas faltando em venda_dia_campanha.txt — nesse caso o valor exibido fica subestimado</div><div class="table-wrap mt" style="max-height:220px;overflow:auto"><table><thead><tr><th>Mes</th><th>Bloco</th><th>Σ Base diaria (adotado)</th><th>Mensal (campanhas)</th><th>Dif.</th></tr></thead><tbody>${bd.map(r=>`<tr><td>${r.mes}</td><td>${esc(r.bloco)}</td><td><b>${brlShort(r.diario)}</b></td><td>${brlShort(r.oficial)}</td><td>${fd(r.diff)}</td></tr>`).join('')}</tbody></table></div></div>`:'';
-  return`<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Reconciliacao de fontes</div><div class="panel-sub">Cruzamento entre os arquivos importados por campanha. O arquivo campanhas_ofertas e a fonte oficial; produtos e departamentos sao detalhamento e devem somar o mesmo valor.</div></div></div>${head}${dupHtml}${t}${t2}${t3}</div>`
-}
-
 /* ===== AUDITORIA ===== */
 function audit(loja=fLoja.value){if(loja=='Todas')loja=db.empresas[0]?.nome||'Loja 01';let months=monthsBetween(fInicio.value,fFim.value),key=periodKey(loja),mark=db.aprovacoes[key]||{},imps=db.importacoes.filter(i=>i.loja==loja&&i.periodo==fInicio.value+' a '+fFim.value),present={};ORDER.forEach(t=>present[t]=db[TYPES[t].bucket].some(r=>r.loja==loja&&months.includes(monthKey(r.mes))&&r.__tipo==t));let missing=ORDER.filter(t=>!present[t]),t=total(loja,false),ignored=imps.reduce((s,i)=>s+(+i.ignoradas||0),0),alerts=[];if(missing.length)alerts.push('Faltam: '+missing.map(t=>TYPES[t].label).join(', '));if(!t.vt)alerts.push('Resumo geral sem venda no periodo.');if(ignored)alerts.push(num(ignored)+' linha(s) fora do periodo ignoradas na importacao (esperado quando o TXT cobre mais meses).');let st='Pendente';if(ORDER.length-missing.length>0)st=missing.length?'Parcial':'Auditado';if(st=='Auditado'&&!t.vt)st='Com erro';if(mark.status=='Reaberto'&&st=='Auditado')st='Reaberto';if(mark.status=='Aprovado')st='Aprovado';return{loja,months,imps,present,missing,total:t,ignored,alerts,status:st,reaberto:mark.status=='Reaberto',last:imps[0]?.data||'',obs:mark.obs||imps[0]?.observacao||''}}
-function auditoria(){if(fLoja.value=='Todas')return'<div class="alert a-info">Visao da rede inteira. Para auditar o lote de arquivos de uma loja (status, historico, aprovacao), selecione a loja no filtro. Abaixo, a reconciliacao de fontes de todas as lojas, ordenada da maior divergencia para a menor.</div>'+reconPanel('Todas');let a=audit(),lock=['Auditado','Aprovado'].includes(a.status)&&!a.reaberto;return`<div class="grid kpis">${kpi('Status',statusPill(a.status),'',true)}${kpi('Arquivos',a.imps.length,'importados')}${kpi('Meses',a.months.length,'no periodo')}${kpi('Ignoradas',num(a.ignored),'linhas')}</div><div class="panel mt"><div class="panel-title">Controle do lote</div><div class="panel-sub">${lock?'Lote bloqueado para reimportacao. Retire a auditoria para corrigir arquivos.':'Lote liberado para ajustes e importacao.'}</div><div class="row mt">${lock?`<button class="btn" onclick="unlockAudit('${a.loja}',true)">Retirar auditoria</button>`:''}<button class="btn" onclick="go('importacoes')">Ir para importacao</button></div></div><div class="grid g2 mt"><div class="panel"><div class="panel-title">Historico</div>${history()}</div><div class="panel"><div class="panel-title">Diagnostico</div><p style="font-size:12px;margin-top:8px">Venda total: <b>${brl(a.total.vt)}</b></p><p style="font-size:12px">Campanhas: <b>${brl(a.total.v)}</b></p><p style="font-size:12px">Diferenca: <b>${brl(a.total.vt-a.total.v)}</b></p><div class="mt"><div class="panel-title">Arquivos faltantes</div><p style="margin-top:6px">${a.missing.map(t=>`<span class="pill p-warn">${TYPES[t].label}</span> `).join('')||'<span class="pill p-ok">Nenhum</span>'}</p></div>${a.alerts.map(x=>`<div class="alert a-warn">${x}</div>`).join('')||'<div class="alert a-ok">Sem alertas.</div>'}</div></div>${reconPanel(a.loja)}`}
+function auditoria(){if(fLoja.value=='Todas')return'<div class="alert a-warn">Selecione uma loja especifica para auditar.</div>';let a=audit(),lock=['Auditado','Aprovado'].includes(a.status)&&!a.reaberto;return`<div class="grid kpis">${kpi('Status',statusPill(a.status),'',true)}${kpi('Arquivos',a.imps.length,'importados')}${kpi('Meses',a.months.length,'no periodo')}${kpi('Ignoradas',num(a.ignored),'linhas')}</div><div class="panel mt"><div class="panel-title">Controle do lote</div><div class="panel-sub">${lock?'Lote bloqueado para reimportacao. Retire a auditoria para corrigir arquivos.':'Lote liberado para ajustes e importacao.'}</div><div class="row mt">${lock?`<button class="btn" onclick="unlockAudit('${a.loja}',true)">Retirar auditoria</button>`:''}<button class="btn" onclick="go('importacoes')">Ir para importacao</button></div></div><div class="grid g2 mt"><div class="panel"><div class="panel-title">Historico</div>${history()}</div><div class="panel"><div class="panel-title">Diagnostico</div><p style="font-size:12px;margin-top:8px">Venda total: <b>${brl(a.total.vt)}</b></p><p style="font-size:12px">Campanhas: <b>${brl(a.total.v)}</b></p><p style="font-size:12px">Diferenca: <b>${brl(a.total.vt-a.total.v)}</b></p><div class="mt"><div class="panel-title">Arquivos faltantes</div><p style="margin-top:6px">${a.missing.map(t=>`<span class="pill p-warn">${TYPES[t].label}</span> `).join('')||'<span class="pill p-ok">Nenhum</span>'}</p></div>${a.alerts.map(x=>`<div class="alert a-warn">${x}</div>`).join('')||'<div class="alert a-ok">Sem alertas.</div>'}</div></div>`}
 
 /* ===== PLANO ===== */
 function plano(){let rs=db.empresas.filter(e=>fRegiao.value=='Todas'||e.regiao==fRegiao.value).map(e=>({...audit(e.nome),regiao:e.regiao})),tot=rs.length,ap=rs.filter(r=>r.status=='Aprovado').length,err=rs.filter(r=>r.status=='Com erro').length,pend=rs.filter(r=>!['Aprovado','Auditado'].includes(r.status)).length;return`<div class="grid kpis">${kpi('Total',tot,'lojas',true)}${kpi('Aprovadas',ap,pct(tot?ap/tot*100:0))}${kpi('Pendentes',pend,'')}${kpi('Com erro',err,'')}</div><div class="panel mt"><div class="panel-header"><div class="panel-title">Plano de Coleta</div>${csvBtn('CSV',"exportPlano()")}</div><div class="table-wrap"><table><thead><tr><th>Loja</th><th>Regiao</th><th>Status</th>${ORDER.map(t=>`<th>${TYPES[t].label.substring(0,6)}</th>`).join('')}<th>Ultima</th><th>Acoes</th></tr></thead><tbody>${rs.map(r=>{let lock=['Auditado','Aprovado'].includes(r.status)&&!r.reaberto;return`<tr><td><b>${r.loja}</b></td><td>${r.regiao}</td><td>${statusPill(r.status)}</td>${ORDER.map(t=>`<td>${r.present[t]?'<span class="pill p-ok">Sim</span>':'<span class="pill p-muted">Nao</span>'}</td>`).join('')}<td style="font-size:10px">${r.last||'-'}</td><td><button class="btn" onclick="openAudit('${r.loja}')">Ver auditoria</button> ${r.status!='Aprovado'?`<button class="btn primary" onclick="approve('${r.loja}')">Aprovar lote</button>`:''} ${lock?`<button class="btn" onclick="unlockAudit('${r.loja}',false)">Retirar auditoria</button>`:`<button class="btn" onclick="reprocess('${r.loja}')">Reprocessar</button>`}</td></tr>`}).join('')}</tbody></table></div></div>`}
@@ -1276,13 +849,13 @@ function exportConsol(){let lojas=db.empresas.filter(e=>(fRegiao.value=='Todas'|
 
 /* ===== MODELOS SQL ===== */
 function modelos(){let loja=fLoja.value=='Todas'?'Loja 01':fLoja.value,tipo=(window.sqlTipo&&sqlTipo.value)||'resumo_geral_loja';return`<div class="panel"><div class="panel-title">Modelos SQL</div><div class="panel-sub">Consultas mensais de importacao e consultas diarias de apoio</div><div class="row mt"><select id="sqlTipo" onchange="render()">${SQL_ORDER.map(k=>`<option value="${k}" ${k==tipo?'selected':''}>${SQL_MODELS[k].label}</option>`).join('')}</select><button class="btn primary" onclick="copySql()">Copiar SQL</button></div><pre id="sqlBox" class="sql" style="margin-top:12px">${makeSql(tipo,empresa(loja),fInicio.value,fFim.value)}</pre></div>`}
-function makeSql(tipo,e,ini,fim){let id=e.id_vr||1;if(tipo=='venda_departamento_total')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  p.mercadologico1, m.descricao AS descricao_departamento,\n  SUM(i.valortotal) AS venda_total,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro_total\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id=i.id_venda\nINNER JOIN public.produto p ON p.id=i.id_produto\nINNER JOIN public.mercadologico m ON m.mercadologico1=p.mercadologico1 AND m.nivel=1\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), p.mercadologico1, m.descricao\nORDER BY mes, venda_total DESC;`;if(tipo=='ofertas_dia_campanha')return`SELECT\n  v.id_loja AS loja,\n  v.data AS data,\n  i.id_tipooferta,\n  t.descricao AS campanha,\n  SUM(i.valortotal) AS venda_oferta,\n  SUM(i.customediocomimposto * i.quantidade) AS custo_oferta,\n  SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade) AS lucro_oferta,\n  ROUND((SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade)) / NULLIF(SUM(i.valortotal),0) * 100,2) AS margem_oferta,\n  SUM(i.quantidade) AS quantidade_oferta,\n  COUNT(DISTINCT v.id) AS cupons_oferta,\n  COUNT(DISTINCT i.id_produto) AS produtos_oferta\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda = v.id\nINNER JOIN public.tipooferta t ON t.id = i.id_tipooferta\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, v.data, i.id_tipooferta, t.descricao\nORDER BY v.data, venda_oferta DESC;`;if(tipo=='venda_diaria_loja')return`SELECT\n  v.id_loja AS loja,\n  v.data AS data,\n  SUM(i.valortotal) AS venda_total,\n  SUM(i.customediocomimposto * i.quantidade) AS custo_total,\n  SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade) AS lucro_total,\n  ROUND((SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade)) / NULLIF(SUM(i.valortotal),0) * 100,2) AS margem_total,\n  COUNT(DISTINCT v.id) AS cupons_totais,\n  SUM(i.quantidade) AS unidades_totais\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda = v.id\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE\nGROUP BY v.id_loja, v.data\nORDER BY v.data;`;if(tipo=='cupons_totais')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  ct.cupons_totais,\n  t.descricao AS campanha,\n  COUNT(DISTINCT v.id) AS cupons_campanha\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id = i.id_venda\nINNER JOIN public.tipooferta t ON t.id = i.id_tipooferta\nINNER JOIN (\n  SELECT id_loja, DATE_TRUNC('month',data) AS mes_ref, COUNT(DISTINCT id) AS cupons_totais\n  FROM pdv.venda WHERE id_loja=${id} AND data>='${ini}' AND data<'${fim}' AND cancelado=FALSE\n  GROUP BY id_loja, DATE_TRUNC('month',data)\n) ct ON ct.id_loja=v.id_loja AND ct.mes_ref=DATE_TRUNC('month',v.data)\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), ct.cupons_totais, t.descricao\nORDER BY mes, cupons_campanha DESC;`;if(tipo=='departamentos_campanha')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao AS campanha,\n  p.mercadologico1, m.descricao AS descricao_departamento,\n  COUNT(DISTINCT i.id_produto) AS produtos,\n  SUM(i.quantidade) AS quantidade,\n  SUM(i.valortotal) AS venda,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id=i.id_venda\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nINNER JOIN public.produto p ON p.id=i.id_produto\nINNER JOIN public.mercadologico m ON m.mercadologico1=p.mercadologico1 AND m.nivel=1\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao, p.mercadologico1, m.descricao\nORDER BY mes, campanha, venda DESC;`;if(tipo=='produtos_campanha')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao AS campanha,\n  p.mercadologico1, m.descricao AS descricao_departamento,\n  i.id_produto, p.descricaocompleta AS descricao_produto,\n  SUM(i.quantidade) AS quantidade,\n  SUM(i.valortotal) AS venda,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id=i.id_venda\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nINNER JOIN public.produto p ON p.id=i.id_produto\nINNER JOIN public.mercadologico m ON m.mercadologico1=p.mercadologico1 AND m.nivel=1\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao, p.mercadologico1, m.descricao, i.id_produto, p.descricaocompleta\nORDER BY mes, campanha, venda DESC;`;if(tipo=='campanhas_ofertas')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao,\n  SUM(i.valortotal) AS venda,\n  SUM(i.customediocomimposto*i.quantidade) AS custo,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem,\n  SUM(i.quantidade) AS quantidade,\n  COUNT(*) AS itens,\n  COUNT(DISTINCT i.id_produto) AS produtos_distintos,\n  COUNT(DISTINCT v.id) AS cupons,\n  ROUND(SUM(i.valortotal)/NULLIF(COUNT(DISTINCT v.id),0),2) AS ticket_medio,\n  ROUND(SUM(i.valortotal)/NULLIF(SUM(i.quantidade),0),2) AS preco_medio\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda=v.id\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao\nORDER BY mes, venda DESC;`;return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  SUM(i.valortotal) AS venda_total,\n  SUM(i.customediocomimposto*i.quantidade) AS custo_total,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro_total,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem_total,\n  COUNT(DISTINCT v.id) AS cupons_totais,\n  SUM(i.quantidade) AS unidades_totais,\n  COUNT(DISTINCT i.id_produto) AS produtos_distintos\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda=v.id\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data)\nORDER BY mes;`}
+function makeSql(tipo,e,ini,fim){let id=e.id_vr||1;if(tipo=='ofertas_dia_campanha')return`SELECT\n  v.id_loja AS loja,\n  v.data AS data,\n  i.id_tipooferta,\n  t.descricao AS campanha,\n  SUM(i.valortotal) AS venda_oferta,\n  SUM(i.customediocomimposto * i.quantidade) AS custo_oferta,\n  SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade) AS lucro_oferta,\n  ROUND((SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade)) / NULLIF(SUM(i.valortotal),0) * 100,2) AS margem_oferta,\n  SUM(i.quantidade) AS quantidade_oferta,\n  COUNT(DISTINCT v.id) AS cupons_oferta,\n  COUNT(DISTINCT i.id_produto) AS produtos_oferta\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda = v.id\nINNER JOIN public.tipooferta t ON t.id = i.id_tipooferta\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, v.data, i.id_tipooferta, t.descricao\nORDER BY v.data, venda_oferta DESC;`;if(tipo=='venda_diaria_loja')return`SELECT\n  v.id_loja AS loja,\n  v.data AS data,\n  SUM(i.valortotal) AS venda_total,\n  SUM(i.customediocomimposto * i.quantidade) AS custo_total,\n  SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade) AS lucro_total,\n  ROUND((SUM(i.valortotal) - SUM(i.customediocomimposto * i.quantidade)) / NULLIF(SUM(i.valortotal),0) * 100,2) AS margem_total,\n  COUNT(DISTINCT v.id) AS cupons_totais,\n  SUM(i.quantidade) AS unidades_totais\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda = v.id\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE\nGROUP BY v.id_loja, v.data\nORDER BY v.data;`;if(tipo=='cupons_totais')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  ct.cupons_totais,\n  t.descricao AS campanha,\n  COUNT(DISTINCT v.id) AS cupons_campanha\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id = i.id_venda\nINNER JOIN public.tipooferta t ON t.id = i.id_tipooferta\nINNER JOIN (\n  SELECT id_loja, DATE_TRUNC('month',data) AS mes_ref, COUNT(DISTINCT id) AS cupons_totais\n  FROM pdv.venda WHERE id_loja=${id} AND data>='${ini}' AND data<'${fim}' AND cancelado=FALSE\n  GROUP BY id_loja, DATE_TRUNC('month',data)\n) ct ON ct.id_loja=v.id_loja AND ct.mes_ref=DATE_TRUNC('month',v.data)\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), ct.cupons_totais, t.descricao\nORDER BY mes, cupons_campanha DESC;`;if(tipo=='departamentos_campanha')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao AS campanha,\n  p.mercadologico1, m.descricao AS descricao_departamento,\n  COUNT(DISTINCT i.id_produto) AS produtos,\n  SUM(i.quantidade) AS quantidade,\n  SUM(i.valortotal) AS venda,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id=i.id_venda\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nINNER JOIN public.produto p ON p.id=i.id_produto\nINNER JOIN public.mercadologico m ON m.mercadologico1=p.mercadologico1 AND m.nivel=1\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao, p.mercadologico1, m.descricao\nORDER BY mes, campanha, venda DESC;`;if(tipo=='produtos_campanha')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao AS campanha,\n  p.mercadologico1, m.descricao AS descricao_departamento,\n  i.id_produto, p.descricaocompleta AS descricao_produto,\n  SUM(i.quantidade) AS quantidade,\n  SUM(i.valortotal) AS venda,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem\nFROM pdv.vendaitem i\nINNER JOIN pdv.venda v ON v.id=i.id_venda\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nINNER JOIN public.produto p ON p.id=i.id_produto\nINNER JOIN public.mercadologico m ON m.mercadologico1=p.mercadologico1 AND m.nivel=1\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao, p.mercadologico1, m.descricao, i.id_produto, p.descricaocompleta\nORDER BY mes, campanha, venda DESC;`;if(tipo=='campanhas_ofertas')return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  i.id_tipooferta, t.descricao,\n  SUM(i.valortotal) AS venda,\n  SUM(i.customediocomimposto*i.quantidade) AS custo,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem,\n  SUM(i.quantidade) AS quantidade,\n  COUNT(*) AS itens,\n  COUNT(DISTINCT i.id_produto) AS produtos_distintos,\n  COUNT(DISTINCT v.id) AS cupons,\n  ROUND(SUM(i.valortotal)/NULLIF(COUNT(DISTINCT v.id),0),2) AS ticket_medio,\n  ROUND(SUM(i.valortotal)/NULLIF(SUM(i.quantidade),0),2) AS preco_medio\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda=v.id\nINNER JOIN public.tipooferta t ON t.id=i.id_tipooferta\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE AND i.oferta=TRUE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data), i.id_tipooferta, t.descricao\nORDER BY mes, venda DESC;`;return`SELECT\n  v.id_loja AS loja,\n  TO_CHAR(DATE_TRUNC('month', v.data), 'YYYY-MM') AS mes,\n  SUM(i.valortotal) AS venda_total,\n  SUM(i.customediocomimposto*i.quantidade) AS custo_total,\n  SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade) AS lucro_total,\n  ROUND((SUM(i.valortotal)-SUM(i.customediocomimposto*i.quantidade))/NULLIF(SUM(i.valortotal),0)*100,2) AS margem_total,\n  COUNT(DISTINCT v.id) AS cupons_totais,\n  SUM(i.quantidade) AS unidades_totais,\n  COUNT(DISTINCT i.id_produto) AS produtos_distintos\nFROM pdv.venda v\nINNER JOIN pdv.vendaitem i ON i.id_venda=v.id\nWHERE v.id_loja=${id} AND v.data>='${ini}' AND v.data<'${fim}' AND v.cancelado=FALSE\nGROUP BY v.id_loja, DATE_TRUNC('month',v.data)\nORDER BY mes;`}
 function copySql(){navigator.clipboard.writeText(sqlBox.textContent).then(()=>showToast('SQL copiado'))}
 
 /* ===== EMPRESAS ===== */
 function regioes(){return [...new Set(['Joao Pessoa','Campina Grande','Litoral','Brejo','Agreste','Natal','Sertao',...(db.regioes||[]),...db.empresas.map(e=>e.regiao).filter(Boolean)])].sort()}
 function empresas(){let rs=regioes();return`${cloudLoaded||location.protocol=='file:'?'':'<div class="alert a-warn"><b>Dados da nuvem ainda carregando.</b> Aguarde este aviso sumir antes de editar — alteracoes feitas agora nao serao salvas.</div>'}<div class="panel"><div class="panel-header"><div><div class="panel-title">Empresas</div><div class="panel-sub">Edite o nome ou a regiao de cada loja; a alteracao e salva na nuvem na hora e confirmada no aviso do canto da tela</div></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><input id="novaRegiao" placeholder="Nome da nova regiao" style="height:30px;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px" onkeydown="if(event.key==='Enter')addRegiao()"><button class="btn" onclick="addRegiao()">+ Criar regiao</button>${csvBtn('CSV',"exportEmpresas()")}</div></div><div class="table-wrap"><table><thead><tr><th style="width:70px">Codigo</th><th style="width:70px">ID VR</th><th>Nome</th><th style="width:220px">Regiao</th></tr></thead><tbody>${db.empresas.map((e,i)=>`<tr><td>${esc(e.codigo)}</td><td>${esc(e.id_vr)}</td><td><input class="emp-input" value="${esc(e.nome)}" onblur="updateCompanyName(${i},this)" onkeydown="if(event.key==='Enter')this.blur()"></td><td><select style="width:100%" onchange="updateRegion(${i},this.value)">${rs.map(r=>`<option value="${esc(r)}" ${r==e.regiao?'selected':''}>${esc(r)}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table></div></div>`}
-function renameStoreRefs(oldName,newName){['resumos','campanhas','departamentos','produtos','cupons','ofertasDia','vendasDiarias','deptTotais'].forEach(b=>(db[b]||[]).forEach(r=>{if(r.loja==oldName)r.loja=newName}));(db.importacoes||[]).forEach(r=>{if(r.loja==oldName)r.loja=newName});let ap={};Object.entries(db.aprovacoes||{}).forEach(([k,v])=>{let parts=k.split('|');if(parts[0]==oldName){parts[0]=newName;ap[parts.join('|')]=v}else ap[k]=v});db.aprovacoes=ap;if(fLoja.value==oldName)fLoja.value=newName}
+function renameStoreRefs(oldName,newName){['resumos','campanhas','departamentos','produtos','cupons','ofertasDia','vendasDiarias'].forEach(b=>(db[b]||[]).forEach(r=>{if(r.loja==oldName)r.loja=newName}));(db.importacoes||[]).forEach(r=>{if(r.loja==oldName)r.loja=newName});let ap={};Object.entries(db.aprovacoes||{}).forEach(([k,v])=>{let parts=k.split('|');if(parts[0]==oldName){parts[0]=newName;ap[parts.join('|')]=v}else ap[k]=v});db.aprovacoes=ap;if(fLoja.value==oldName)fLoja.value=newName}
 function saveFeedback(oQue){return ok=>showToast(ok?oQue+' salvo(a) na nuvem':'FALHA ao salvar - '+(cloudError||'verifique a conexao e recarregue (F5)'))}
 function saveEmpresas(renames,cb){cacheLocal();if(location.protocol=='file:'){if(cb)cb(true);return}fetch('/api/empresas',{method:'PATCH',headers:authHeaders(true),body:JSON.stringify({empresas:db.empresas,regioes:db.regioes||[],renames:renames||[]})}).then(async r=>{if(r.status===401){if(cb)cb(false);let t=prompt('Token de acesso da API:');if(t)setApiToken(t);return}if(!r.ok){let j=await r.json().catch(()=>({}));cloudError='HTTP '+r.status+': '+(j.error||'erro desconhecido');cloudOnline=false;updateCloud();if(cb)cb(false);return}cloudOnline=true;cloudError='';updateCloud();if(cb)cb(true)}).catch(e=>{cloudOnline=false;cloudError=e.message||'Falha de conexao';updateCloud();if(cb)cb(false)})}
 function updateCompanyName(i,el){let e=db.empresas[i];if(!e)return;let old=e.nome,newName=String(el.value||'').trim();if(!newName||newName==old){el.value=old;return}if(db.empresas.some((x,idx)=>idx!=i&&x.nome==newName)){alert('Ja existe uma empresa com esse nome.');el.value=old;return}e.nome=newName;renameStoreRefs(old,newName);saveEmpresas([{from:old,to:newName}],saveFeedback('Nome'));setupFilters()}
@@ -1540,16 +1113,16 @@ function render(){
   document.querySelector('header .filters').style.display=page=='benchmark'?'none':'';
   let pd=document.getElementById('printDate');if(pd)pd.textContent=new Date().toLocaleString('pt-BR');
   let ap=db.empresas.filter(e=>(fRegiao.value=='Todas'||e.regiao==fRegiao.value)&&audit(e.nome).status=='Aprovado').length;
-  nav.innerHTML=pages.map(([id,l])=>`<button class="${id==page?'active':''}" onclick="go('${id}')" title="${l}">${ICONS[id]||''}<span class="nav-label">${l}</span>${id=='plano'?'<span class="nav-badge">'+ap+'/27</span>':''}</button>`).join('');
-  let meta={decisao:['Centro de Decisao','Diagnostico e plano de acao'],dashboard:['Dashboard','Visao geral do periodo'],encarte:['Encarte Big Nordeste','Analise por loja — fluxo, ticket, canibalizacao e eficiencia'],benchmark:['Benchmark de Encartes','Comparacao funcional de preco, variedade e atratividade'],periodo:['Periodo de Campanha','Analise diaria e comparativo justo'],importacoes:['Importacoes','Importar arquivos .txt'],auditoria:['Auditoria','Validar periodo'],plano:['Plano de Coleta','Controle de '+db.empresas.length+' lojas'],modelos:['Modelos SQL','Consultas VR'],empresas:['Empresas','Cadastro'],consolidacao:['Consolidacao','Lojas aprovadas'],masterdata:['Master Data','Cadastro unico, reconciliacao e auditoria de produtos'],relatorio:['Relatorio','Resumo'],backups:['Seguranca e Backups','Protecao e restauracao da base']}[page];
+  nav.innerHTML=pages.map(([id,l])=>`<button class="${id==page?'active':''}" onclick="go('${id}')">${ICONS[id]||''}${l}${id=='plano'?'<span class="nav-badge">'+ap+'/27</span>':''}</button>`).join('');
+  let meta={decisao:['Centro de Decisao','Diagnostico e plano de acao'],dashboard:['Dashboard','Visao geral do periodo'],encarte:['Encarte Big Nordeste','Analise por loja — fluxo, ticket, canibalizacao e eficiencia'],benchmark:['Benchmark de Encartes','Comparacao funcional de preco, variedade e atratividade'],periodo:['Periodo de Campanha','Analise diaria e comparativo justo'],importacoes:['Importacoes','Importar arquivos .txt'],auditoria:['Auditoria','Validar periodo'],plano:['Plano de Coleta','Controle de '+db.empresas.length+' lojas'],modelos:['Modelos SQL','Consultas VR'],empresas:['Empresas','Cadastro'],consolidacao:['Consolidacao','Lojas aprovadas'],relatorio:['Relatorio','Resumo'],backups:['Seguranca e Backups','Protecao e restauracao da base']}[page];
   title.textContent=meta[0];sub.textContent=meta[1];
-  let vis={decisao:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],dashboard:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],encarte:['fLoja','fRegiao','fInicio','fFim','fReset'],periodo:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],importacoes:['fInicio','fFim','fReset'],auditoria:['fLoja','fInicio','fFim','fReset'],plano:['fRegiao','fInicio','fFim','fReset'],modelos:['fLoja','fInicio','fFim','fReset'],empresas:[],masterdata:[],consolidacao:['fRegiao','fInicio','fFim','fReset','fVisao'],relatorio:['fLoja','fInicio','fFim','fReset'],backups:[]}[page]||[];
+  let vis={decisao:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],dashboard:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],encarte:['fLoja','fRegiao','fInicio','fFim','fReset'],periodo:['fLoja','fRegiao','fInicio','fFim','fReset','fCamp'],importacoes:['fInicio','fFim','fReset'],auditoria:['fLoja','fInicio','fFim','fReset'],plano:['fRegiao','fInicio','fFim','fReset'],modelos:['fLoja','fInicio','fFim','fReset'],empresas:[],consolidacao:['fRegiao','fInicio','fFim','fReset','fVisao'],relatorio:['fLoja','fInicio','fFim','fReset'],backups:[]}[page]||[];
   ['fLoja','fRegiao','fInicio','fFim','fReset','fVisao','fCamp'].forEach(id=>document.getElementById(id).style.display=vis.includes(id)?'':'none');
   view.classList.add('fade');
-  setTimeout(()=>{view.innerHTML=securityWarning()+cloudWarning()+approvalWarning()+({decisao,dashboard,encarte:encarteAnalise,benchmark,periodo:periodoCampanha,importacoes,auditoria,plano,modelos,empresas,masterdata,consolidacao,relatorio,backups})[page]();view.classList.remove('fade');if(page=='importacoes')showReq()},80);
+  setTimeout(()=>{view.innerHTML=securityWarning()+cloudWarning()+approvalWarning()+({decisao,dashboard,encarte:encarteAnalise,benchmark,periodo:periodoCampanha,importacoes,auditoria,plano,modelos,empresas,consolidacao,relatorio,backups})[page]();view.classList.remove('fade');if(page=='importacoes')showReq()},80);
 }
 ['fLoja','fRegiao','fInicio','fFim','fVisao','fCamp'].forEach(id=>document.getElementById(id).addEventListener('change',render));
-setupFilters();applySidebarState();render();loadCloud();checkHealth();
+setupFilters();render();loadCloud();checkHealth();
 </script>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 </body>

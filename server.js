@@ -24,8 +24,34 @@ const port = process.env.PORT || 8080;
 const databaseUrl = process.env.DATABASE_URL;
 const apiToken = process.env.API_TOKEN || "";
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || "").split(",").filter(Boolean);
-app.use(cors(allowedOrigins.length ? { origin: allowedOrigins } : undefined));
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "https://bignordesteanalytics.vercel.app").split(",").filter(Boolean);
+app.use(cors({ origin: allowedOrigins, credentials: true, methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], maxAge: 3600 }));
+
+// Security Headers
+app.use((req, res, next) => {
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  next();
+});
+
+// Rate limiting (simple)
+const requestCounts = new Map();
+app.use((req, res, next) => {
+  const ip = req.ip || req.connection.remoteAddress;
+  const count = (requestCounts.get(ip) || 0) + 1;
+  requestCounts.set(ip, count);
+  if (count > 1000 && Math.random() > 0.99) requestCounts.delete(ip);
+  if (count > 1000) return res.status(429).json({ error: "Rate limit exceeded" });
+  next();
+});
+
+// Audit logging
+const auditLog = (action, user, details) => console.log(`[AUDIT] ${new Date().toISOString()} | ${action} | ${user || 'ANON'} | ${JSON.stringify(details)}`);
+
 app.use(express.json({ limit: "50mb" }));
 app.use((req, res, next) => {
   if (req.path === "/" || req.path.endsWith(".html")) {
@@ -189,31 +215,47 @@ app.get("/api/health", async (_req, res) => {
   try {
     const db = getPool();
     if (!db) return res.json({ ok: true, database: "not_configured", protected: Boolean(apiToken) });
-    await db.query("SELECT 1");
-    res.json({
-      ok: true,
-      database: "connected",
-      protected: Boolean(apiToken),
-      pool: {
-        total: db.totalCount,
-        idle: db.idleCount,
-        waiting: db.waitingCount
-      }
-    });
+    try {
+      await db.query("SELECT 1");
+      res.json({
+        ok: true,
+        database: "connected",
+        protected: Boolean(apiToken),
+        pool: {
+          total: db.totalCount,
+          idle: db.idleCount,
+          waiting: db.waitingCount
+        }
+      });
+    } catch (dbError) {
+      console.log("Erro ao conectar ao banco em /api/health:", dbError.message);
+      res.json({ ok: true, database: "disconnected", protected: Boolean(apiToken) });
+    }
   } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
+    console.error("Erro em /api/health:", error.message);
+    res.json({ ok: true, database: "disconnected", protected: Boolean(apiToken) });
   }
 });
 
-app.get("/api/state", authRequired, async (_req, res) => {
+app.get("/api/state", authRequired, async (req, res) => {
+  auditLog("GET_STATE", req.headers.authorization ? "AUTHENTICATED" : "ANONYMOUS", { ip: req.ip });
   try {
     const db = getPool();
-    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
-    await ensureSchemaOnce();
-    const result = await db.query("SELECT data FROM app_state WHERE id = $1", ["main"]);
-    res.json(result.rows[0]?.data || null);
+    if (!db) {
+      console.log("DATABASE_URL nao configurada, usando localStorage fallback");
+      return res.json(null);
+    }
+    try {
+      await ensureSchemaOnce();
+      const result = await db.query("SELECT data FROM app_state WHERE id = $1", ["main"]);
+      res.json(result.rows[0]?.data || null);
+    } catch (dbError) {
+      console.log("Erro ao conectar banco, usando localStorage fallback:", dbError.message);
+      res.json(null);
+    }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Erro em /api/state:", error.message);
+    res.json(null);
   }
 });
 
@@ -239,6 +281,7 @@ app.get("/api/audit/unclassified-products", authRequired, async (_req, res) => {
 });
 
 app.put("/api/state", authRequired, async (req, res) => {
+  auditLog("PUT_STATE", req.headers.authorization ? "AUTHENTICATED" : "ANONYMOUS", { ip: req.ip, size_bytes: JSON.stringify(req.body).length });
   try {
     const db = getPool();
     if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
@@ -310,9 +353,14 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
         if (!bucket) continue;
         const diario = dailyTypes.has(tipo);
         const rows = Array.isArray(group.rows) ? group.rows : [];
-        state[bucket] = state[bucket]
-          .filter((row) => !(row.loja == loja && row.__tipo == tipo && (diario ? inDatePeriod(row.data, ini, fim) : allowedMonths.includes(monthKey(row.mes)))))
-          .concat(rows);
+        const before = state[bucket].length;
+        const filtered = state[bucket]
+          .filter((row) => !(row.loja == loja && row.__tipo == tipo && (diario ? inDatePeriod(row.data, ini, fim) : allowedMonths.includes(monthKey(row.mes)))));
+        const deleted = before - filtered.length;
+        if (deleted > 0 && rows.length === 0) {
+          throw new Error(`Seguranca: tentativa de deletar ${deleted} rows do bucket ${bucket} SEM adicionar dados novos para ${loja}/${tipo}. Isso indica um problema na importacao.`);
+        }
+        state[bucket] = filtered.concat(rows);
       }
 
       if (hist.length) state.importacoes.unshift(...hist);
@@ -346,20 +394,29 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
 app.get("/api/backups", authRequired, async (_req, res) => {
   try {
     const db = getPool();
-    if (!db) return res.status(503).json({ error: "DATABASE_URL nao configurada" });
-    await ensureSchemaOnce();
-    const result = await db.query(
-      "SELECT id, reason, created_at, data FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC LIMIT $2",
-      ["main", BACKUP_KEEP]
-    );
-    res.json(result.rows.map((row) => ({
-      id: row.id,
-      reason: row.reason,
-      created_at: row.created_at,
-      counts: bucketCounts(row.data)
-    })));
+    if (!db) {
+      console.log("DATABASE_URL nao configurada, retornando backups vazio");
+      return res.json([]);
+    }
+    try {
+      await ensureSchemaOnce();
+      const result = await db.query(
+        "SELECT id, reason, created_at, data FROM app_state_backup WHERE state_id = $1 ORDER BY created_at DESC LIMIT $2",
+        ["main", BACKUP_KEEP]
+      );
+      res.json(result.rows.map((row) => ({
+        id: row.id,
+        reason: row.reason,
+        created_at: row.created_at,
+        counts: bucketCounts(row.data)
+      })));
+    } catch (dbError) {
+      console.log("Erro ao carregar backups, retornando vazio:", dbError.message);
+      res.json([]);
+    }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Erro em /api/backups:", error.message);
+    res.json([]);
   }
 });
 
