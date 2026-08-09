@@ -336,11 +336,11 @@ app.get("/api/backups", authRequired, async (_req, res) => {
     try {
       const rows = await sbRest("app_state_backup", {
         filter: { state_id: "eq.main" },
-        select: "id,reason,created_at,data",
+        select: "id,reason,created_at",
         order: "created_at.desc",
         limit: BACKUP_KEEP,
       });
-      res.json(rows.map((row) => ({ id: row.id, reason: row.reason, created_at: row.created_at, counts: bucketCounts(row.data) })));
+      res.json(rows.map((row) => ({ id: row.id, reason: row.reason, created_at: row.created_at })));
     } catch (dbError) {
       console.log("Erro ao carregar backups, retornando vazio:", dbError.message);
       res.json([]);
