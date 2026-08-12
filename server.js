@@ -289,7 +289,9 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
       return res.status(400).json({ error: "Payload de importacao invalido" });
     }
 
-    const state = normalizeState((await sbGetState()) || {});
+    const prevState = await sbGetState();
+    await sbBackup(prevState, "import:" + loja);
+    const state = normalizeState(prevState || {});
     const allowedMonths = monthsBetween(ini, fim);
 
     if (hasMonthly) delete state.aprovacoes[periodKey(loja)];
@@ -418,7 +420,9 @@ app.patch("/api/aprovacoes", authRequired, async (req, res) => {
     const { updates } = req.body || {};
     if (!updates || typeof updates !== "object") return res.status(400).json({ error: "updates deve ser um objeto" });
 
-    const state = normalizeState((await sbGetState()) || {});
+    const prev = await sbGetState();
+    await sbBackup(prev, "patch-aprovacoes");
+    const state = normalizeState(prev || {});
     if (!state.aprovacoes) state.aprovacoes = {};
     Object.entries(updates).forEach(([key, val]) => {
       state.aprovacoes[key] = val;
