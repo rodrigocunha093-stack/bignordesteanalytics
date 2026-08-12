@@ -85,6 +85,8 @@ textarea{border:1px solid var(--line);background:white;border-radius:6px;padding
 .pivot-prod-name{font-weight:400;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pivot-prod-cell{font-size:9px;white-space:nowrap}
 .m-good{color:#16a34a}.m-warn{color:#ca8a04}.m-bad{color:#dc2626}
+.pivot-best{background:#dcfce7;outline:2px solid #16a34a;outline-offset:-2px;border-radius:4px}
+.pivot-worst{background:#fef2f2;outline:2px solid #dc2626;outline-offset:-2px;border-radius:4px}
 .range-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
 .range-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px}
 .range-card .lb{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px}
@@ -578,7 +580,7 @@ function productCategory(desc){
 }
 
 /* ===== ARVORE MARGEM ITEM ===== */
-let _treeOpen={};
+let _treeOpen={},_margemExpanded=false;
 function toggleTree(key){_treeOpen[key]=!_treeOpen[key];render()}
 function classifyCategory(r){
   if(r.descricao_departamento)return r.descricao_departamento;
@@ -615,11 +617,14 @@ function margemItemTree(){
   h+='</tr></thead><tbody>';
   cats.forEach(cat=>{
     let ct=catTotals[cat],cm=ct.v?ct.l/ct.v*100:0,ck='CAT|'+cat,cOpen=!!_treeOpen[ck];
+    let catMargins=[];
+    lojas.forEach(lj=>{let d=pivot[cat+'||'+lj];if(d&&d.v)catMargins.push(d.v?d.l/d.v*100:0)});
+    let catBest=catMargins.length>=2?Math.max(...catMargins):-Infinity,catWorst=catMargins.length>=2?Math.min(...catMargins):Infinity;
     h+='<tr class="pivot-cat-row" onclick="toggleTree(\''+ck+'\')"><td class="pivot-cat-name" style="position:sticky;left:0;z-index:1;background:#fff"><span class="tree-toggle">'+(cOpen?'▼':'▶')+'</span>'+esc(cat)+'<div class="pivot-cat-total">'+brlShort(ct.v)+' <span class="'+mc(cm)+'">'+pct(cm)+'</span></div></td>';
     lojas.forEach(lj=>{
       let d=pivot[cat+'||'+lj];
       if(!d)h+='<td class="pivot-cell pivot-empty">-</td>';
-      else{let m=d.v?d.l/d.v*100:0;h+='<td class="pivot-cell"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div></td>'}
+      else{let m=d.v?d.l/d.v*100:0,hl=catMargins.length>=2&&m===catBest?' pivot-best':catMargins.length>=2&&m===catWorst?' pivot-worst':'';h+='<td class="pivot-cell'+hl+'"><div class="pivot-val">'+brlShort(d.v)+'</div><div class="pivot-marg '+mc(m)+'">'+pct(m)+'</div></td>'}
     });
     h+='</tr>';
     if(cOpen){
@@ -638,7 +643,11 @@ function margemItemTree(){
     }
   });
   h+='</tbody></table></div>';
-  return'<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos</div></div>'+csvBtn('CSV','exportMargemTree()')+'</div>'+h+'</div>';
+  let legend='<div style="display:flex;gap:12px;align-items:center;font-size:10px;margin-top:6px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:3px"><span style="width:10px;height:10px;background:#dcfce7;border:2px solid #16a34a;border-radius:2px;display:inline-block"></span> Maior margem</span><span style="display:inline-flex;align-items:center;gap:3px"><span style="width:10px;height:10px;background:#fef2f2;border:2px solid #dc2626;border-radius:2px;display:inline-block"></span> Menor margem</span></div>';
+  let btns='<button class="btn" onclick="_margemExpanded=true;render()">Ampliar</button>'+csvBtn('CSV','exportMargemTree()');
+  let panel='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos</div></div><div style="display:flex;gap:6px">'+btns+'</div></div>'+h+legend+'</div>';
+  if(_margemExpanded)panel+='<div class="modal" onclick="if(event.target===this){_margemExpanded=false;render()}"><div class="modal-card"><div class="modal-head"><div><h3>Margem por item ofertado</h3><div class="sub">Categorias x Lojas — visao ampliada</div></div><div style="display:flex;gap:6px"><button class="btn" onclick="_margemExpanded=false;render()">Fechar</button>'+csvBtn('CSV','exportMargemTree()')+'</div></div><div style="flex:1;overflow:auto">'+h+legend+'</div></div></div>';
+  return panel;
 }
 function exportMargemTree(){
   let rows=scopeRows('produtos').filter(r=>passaBloco(r.campanha)),out=[];
