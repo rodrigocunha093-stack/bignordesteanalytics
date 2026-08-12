@@ -111,8 +111,8 @@ textarea{border:1px solid var(--line);background:white;border-radius:6px;padding
 .chart-lg{position:relative;width:100%;height:300px}
 .chart-md{position:relative;width:100%;height:240px}
 .chart-sm{position:relative;width:100%;height:180px}
-.modal{position:fixed;inset:0;background:rgba(15,23,42,.72);z-index:100;display:flex;align-items:stretch;justify-content:center;padding:28px}
-.modal-card{background:#fff;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.35);width:min(1500px,100%);display:flex;flex-direction:column;padding:18px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.72);z-index:100;display:flex;align-items:stretch;justify-content:stretch;padding:8px}
+.modal-card{background:#fff;border-radius:8px;box-shadow:0 24px 80px rgba(0,0,0,.35);width:100%;display:flex;flex-direction:column;padding:14px}
 .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:10px}
 .modal-head h3{margin:0;font-size:18px}
 .modal-head .sub{font-size:12px;color:var(--muted);margin-top:2px}
@@ -609,7 +609,7 @@ function margemItemTree(){
   Array.from(catSet).forEach(c=>{catTotals[c]={v:0,l:0};lojas.forEach(lj=>{let d=pivot[c+'||'+lj];if(d){catTotals[c].v+=d.v;catTotals[c].l+=d.l}})});
   let cats=Array.from(catSet).sort((a,b)=>catTotals[b].v-catTotals[a].v);
   let shortN=l=>l.replace(/^.*-\s*/,'');
-  let h='<div class="table-wrap" style="max-height:700px;overflow:auto"><table class="pivot-cat"><thead><tr><th class="pivot-cat-th" style="min-width:130px;position:sticky;left:0;z-index:2;background:#fff">Categoria</th>';
+  let h='<table class="pivot-cat"><thead><tr><th class="pivot-cat-th" style="min-width:130px;position:sticky;left:0;z-index:2;background:#fff">Categoria</th>';
   lojas.forEach(lj=>{
     let lt=lojaTotals[lj],lm=lt.v?lt.l/lt.v*100:0;
     h+='<th class="pivot-loja-th" title="'+esc(lj)+'"><div>'+esc(shortN(lj))+'</div><div class="pivot-loja-sub">'+brlShort(lt.v)+' <span class="'+mc(lm)+'">'+pct(lm)+'</span></div></th>';
@@ -642,11 +642,11 @@ function margemItemTree(){
       });
     }
   });
-  h+='</tbody></table></div>';
+  h+='</tbody></table>';
   let legend='<div style="display:flex;gap:12px;align-items:center;font-size:10px;margin-top:6px;color:var(--muted)"><span style="display:inline-flex;align-items:center;gap:3px"><span style="width:10px;height:10px;background:#dcfce7;border:2px solid #16a34a;border-radius:2px;display:inline-block"></span> Maior margem</span><span style="display:inline-flex;align-items:center;gap:3px"><span style="width:10px;height:10px;background:#fef2f2;border:2px solid #dc2626;border-radius:2px;display:inline-block"></span> Menor margem</span></div>';
   let btns='<button class="btn" onclick="_margemExpanded=true;render()">Ampliar</button>'+csvBtn('CSV','exportMargemTree()');
-  let panel='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos</div></div><div style="display:flex;gap:6px">'+btns+'</div></div>'+h+legend+'</div>';
-  if(_margemExpanded)panel+='<div class="modal" onclick="if(event.target===this){_margemExpanded=false;render()}"><div class="modal-card"><div class="modal-head"><div><h3>Margem por item ofertado</h3><div class="sub">Categorias x Lojas — visao ampliada</div></div><div style="display:flex;gap:6px"><button class="btn" onclick="_margemExpanded=false;render()">Fechar</button>'+csvBtn('CSV','exportMargemTree()')+'</div></div><div style="flex:1;overflow:auto">'+h+legend+'</div></div></div>';
+  let panel='<div class="panel mt"><div class="panel-header"><div><div class="panel-title">Margem por item ofertado</div><div class="panel-sub">Categorias x Lojas — clique na categoria para detalhar produtos</div></div><div style="display:flex;gap:6px">'+btns+'</div></div><div class="table-wrap" style="max-height:700px;overflow:auto">'+h+'</div>'+legend+'</div>';
+  if(_margemExpanded)panel+='<div class="modal" style="padding:0" onclick="if(event.target===this){_margemExpanded=false;render()}"><div class="modal-card" style="border-radius:0;width:100%;height:100%"><div class="modal-head"><div><h3>Margem por item ofertado</h3><div class="sub">Categorias x Lojas — visao ampliada</div></div><div style="display:flex;gap:6px"><button class="btn" onclick="_margemExpanded=false;render()">Fechar</button>'+csvBtn('CSV','exportMargemTree()')+'</div></div><div style="flex:1;overflow:auto">'+h+legend+'</div></div></div>';
   return panel;
 }
 function exportMargemTree(){

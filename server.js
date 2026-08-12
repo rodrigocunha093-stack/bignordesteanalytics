@@ -420,10 +420,7 @@ app.patch("/api/aprovacoes", authRequired, async (req, res) => {
     const { updates } = req.body || {};
     if (!updates || typeof updates !== "object") return res.status(400).json({ error: "updates deve ser um objeto" });
 
-    const prev = await sbGetState();
-    await sbBackup(prev, "patch-aprovacoes");
-    const state = normalizeState(prev || {});
-
+    const state = normalizeState((await sbGetState()) || {});
     if (!state.aprovacoes) state.aprovacoes = {};
     Object.entries(updates).forEach(([key, val]) => {
       state.aprovacoes[key] = val;
