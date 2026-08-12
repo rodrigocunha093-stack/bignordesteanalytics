@@ -289,9 +289,7 @@ app.post("/api/import-batch", authRequired, async (req, res) => {
       return res.status(400).json({ error: "Payload de importacao invalido" });
     }
 
-    const prevState = await sbGetState();
-    await sbBackup(prevState, "import:" + loja);
-    const state = normalizeState(prevState || {});
+    const state = normalizeState((await sbGetState()) || {});
     const allowedMonths = monthsBetween(ini, fim);
 
     if (hasMonthly) delete state.aprovacoes[periodKey(loja)];
