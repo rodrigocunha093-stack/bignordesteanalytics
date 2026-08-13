@@ -145,6 +145,24 @@ function benchmarkFullCatalog(){
     ['goma',2,'Mercearia basica','Goma para tapioca','Goma para Tapioca Sao Braz 1kg','Sao Braz','1kg',1,'kg',6.29,0,0],
     ['papel',2,'Higiene','Papel higienico','Papel Higienico Caprice 12 rolos','Caprice','12 rolos',12,'un',11.35,1,0]
   ];
+  const u='enc-unilojas-jul26';
+  const ul=[
+    ['cafe',1,'Mercearia basica','Cafe tradicional 250g','Cafe Premium 500g','Unilojas','500g',500,'g',7.49,1,1],
+    ['macarrao',1,'Mercearia basica','Macarrao espaguete 400g','Macarrao 500g','Unilojas','500g',500,'g',2.99,0,0],
+    ['oleo',1,'Mercearia basica','Oleo de soja','Oleo de Soja 900ml','Unilojas','900ml',900,'ml',7.29,0,0],
+    ['feijao',1,'Mercearia basica','Feijao carioca','Feijao Carioca 1kg','Unilojas','1kg',1,'kg',4.99,0,0],
+    ['acucar',1,'Mercearia basica','Acucar','Acucar 1kg','Unilojas','1kg',1,'kg',3.29,0,0],
+    ['sabonete',1,'Higiene','Sabonete','Sabonete Johnson 90g','Johnson','90g',90,'g',24.99,0,0],
+    ['xampu',1,'Higiene','Shampoo','Xampu 200ml','Unilojas','200ml',200,'ml',12.99,0,0],
+    ['condicionador',1,'Higiene','Condicionador','Condicionador 200ml','Unilojas','200ml',200,'ml',13.99,0,0],
+    ['polvilho',1,'Biscoitos e massas','Polvilho','Polvilho 100g','Unilojas','100g',100,'g',3.49,0,0],
+    ['biscoito',1,'Biscoitos e massas','Biscoito cream cracker','Biscoito Doce Bretzke 200g','Bretzke','200g',200,'g',4.29,0,0],
+    ['suco',2,'Bebidas','Suco','Suco Natural 1L','Unilojas','1l',1000,'ml',5.99,0,0],
+    ['nectar',2,'Bebidas','Nectar','Nectar de Fruta 1L','Unilojas','1l',1000,'ml',4.49,0,0],
+    ['detergente',2,'Limpeza','Detergente','Detergente Fiel 500ml','Fiel','500ml',500,'ml',1.79,0,0],
+    ['desinfetante',2,'Limpeza','Desinfetante','Desinfetante 1L','Unilojas','1l',1000,'ml',5.99,0,0],
+    ['amaciante',2,'Limpeza','Amaciante','Amaciante Downy 1L','Downy','1l',1000,'ml',14.99,0,0]
+  ];
   const make=(prefix,enc,row)=>{const [id,pagina,departamento,categoria,produto,marca,embalagem,qty,unit,preco,ancora,capa]=row;return{id:prefix+'-'+id,encarte_id:enc,pagina,departamento,categoria_funcional:categoria,subcategoria:'',produto,marca,embalagem,quantidade_embalagem:qty,unidade_comparacao:unit,preco_de:null,preco_por:preco,tipo_produto:departamento,produto_ancora:!!ancora,destaque_capa:!!capa,revisado:false,observacao:'Transcrito do encarte; validar na revisao manual'}};
-  return [...rp.map(r=>make('rp',p,r)),...bn.map(r=>make('bn',b,r))];
+  return [...rp.map(r=>make('rp',p,r)),...bn.map(r=>make('bn',b,r)),...ul.map(r=>make('ul',u,r))];
 }
