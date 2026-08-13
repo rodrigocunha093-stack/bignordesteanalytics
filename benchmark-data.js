@@ -294,7 +294,7 @@ function benchmarkFullCatalog(){
     ['salsicha',2,'Carnes e proteinas','Salsicha','Salsicha Hot Dog Rara kg','Rara','kg',1,'kg',5.59,0,0],
     ['paoalho',2,'Biscoitos e massas','Pao de alho','Pao de Alho Bom Todo 400g','Bom Todo','400g',400,'g',11.99,0,0],
     ['leitepo',2,'Laticinios e frios','Leite em po','Leite em Po TGuinho 800g','TGuinho','800g',800,'g',23.85,1,0],
-    ['requeijao',2,'Laticinios e frios','Requeijao','Requeijao Santo Expedito 180g','Santo Expedito','180g',180,'g',5.09,0,0],
+    ['requeijao',2,'Laticinios e frios','Requeijao','Requeijao Santo Expedito 180g','Santo Expedito','180g',180,'g',7.29,0,0],
     ['recheado',2,'Biscoitos e massas','Biscoito recheado','Biscoito Recheado Vitamassa 130g','Vitamassa','130g',130,'g',1.79,0,0],
     ['lamen',2,'Biscoitos e massas','Lamen','Nissin Lamen Sabores 85g','Nissin','85g',85,'g',2.39,0,0],
     ['creme',2,'Laticinios e frios','Creme de leite','Creme de Leite TGuinho 200g','TGuinho','200g',200,'g',2.49,0,0],
