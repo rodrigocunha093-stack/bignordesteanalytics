@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
+const { promisify } = require("util");
+const gunzipAsync = promisify(zlib.gunzip);
 
 function loadLocalEnv() {
   const envPath = path.join(__dirname, ".env");
@@ -119,7 +122,28 @@ app.use((req, res, next) => {
 const auditLog = (action, user, details) =>
   console.log(`[AUDIT] ${new Date().toISOString()} | ${action} | ${user || "ANON"} | ${JSON.stringify(details)}`);
 
-app.use(express.json({ limit: "50mb" }));
+app.use(async (req, res, next) => {
+  if (req.headers["content-encoding"] === "gzip") {
+    try {
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      const compressed = Buffer.concat(chunks);
+      const decompressed = await gunzipAsync(compressed);
+      req.body = JSON.parse(decompressed.toString());
+      req._gzipParsed = true;
+      delete req.headers["content-encoding"];
+      next();
+    } catch (e) {
+      res.status(400).json({ error: "Falha ao descomprimir payload gzip: " + e.message });
+    }
+  } else {
+    next();
+  }
+});
+app.use((req, res, next) => {
+  if (req._gzipParsed) return next();
+  express.json({ limit: "50mb" })(req, res, next);
+});
 app.use((req, res, next) => {
   if (req.path === "/" || req.path.endsWith(".html")) {
     res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
