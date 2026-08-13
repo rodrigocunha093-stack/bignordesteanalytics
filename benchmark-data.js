@@ -320,12 +320,9 @@ function benchmarkFullCatalog(){
     ['sabonete',2,'Higiene','Sabonete','Sabonete Above Cream 75g','Above','75g',75,'g',1.79,0,0],
     ['sandalia',2,'Bazar','Sandalia','Sandalias Ipanema Classica','Ipanema','par',1,'un',11.99,0,0],
     ['sabonliquido',2,'Higiene','Sabonete liquido','Sabonete Liquido Lux Refil 200ml','Lux','200ml',200,'ml',7.69,0,0],
-    ['lenco',2,'Higiene','Lenco umedecido','Lenco Umedecido Protetudo 50 un','Protetudo','50 un',50,'un',4.99,0,0],
+    ['lenco',2,'Higiene','Lenco umedecido','Lenco Umedecido Protetudo 50 un','Protetudo','50 un',50,'un',4.79,0,0],
     ['shampoo',2,'Higiene','Shampoo','Shampoo Anticaspa Clear 200ml','Clear','200ml',200,'ml',14.99,0,0],
-    ['bebidalactea540',2,'Laticinios e frios','Bebida lactea','Bebida Lactea Isis 540g','Isis','540g',540,'g',5.09,0,0],
-    ['goma',2,'Mercearia basica','Goma para tapioca','Goma para Tapioca Daterra 1kg','Daterra','1kg',1,'kg',5.99,0,0],
-    ['iogurte',2,'Laticinios e frios','Iogurte','Iogurte Isis 170g','Isis','170g',170,'g',3.09,0,0],
-    ['polpa',2,'Bebidas','Polpa de fruta','Polpa de Frutas Ster Bom 400g','Ster Bom','400g',400,'g',3.99,0,0]
+    ['bebidalactea540',2,'Laticinios e frios','Bebida lactea','Bebida Lactea Isis 540g','Isis','540g',540,'g',5.09,0,0]
   ];
   const make=(prefix,enc,row)=>{const [id,pagina,departamento,categoria,produto,marca,embalagem,qty,unit,preco,ancora,capa]=row;return{id:prefix+'-'+id,encarte_id:enc,pagina,departamento,categoria_funcional:categoria,subcategoria:'',produto,marca,embalagem,quantidade_embalagem:qty,unidade_comparacao:unit,preco_de:null,preco_por:preco,tipo_produto:departamento,produto_ancora:!!ancora,destaque_capa:!!capa,revisado:false,observacao:'Transcrito do encarte; validar na revisao manual'}};
   return [...rp.map(r=>make('rp',p,r)),...bn.map(r=>make('bn',b,r)),...ul.map(r=>make('ul',u,r)),...rpa.map(r=>make('rpa',pa,r)),...bna.map(r=>make('bna',ba,r))];
